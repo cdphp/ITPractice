@@ -2,7 +2,7 @@
   采用Go的Restful设计思想去定义接口(PHP太麻烦了，不适合)
 
 ### 数据库设计
-  [数据库说明](https://github.com/ITPai/ITPractice/tree/master/web_backend/schema/db_structure.sql)
+  [数据库文件](https://github.com/ITPai/ITPractice/tree/master/web_backend/schema/db_structure.sql)
 
 ### 接口规范
   * Request(http请求)
@@ -40,11 +40,14 @@
     | /users/:id | PUT | update | 修改信息 |
     | /users/:id | DELETE | delete | 删除信息 |
 
-### 项目结构
->schema #sql文件
->src #项目代码
->>public #公共文件
->>v1.0 #版本1.0
->>>main.go #主程序
->>>router.go #router方法
->>>routes.go #定义路由规则
+### 本地部署
+  * 安装环境(go)
+    根据[官方文档](http://docscn.studygolang.com/doc/)安装最新版本的golang
+  * 获取mux包
+    ```
+    go get "github.com/gorilla/mux"
+    ```
+  * 运行
+    ```
+    go run src/v1.0/*.go
+    ```

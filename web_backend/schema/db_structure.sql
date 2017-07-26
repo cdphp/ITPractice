@@ -1,4 +1,5 @@
-create database it_pratice default charset=utf8;
+create database it_practice default charset=utf8;
+  use it_practice;
 
 /**
  * temp 示例
@@ -39,6 +40,7 @@ create table users (
     created_at int not null default 0,
     updated_at int not null default 0
 )charset=utf8;
+
 
 /**
  * users_info 示例

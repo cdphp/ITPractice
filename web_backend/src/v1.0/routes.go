@@ -19,4 +19,5 @@ var routes = Routes{
 	Route{"ArticleIndex", "GET", "/article", ArticleIndex},
 	Route{"GetUser", "GET", "/user/{id:[0-9]+}", GetUser},
 	Route{"Register", "POST", "/user", AddUser},
+	Route{"Login", "POST", "/login", Login},
 }

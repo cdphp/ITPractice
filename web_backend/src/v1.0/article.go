@@ -1,12 +1,11 @@
 package main
 
-/**
- * Article 文章
- */
+// Article 文章信息
 type Article struct {
-	Id      int    `json:"id"`
+	ID      int    `json:"id"`
 	Title   string `json:"title"`
 	Content string `json:"content"`
 }
 
+// Articles array
 type Articles []Article

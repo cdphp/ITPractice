@@ -17,4 +17,6 @@ type Routes []Route
 var routes = Routes{
 	Route{"Index", "GET", "/", Index},
 	Route{"ArticleIndex", "GET", "/article", ArticleIndex},
+	Route{"GetUser", "GET", "/user/{id:[0-9]+}", GetUser},
+	Route{"Register", "POST", "/user", AddUser},
 }

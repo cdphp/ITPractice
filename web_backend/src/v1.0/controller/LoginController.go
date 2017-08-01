@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"fmt"
-
 	"v1.0/model"
 	"v1.0/vendor"
 )
@@ -30,13 +28,19 @@ func (c *LoginController) Index() {
 
 	user, errorNo := c.operation.Auth(postData["username"], postData["password"])
 	if errorNo == 0 {
-		sess := globalSessions.SessionStart(c.GetResponseWriter(), c.GetRequest())
+		// 获取token
+		tokenOperation := model.NewToken()
+		token, errorNo := tokenOperation.Obtian(user.ID, "User", 7200)
 
-		sess.Set("id", user.ID)
-		fmt.Println("session set id:", user.ID)
+		if errorNo == 0 {
+			sess := globalSessions.SessionStart(c.GetResponseWriter(), c.GetRequest())
+
+			sess.Set("token", token)
+			result.Data = token
+		}
+
 	}
 	result.ErrorNo = errorNo
-	result.Data = user
 
 	JSONReturn(c.GetResponseWriter(), result)
 	defer c.operation.CloseDb()

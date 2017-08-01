@@ -14,5 +14,6 @@ type IndexController struct {
 func (c *IndexController) Index() {
 	sess := globalSessions.SessionStart(c.GetResponseWriter(), c.GetRequest())
 
-	fmt.Println(sess.Get("id"))
+	token := sess.Get("token")
+	fmt.Println(token)
 }

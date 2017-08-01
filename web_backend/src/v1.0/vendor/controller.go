@@ -62,8 +62,8 @@ func (c *Controller) GetRequest() *http.Request {
 	return c.ct.Request
 }
 
-// GetPostData func
-func (c *Controller) GetPostData() map[string]string {
+// GetPosts 获取post数据
+func (c *Controller) GetPosts() map[string]string {
 	request := c.GetRequest()
 	request.ParseForm()
 
@@ -76,14 +76,4 @@ func (c *Controller) GetPostData() map[string]string {
 	}
 
 	return result
-}
-
-// JSONReturn func
-func (c *Controller) JSONReturn(result map[string]interface{}) {
-	writer := c.GetResponseWriter()
-	writer.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	writer.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(writer).Encode(result); err != nil {
-		panic(err)
-	}
 }

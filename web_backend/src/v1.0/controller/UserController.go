@@ -11,9 +11,8 @@ import (
 // UserController struct
 type UserController struct {
 	vendor.Controller
+	operation *model.User
 }
-
-var operation *model.User
 
 // Index function
 func (c *UserController) Index() {
@@ -31,42 +30,35 @@ func (c *UserController) List() {
 
 // Get function
 func (c *UserController) Get() {
-	operation = model.NewUser()
+	c.operation = model.NewUser()
 
 	params := c.GetParams()
 	uid, _ := strconv.Atoi(params[1])
 
-	user, err := operation.Get(uid)
+	user, errorNo := c.operation.Get(uid)
 
-	result := make(map[string]interface{})
+	result := new(Result)
+	result.ErrorNo = errorNo
+	result.Data = &user
 
-	if err != nil {
-		result["errorNo"] = err.No
-		result["errorMsg"] = err.Msg
-	} else {
-		result["errorNo"] = 0
-		result["errorMsg"] = "没有错误"
-	}
-	result["data"] = &user
-	defer operation.CloseDb()
-	c.JSONReturn(result)
+	defer c.operation.CloseDb()
 
 }
 
 // Add func
 func (c *UserController) Add() {
-	postData := c.GetPostData()
+	postData := c.GetPosts()
 	fmt.Println(postData)
 }
 
 // Update func
 func (c *UserController) Update() {
-	postData := c.GetPostData()
+	postData := c.GetPosts()
 	fmt.Println(postData)
 }
 
 // Delete func
 func (c *UserController) Delete() {
-	postData := c.GetPostData()
+	postData := c.GetPosts()
 	fmt.Println(postData)
 }

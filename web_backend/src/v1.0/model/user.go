@@ -26,16 +26,16 @@ func NewUser() *User {
 }
 
 // Get 根据id获取数据
-func (u *User) Get(id int) (*User, *vendor.Error) {
+func (u *User) Get(id int) (*User, int) {
 
 	sql := "select id,username,email,password,type,created_at,updated_at from users where id=?"
 	err := u.ModelManager.QueryRow(sql, id).Scan(&u.ID, &u.Username, &u.Email, &u.Password, &u.Type, &u.CreatedAt, &u.UpdatedAt)
 
 	if err != nil {
-		return nil, &vendor.Error{101, "该账号不存在"}
+		return nil, 101
 	}
 
-	return u, nil
+	return u, 0
 
 }
 
@@ -58,20 +58,20 @@ func (u *User) Add() {
 }
 
 // Auth 验证
-func (u *User) Auth(username string, password string) (*User, *vendor.Error) {
+func (u *User) Auth(username string, password string) (*User, int) {
 
 	sql := "select id,username,email,password,type,created_at,updated_at from users where username=?"
 	err := u.ModelManager.QueryRow(sql, username).Scan(&u.ID, &u.Username, &u.Email, &u.Password, &u.Type, &u.CreatedAt, &u.UpdatedAt)
 
 	if err != nil {
-		return nil, &vendor.Error{101, "该账号不存在"}
+		return nil, 101
 	}
 
 	if u.Md5(password) != u.Password {
-		return nil, &vendor.Error{102, "密码错误，请重试"}
+		return nil, 102
 	}
 
-	return u, nil
+	return u, 0
 
 }
 

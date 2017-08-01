@@ -1,15 +1,18 @@
 package model
 
+import "v1.0/vendor"
+
 // Token struct
 type Token struct {
-	ID        int64  `json:"id"`
-	Token     string `json:"token"`
-	UserID    int64  `json:"user_id"`
-	Expire    int    `json:"expire"`
-	Auth      string `json:"auth"`
-	LogoutAt  int64  `json:"lougout_at"`
-	CreatedAt int64  `json:"created_at"`
-	UpdatedAt int64  `json:"updated_at"`
+	ID           int64  `json:"id"`
+	Token        string `json:"token"`
+	UserID       int64  `json:"user_id"`
+	Expire       int    `json:"expire"`
+	Auth         string `json:"auth"`
+	LogoutAt     int64  `json:"lougout_at"`
+	CreatedAt    int64  `json:"created_at"`
+	UpdatedAt    int64  `json:"updated_at"`
+	vendor.Model `json:"-"`
 }
 
 // Obtian 获取token

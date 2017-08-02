@@ -46,8 +46,10 @@
   * 获取mux包
     ```
     go get "github.com/gorilla/mux"
+    go get "github.com/go-sql-driver/mysql"
     ```
   * 运行
     ```
-    go run src/v1.0/*.go
+    cd src/v1.0
+    go run main.go
     ```

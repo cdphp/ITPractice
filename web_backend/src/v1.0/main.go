@@ -17,6 +17,8 @@ func main() {
 	router.RegisterController("UserGet", "/user/:id", "GET", &controller.UserController{}, "Get")
 	router.RegisterController("UserUpdate", "/user/:id", "PUT", &controller.UserController{}, "Update")
 	router.RegisterController("Login", "/login", "POST", &controller.LoginController{}, "Index")
+	router.RegisterController("Register", "/register", "POST", &controller.RegisterController{}, "Index")
+
 	port := "8085"
 	fmt.Println("Server started at http://localhost:" + port)
 	log.Fatal(http.ListenAndServe(":"+port, router)) //启动server

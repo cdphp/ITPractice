@@ -1,6 +1,10 @@
 package model
 
-import "v1.0/vendor"
+import (
+	"time"
+
+	"v1.0/vendor"
+)
 
 // User 用户信息
 type User struct {
@@ -40,7 +44,7 @@ func (u *User) Get(id int) (*User, int) {
 }
 
 // Add 添加
-func (u *User) Add() {
+func (u *User) Add() bool {
 
 	//插入数据
 	stmt, err := u.ModelManager.Prepare("INSERT users SET username=?,email=?,password=?,type=?,created_at=?")
@@ -49,11 +53,11 @@ func (u *User) Add() {
 
 	id, err := res.LastInsertId()
 
-	if err != nil {
-		panic(err)
+	if err == nil {
+		u.ID = id
+		return true
 	}
-
-	u.ID = id
+	return false
 
 }
 
@@ -73,6 +77,28 @@ func (u *User) Auth(username string, password string) (*User, int) {
 
 	return u, 0
 
+}
+
+// Register 注册
+func (u *User) Register(username, email, password string, userType int) (*User, int) {
+	if u.HasName(username) {
+		return nil, 103
+	}
+
+	if u.HasEmail(email) {
+		return nil, 104
+	}
+
+	u.Username = username
+	u.Email = email
+	u.Password = password
+	u.CreatedAt = time.Now().Unix()
+	u.Type = userType
+
+	if u.Add() {
+		return u, 0
+	}
+	return nil, 23
 }
 
 // HasName 判断用户名是否已存在
@@ -97,4 +123,17 @@ func (u *User) HasEmail(email string) bool {
 		return true
 	}
 	return false
+}
+
+// GetAuthName 获取等级名称
+func (u *User) GetAuthName(auth int) string {
+	var name string
+	if auth == 1 {
+		name = "User"
+	} else if auth == 2 {
+		name = "Master"
+	} else {
+		name = "Admin"
+	}
+	return name
 }

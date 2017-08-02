@@ -5,28 +5,30 @@ import (
 	"v1.0/vendor"
 )
 
-// LoginController struct
-type LoginController struct {
+// RegisterController struct
+type RegisterController struct {
 	vendor.Controller
 	operation *model.User
 }
 
-// Index 登录验证
-func (c *LoginController) Index() {
+// Index 注册
+func (c *RegisterController) Index() {
 	postData := c.GetPosts()
 
 	result := new(Result)
 
-	if HasParam(postData, "username") == false || HasParam(postData, "password") == false {
+	if HasParam(postData, "username") == false || HasParam(postData, "password") == false || HasParam(postData, "email") == false {
 		result.ErrorNo = 24
 
 		JSONReturn(c.GetResponseWriter(), result)
 		return
 	}
-
+	userType := 1
 	c.operation = model.NewUser()
+	user, errorNo := c.operation.Register(postData["username"], postData["email"], postData["password"], userType)
 
-	user, errorNo := c.operation.Auth(postData["username"], postData["password"])
+	result.ErrorNo = errorNo
+
 	if errorNo == 0 {
 		// 获取token
 		tokenOperation := model.NewToken()
@@ -41,7 +43,6 @@ func (c *LoginController) Index() {
 		}
 
 	}
-	result.ErrorNo = errorNo
 
 	JSONReturn(c.GetResponseWriter(), result)
 	defer c.operation.CloseDb()

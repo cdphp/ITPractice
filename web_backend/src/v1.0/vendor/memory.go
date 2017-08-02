@@ -2,7 +2,6 @@ package vendor
 
 import (
 	"container/list"
-	"fmt"
 
 	"sync"
 	"time"
@@ -105,5 +104,5 @@ var pder = &Provider{list: list.New()}
 func init() {
 	pder.sessions = make(map[string]*list.Element, 0)
 	Register("memory", *pder)
-	fmt.Println("wzz")
+
 }

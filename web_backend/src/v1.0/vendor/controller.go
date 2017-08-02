@@ -30,6 +30,12 @@ type Controller struct {
 func (c *Controller) Init(ct *Context, controllerName string) {
 	c.ct = ct
 	c.name = controllerName
+	//c.Initialize()
+}
+
+// Initialize func
+func (c *Controller) Initialize() {
+	fmt.Println("Initialize:", c.name)
 }
 
 // Get func

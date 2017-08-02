@@ -19,13 +19,13 @@ type ModelInterface interface {
 
 // Model struct
 type Model struct {
-	Name         string
+	Resource     string
 	ModelManager *sql.DB
 }
 
 // Init func
-func (m *Model) Init(name string) {
-	m.Name = name
+func (m *Model) Init(resource string) {
+	m.Resource = resource
 	m.InstanceDb()
 }
 

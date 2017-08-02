@@ -18,6 +18,8 @@ func main() {
 	router.RegisterController("UserUpdate", "/user/:id", "PUT", &controller.UserController{}, "Update")
 	router.RegisterController("Login", "/login", "POST", &controller.LoginController{}, "Index")
 	router.RegisterController("Register", "/register", "POST", &controller.RegisterController{}, "Index")
+	router.RegisterController("ArticleAdd", "/article", "POST", &controller.ArticleController{}, "Add")
+	router.RegisterController("ArticleGet", "/article/:id", "GET", &controller.ArticleController{}, "Get")
 
 	port := "8085"
 	fmt.Println("Server started at http://localhost:" + port)

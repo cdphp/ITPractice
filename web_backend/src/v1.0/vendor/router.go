@@ -42,7 +42,8 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if reg.MatchString(r.URL.String()) && p.method == r.Method {
-
+			fmt.Println("request=>url:", r.URL.String(), ",method:", r.Method)
+			fmt.Println("server=>url:", p.pattern, ",method:", p.method)
 			matches := reg.FindStringSubmatch(r.URL.String())
 
 			if len(matches[0]) != len(r.URL.Path) {

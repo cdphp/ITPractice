@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"time"
 
 	"v1.0/vendor"
@@ -8,15 +9,17 @@ import (
 
 // Article 文章信息
 type Article struct {
-	ID           int64  `json:"id"`
-	Title        string `json:"title"`
-	Digest       string `json:"digest"`
-	Content      string `json:"content"`
-	UserID       int64  `json:"user_id"`
-	Labels       string `json:"labels"`
-	Clicks       int    `json:"clicks"`
-	CreatedAt    int64  `json:"created_at"`
-	UpdatedAt    int64  `json:"updated_at"`
+	ID        int64  `json:"id"`
+	Title     string `json:"title"`
+	Digest    string `json:"digest"`
+	Content   string `json:"content"`
+	UserID    int64  `json:"user_id"`
+	Labels    string `json:"labels"`
+	Clicks    int    `json:"clicks"`
+	IsDelete  int    `json:"-"`
+	CreatedAt int64  `json:"created_at"`
+	UpdatedAt int64  `json:"updated_at"`
+
 	vendor.Model `json:"-"`
 }
 
@@ -29,6 +32,10 @@ func NewArticle() *Article {
 	a.Init("articles") //设置表名
 
 	return a
+}
+
+func (a *Article) Find() {
+
 }
 
 // Get 根据id获取数据
@@ -78,18 +85,36 @@ func (a *Article) Add() bool {
 
 }
 
+// Update 更新
 func (a *Article) Update() bool {
 	a.UpdatedAt = time.Now().Unix()
-	stmt, err = a.ModelManager.Prepare("update " + a.Resource + " set title=?,digest=?,content=?,labels=?,clicks=?,updated_at=? where uid=?")
+	stmt, err := a.ModelManager.Prepare("update " + a.Resource + " set title=?,digest=?,content=?,labels=?,clicks=?,updated_at=? where id=?")
 	if err != nil {
 		return false
 	}
 
-	res, err = stmt.Exec("astaxieupdate", a.ID)
+	res, err := stmt.Exec(a.Title, a.Digest, a.Content, a.Labels, a.Clicks, a.UpdatedAt, a.ID)
 	if err != nil {
 		return false
 	}
 
-	affect, err := res.RowsAffected()
-	checkErr(err)
+	affect, _ := res.RowsAffected()
+	fmt.Println(affect)
+	return true
+}
+
+// Delete 删除
+func (a *Article) Delete() bool {
+
+	stmt, err := a.ModelManager.Prepare("update " + a.Resource + " set is_delete=? where id=?")
+	if err != nil {
+		return false
+	}
+
+	_, err = stmt.Exec(1, a.ID)
+	if err != nil {
+		return false
+	}
+
+	return true
 }

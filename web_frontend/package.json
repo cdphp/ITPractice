@@ -64,9 +64,6 @@
     "webpack-hot-middleware": "^2.16.1",
     "webpack-merge": "^2.6.1"
   },
-  "scripts": {
-      "build:dll": "webpack --config build/webpack.dll.conf.js"
-  },
   "engines": {
     "node": ">= 4.0.0",
     "npm": ">= 3.0.0"

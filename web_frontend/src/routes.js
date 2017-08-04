@@ -4,7 +4,7 @@ import Index from './views/index.vue'
 import Main from './views/layouts/main.vue'
 import Invest from './views/invest.vue'
 import Master from './views/master.vue'
-import User from './views/user.vue'
+import User from './views/user/index.vue'
 import Article from './views/article/index.vue'
 
 import Register from './views/reg.vue'
@@ -21,7 +21,7 @@ let routes = [
           { path: '/master', component: Master, name: 'Master', hidden: true },
           { path: '/invest', component: Invest, name: '调查', hidden: true },
           { path: '/user', component: User, name: '用户主页', hidden: true },
-          
+
         ],
     },
     {

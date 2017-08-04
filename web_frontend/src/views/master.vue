@@ -33,7 +33,7 @@
 </section>
 </template>
 <script>
-import {getUserList} from '../api/api'
+import {} from '../api/api'
 
 export default {
   data() {

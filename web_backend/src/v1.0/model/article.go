@@ -34,10 +34,6 @@ func NewArticle() *Article {
 	return a
 }
 
-func (a *Article) Find() {
-
-}
-
 // Get 根据id获取数据
 func (a *Article) Get(id int) (*Article, int) {
 
@@ -77,6 +73,9 @@ func (a *Article) Add() bool {
 
 	id, err := res.LastInsertId()
 
+	defer stmt.Close()
+	defer a.CloseDb()
+
 	if err == nil {
 		a.ID = id
 		return true
@@ -89,6 +88,10 @@ func (a *Article) Add() bool {
 func (a *Article) Update() bool {
 	a.UpdatedAt = time.Now().Unix()
 	stmt, err := a.ModelManager.Prepare("update " + a.Resource + " set title=?,digest=?,content=?,labels=?,clicks=?,updated_at=? where id=?")
+
+	defer stmt.Close()
+	defer a.CloseDb()
+
 	if err != nil {
 		return false
 	}
@@ -110,6 +113,8 @@ func (a *Article) Delete() bool {
 	if err != nil {
 		return false
 	}
+	defer stmt.Close()
+	defer a.CloseDb()
 
 	_, err = stmt.Exec(1, a.ID)
 	if err != nil {

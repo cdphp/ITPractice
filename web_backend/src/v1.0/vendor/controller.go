@@ -26,14 +26,16 @@ type Controller struct {
 	name string
 }
 
-// Init func
+// Init set context and name
 func (c *Controller) Init(ct *Context, controllerName string) {
 	c.ct = ct
 	c.name = controllerName
+	c.GetResponseWriter().Header().Set("Access-Control-Allow-Origin", "*")
+	c.GetResponseWriter().Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
 	//c.Initialize()
 }
 
-// Initialize func
+// Initialize run before action
 func (c *Controller) Initialize() {
 	fmt.Println("Initialize:", c.name)
 }
@@ -68,10 +70,19 @@ func (c *Controller) GetRequest() *http.Request {
 	return c.ct.Request
 }
 
+// GetQuery 获取get参数
+func (c *Controller) GetQuery(param string) string {
+	query := c.ct.Request.URL.Query()
+
+	return query.Get(param)
+}
+
 // GetPosts 获取post数据
 func (c *Controller) GetPosts() map[string]string {
 	request := c.GetRequest()
+
 	request.ParseForm()
+	fmt.Println(request)
 
 	postData, _ := ioutil.ReadAll(request.Body)
 	request.Body.Close()

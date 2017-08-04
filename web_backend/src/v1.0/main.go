@@ -12,7 +12,8 @@ import (
 func main() {
 
 	router := vendor.NewRouter()
-	router.RegisterController("Index", "/", "GET", &controller.IndexController{}, "Index")
+
+	router.RegisterController("Index", "/index", "GET", &controller.IndexController{}, "Index")
 	router.RegisterController("UserAdd", "/user", "POST", &controller.UserController{}, "Add")
 	router.RegisterController("UserGet", "/user/:id", "GET", &controller.UserController{}, "Get")
 	router.RegisterController("UserUpdate", "/user/:id", "PUT", &controller.UserController{}, "Update")

@@ -17,22 +17,26 @@ type ArticleController struct {
 // Initialize 初始化
 func (c *ArticleController) Initialize() {
 	fmt.Println("Initialize article controller")
+
 }
 
 // Index 列表接口
 func (c *ArticleController) Index() {
 	c.operation = model.NewArticle()
 
-	conditions := make(map[string]string)
+	page, _ := strconv.Atoi(c.GetQuery("page"))
 
+	conditions := make(map[string]string)
 	conditions["conditions"] = "is_delete=0"
-	conditions["columns"] = "id,title"
+
+	data := c.operation.Find(conditions)
+	limit := GetLimit()
 
 	result := new(Result)
 	result.ErrorNo = 0
+	result.Data = Paginator(data, page, limit)
 
 	JSONReturn(c.GetResponseWriter(), result)
-	defer c.operation.CloseDb()
 
 }
 
@@ -56,11 +60,19 @@ func (c *ArticleController) Get() {
 
 // Add 添加接口
 func (c *ArticleController) Add() {
-	c.operation = model.NewArticle()
-
-	postData := c.GetPosts()
-
 	result := new(Result)
+
+	tokenStr := c.GetRequest().Header.Get("token")
+
+	tokenObj, errorNo := ValidateToken(tokenStr, c.GetResponseWriter(), c.GetRequest())
+	if errorNo != 0 {
+		result.ErrorNo = errorNo
+		JSONReturn(c.GetResponseWriter(), result)
+		return
+	}
+
+	c.operation = model.NewArticle()
+	postData := c.GetPosts()
 
 	if HasParam(postData, "title") == false || HasParam(postData, "digest") == false || HasParam(postData, "content") == false {
 		result.ErrorNo = 24
@@ -68,17 +80,14 @@ func (c *ArticleController) Add() {
 		JSONReturn(c.GetResponseWriter(), result)
 		return
 	}
-	sess := globalSessions.SessionStart(c.GetResponseWriter(), c.GetRequest())
 
-	token := sess.Get("token").(*model.Token)
-
-	article, errorNo := c.operation.Write(postData["title"], postData["digest"], postData["content"], token.UserID)
+	article, errorNo := c.operation.Write(postData["title"], postData["digest"], postData["content"], tokenObj.UserID)
 
 	result.ErrorNo = errorNo
 	result.Data = article
 
 	JSONReturn(c.GetResponseWriter(), result)
-	defer c.operation.CloseDb()
+
 	return
 }
 

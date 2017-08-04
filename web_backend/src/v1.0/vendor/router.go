@@ -42,8 +42,8 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if reg.MatchString(r.URL.String()) && p.method == r.Method {
-			fmt.Println("request=>url:", r.URL.String(), ",method:", r.Method)
-			fmt.Println("server=>url:", p.pattern, ",method:", p.method)
+			//fmt.Println("request=>url:", r.URL.String(), ",method:", r.Method)
+			//fmt.Println("server=>url:", p.pattern, ",method:", p.method)
 			matches := reg.FindStringSubmatch(r.URL.String())
 
 			if len(matches[0]) != len(r.URL.Path) {
@@ -63,7 +63,7 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 			}
-			fmt.Println("params:", params)
+			//fmt.Println("params:", params)
 			vc := reflect.New(p.controllerType)
 			//fmt.Println("vc:", vc)
 			//fmt.Println("type:", p.controllerType)
@@ -77,6 +77,10 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			//fmt.Println("in", in)
 
 			init.Call(in)
+
+			initializeMethod := vc.MethodByName("Initialize")
+			in = make([]reflect.Value, 0)
+			initializeMethod.Call(in)
 
 			method := vc.MethodByName(p.action)
 			in = make([]reflect.Value, 0)

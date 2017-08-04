@@ -22,7 +22,21 @@
 
     </ul>
 
-    <ul class="nav navbar-nav navbar-right">
+
+    <ul class="nav navbar-nav navbar-right" v-if="isLogin">
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{username}} <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+
+          <li><a href="#/user">个人中心</a></li>
+
+          <li role="separator" class="divider"></li>
+          <li><a href="javascript:void(0)" v-on:click="logout">退出登录</a></li>
+
+        </ul>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right" v-else>
       <li><a href="#/login">登录</a></li>
       <li><a href="#/reg">注册</a></li>
 
@@ -36,11 +50,33 @@
   export default {
     data() {
       return {
-
+        username:'',
+        isLogin:false,
       };
     },
     methods: {
+      logout: function () {
 
+        this.$confirm('确认退出吗?', '提示', {
+          //type: 'warning'
+        }).then(() => {
+          this.isLogin = false
+          sessionStorage.removeItem('user');
+          this.$router.push('/login');
+        }).catch(() => {
+
+        });
+        },
+    },
+    mounted() {
+      var user = sessionStorage.getItem('user');
+      
+      if (user) {
+        this.isLogin = true
+        user = JSON.parse(user);
+
+        this.username = user.username || '';
+      }
     }
   }
 </script>

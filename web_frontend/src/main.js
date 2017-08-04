@@ -6,7 +6,7 @@ import 'element-ui/lib/theme-default/index.css'
 import './assets/css/common.css'
 
 import './assets/css/bootstrap.min.css'
-
+import './assets/js/bootstrap.min.js'
 import VueRouter from 'vue-router'
 import store from './vuex/store'
 import Vuex from 'vuex'
@@ -33,12 +33,24 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  //NProgress.start();
-  if (to.path == '/login') {
-    sessionStorage.removeItem('user');
+
+  if (to.path == '/user') {
+    let user = JSON.parse(sessionStorage.getItem('user'));
+
+    if(user) {
+      if(user.created_at+user.expire < new Date().getTime()/1000) {
+        sessionStorage.removeItem('user');
+        next({ path: '/login' })
+      }else {
+        next()
+      }
+    }else {
+      next({ path: '/login' })
+    }
+
+  }else {
+    next()
   }
-  let user = JSON.parse(sessionStorage.getItem('user'));
-  next()
 })
 
 //router.afterEach(transition => {

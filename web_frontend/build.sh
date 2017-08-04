@@ -1,2 +1,3 @@
-scp -r dist/index.html root@120.77.153.236:/var/www/html
-scp -r dist/static root@120.77.153.236:/var/www/html
+npm run build
+cp -r dist/index.html /var/www/html
+cp -r dist/static /var/www/html

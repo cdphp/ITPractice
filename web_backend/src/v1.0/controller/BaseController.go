@@ -2,13 +2,16 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
+	"math"
 	"net/http"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 
+	"v1.0/model"
 	"v1.0/vendor"
 )
 
@@ -66,4 +69,89 @@ func getCurrentDirectory() string {
 		log.Fatal(err)
 	}
 	return strings.Replace(dir, "\\", "/", -1)
+}
+
+// Paginator 分页
+func Paginator(data []map[string]string, page, limit int) map[string]interface{} {
+	paginatorMap := make(map[string]interface{})
+	totalItems := len(data)
+
+	var before int
+	var next int
+
+	totalPages := int(math.Ceil(float64(totalItems) / float64(limit))) //page总数
+
+	if page <= 1 {
+		page = 1
+		before = 1
+	} else {
+		before = page - 1
+	}
+	next = page + 1
+
+	start := (page - 1) * limit
+	if start >= totalItems {
+		start = totalItems
+	}
+
+	end := start + limit
+	if end > totalItems {
+		end = totalItems
+	}
+
+	if next > totalPages {
+		next = totalPages
+	}
+
+	fmt.Println(start, end)
+
+	paginatorMap["items"] = data[start:end]
+	paginatorMap["current"] = page
+	paginatorMap["limit"] = limit
+	paginatorMap["totalItems"] = totalItems
+	paginatorMap["totalPages"] = totalPages
+	paginatorMap["first"] = 1
+	paginatorMap["last"] = totalPages
+	paginatorMap["before"] = before
+	paginatorMap["next"] = next
+
+	return paginatorMap
+}
+
+// ValidateToken 验证token
+func ValidateToken(token string, w http.ResponseWriter, r *http.Request) (*model.Token, int) {
+
+	sess := globalSessions.SessionStart(w, r)
+	var tokenObj *model.Token
+	var errorNo int
+
+	sessionRes := sess.Get("token")
+	fmt.Println("session:", sessionRes)
+	if sessionRes == nil {
+		operation := model.NewToken()
+		tokenObj, errorNo = operation.Validate(token)
+	} else {
+		tokenObj = sessionRes.(*model.Token)
+
+		// token过期
+		if time.Now().Unix()-tokenObj.CreatedAt > tokenObj.Expire {
+			sess.Delete("token")
+			errorNo = 201
+		}
+	}
+
+	if errorNo == 0 {
+		sess := globalSessions.SessionStart(w, r)
+
+		sess.Set("token", tokenObj)
+		return tokenObj, 0
+	}
+
+	return nil, errorNo
+
+}
+
+// GetLimit return limit
+func GetLimit() int {
+	return 10
 }

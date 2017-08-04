@@ -1,19 +1,34 @@
 import axios from 'axios';
 
-let base = '';
+var instance = axios.create({
+  baseURL: '/api',
+  timeout: 2500,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  },
 
-export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
+});
 
-export const register = params => { return axios.post(`${base}/register`, params).then(res => res.data); };
+instance.interceptors.request.use(function (config) {
+    // 在发送请求之前做些什么
+    var user = sessionStorage.getItem('user');
+    if(user) {
+      user = JSON.parse(user);
+      config.headers.token = user.token;
+    }
 
-export const getUserList = params => { return axios.get(`${base}/user/list`, { params: params }).then(res => res.data); };
+    console.log(config);
+    return config;
+  }, function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+  });
 
-export const getUserListPage = params => { return axios.get(`${base}/user/listpage`, { params: params }); };
+export const requestLogin = params => { return instance.post(`/login`, params).then(res => res.data); };
 
-export const removeUser = params => { return axios.get(`${base}/user/remove`, { params: params }); };
+export const register = params => { return instance.post(`/register`, params).then(res => res.data); };
 
-export const batchRemoveUser = params => { return axios.get(`${base}/user/batchremove`, { params: params }); };
+export const getArticleListPage = params => { return instance.get(`/article`, {params: params}).then(res => res.data); };
 
-export const editUser = params => { return axios.get(`${base}/user/edit`, { params: params }); };
-
-export const addUser = params => { return axios.get(`${base}/user/add`, { params: params }); };
+export const getUserListPage = params => { return instance.get(`/user`, {params: params}).then(res => res.data); };

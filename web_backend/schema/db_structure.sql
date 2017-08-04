@@ -80,6 +80,7 @@ drop table if exists tokens;
    id int not null primary key auto_increment,
    token varchar(64) not null,
    user_id int not null,
+   username varchar(30) not null,
    expire int not null,
    auth varchar(30) not null default '',
    logout_at int not null default 0,

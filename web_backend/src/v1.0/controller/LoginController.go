@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"fmt"
+
 	"v1.0/model"
 	"v1.0/vendor"
 )
@@ -9,6 +11,11 @@ import (
 type LoginController struct {
 	vendor.Controller
 	operation *model.User
+}
+
+func (c *LoginController) Initialize() {
+	fmt.Println("login controller intialize ")
+	c.operation = model.NewUser()
 }
 
 // Index 登录验证
@@ -24,14 +31,14 @@ func (c *LoginController) Index() {
 		return
 	}
 
-	c.operation = model.NewUser()
-
 	user, errorNo := c.operation.Auth(postData["username"], postData["password"])
 	if errorNo == 0 {
 		// 获取token
 		tokenOperation := model.NewToken()
 		auth := user.GetAuthName(user.Type)
-		token, errorNo := tokenOperation.Obtian(user.ID, auth, 7200)
+
+		var token *model.Token
+		token, errorNo = tokenOperation.Obtian(user.ID, user.Username, auth, 7200)
 
 		if errorNo == 0 {
 			sess := globalSessions.SessionStart(c.GetResponseWriter(), c.GetRequest())

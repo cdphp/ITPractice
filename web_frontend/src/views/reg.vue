@@ -5,6 +5,9 @@
     <el-form-item prop="account">
       <el-input type="text" v-model="ruleForm2.account" auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
+    <el-form-item prop="email">
+      <el-input type="text" v-model="ruleForm2.email" auto-complete="off" placeholder="邮箱"></el-input>
+    </el-form-item>
     <el-form-item prop="pass">
       <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
@@ -60,6 +63,11 @@
             { required: true, message: '请输入账号', trigger: 'blur' },
 
           ],
+          email: [
+            { required: true, message: '请输入邮箱', trigger: 'blur' },
+            { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
+
+          ],
           pass: [
            { validator: validatePass, trigger: 'blur' }
          ],
@@ -79,7 +87,7 @@
 
             this.loading = true;
             //NProgress.start();
-            var params = { username: this.ruleForm2.account, password: this.ruleForm2.pass };
+            var params = { username: this.ruleForm2.account,email:this.ruleForm2.email, password: this.ruleForm2.pass };
             register(params).then(data => {
               this.loading = false;
               //NProgress.done();

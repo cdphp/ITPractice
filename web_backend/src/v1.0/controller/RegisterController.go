@@ -33,7 +33,7 @@ func (c *RegisterController) Index() {
 		// 获取token
 		tokenOperation := model.NewToken()
 		auth := user.GetAuthName(user.Type)
-		token, errorNo := tokenOperation.Obtian(user.ID, auth, 7200)
+		token, errorNo := tokenOperation.Obtian(user.ID, user.Username, auth, 7200)
 
 		if errorNo == 0 {
 			sess := globalSessions.SessionStart(c.GetResponseWriter(), c.GetRequest())

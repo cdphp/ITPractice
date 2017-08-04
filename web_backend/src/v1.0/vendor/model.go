@@ -58,43 +58,8 @@ func (m *Model) CloseDb() {
 	defer m.ModelManager.Close()
 }
 
-// Find func
-func (m *Model) Find() {
-
-	fmt.Println("sql:", m.QueryStr)
-	rows, _ := m.ModelManager.Query(m.QueryStr)
-	cols, _ := rows.Columns()
-	fmt.Println(cols)
-
-	for rows.Next() {
-		// Create a slice of interface{}'s to represent each column,
-		// and a second slice to contain pointers to each item in the columns slice.
-		columns := make([]interface{}, len(cols))
-		columnPointers := make([]interface{}, len(cols))
-		for i, _ := range columns {
-			columnPointers[i] = &columns[i]
-		}
-
-		// Scan the result into the column pointers...
-		if err := rows.Scan(columnPointers...); err != nil {
-			fmt.Println(err)
-		}
-
-		// Create our map, and retrieve the value for each column from the pointers slice,
-		// storing it in the map with the name of the column as the key.
-		m := make(map[string]interface{})
-		for i, colName := range cols {
-			val := columnPointers[i].(*interface{})
-			m[colName] = *val
-		}
-
-		// Outputs: map[columnName:value columnName2:value2 columnName3:value3 ...]
-		fmt.Print(m)
-	}
-}
-
 // SetConditions set conditions
-func (m *Model) SetConditions(conditions map[string]string) *Model {
+func (m *Model) SetConditions(conditions map[string]string) string {
 	sql := "select "
 
 	// columns
@@ -118,6 +83,97 @@ func (m *Model) SetConditions(conditions map[string]string) *Model {
 		sql += " limit " + conditions["limit"]
 	}
 
-	m.QueryStr = sql
-	return m
+	return sql
+}
+
+func (m *Model) FindFirst(conditions map[string]string) map[string]string {
+	sql := m.SetConditions(conditions)
+	stmt, _ := m.ModelManager.Prepare(sql)
+	defer stmt.Close()
+
+	rows, _ := stmt.Query()
+	defer rows.Close()
+
+	if rows == nil {
+		return nil
+	}
+
+	cols, err := rows.Columns()
+	if err != nil {
+		return nil
+	}
+
+	rawResult := make([][]byte, len(cols))
+	result := make(map[string]string, len(cols))
+	dest := make([]interface{}, len(cols))
+	for i, _ := range rawResult {
+		dest[i] = &rawResult[i]
+	}
+
+	if rows.Next() {
+		err = rows.Scan(dest...)
+		if err != nil {
+			return nil
+		}
+
+		for i, raw := range rawResult {
+			if raw == nil {
+				result[cols[i]] = ""
+			} else {
+				result[cols[i]] = string(raw)
+			}
+		}
+
+	} else {
+		return nil
+	}
+
+	return result
+}
+
+func (m *Model) Find(conditions map[string]string) []map[string]string {
+	sql := m.SetConditions(conditions)
+	stmt, _ := m.ModelManager.Prepare(sql)
+	defer stmt.Close()
+
+	rows, _ := stmt.Query()
+	defer rows.Close()
+
+	if rows == nil {
+		return nil
+	}
+
+	cols, err := rows.Columns()
+	if err != nil {
+		return nil
+	}
+
+	rawResult := make([][]byte, len(cols))
+	result := []map[string]string{}
+
+	dest := make([]interface{}, len(cols))
+	for i, _ := range rawResult {
+		dest[i] = &rawResult[i]
+	}
+
+	for rows.Next() {
+		err = rows.Scan(dest...)
+		if err != nil {
+			continue
+		}
+		item := make(map[string]string)
+		for i, raw := range rawResult {
+
+			if raw == nil {
+				item[cols[i]] = ""
+			} else {
+				item[cols[i]] = string(raw)
+			}
+		}
+		result = append(result, item)
+
+	}
+	defer m.CloseDb()
+
+	return result
 }

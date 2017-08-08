@@ -11,6 +11,7 @@ type IndexController struct {
 	vendor.Controller
 }
 
+// Index 首页
 func (c *IndexController) Index() {
 	sess := globalSessions.SessionStart(c.GetResponseWriter(), c.GetRequest())
 

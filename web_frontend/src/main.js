@@ -34,7 +34,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
 
-  if (to.path == '/user') {
+  if (to.path == '/needLogin') {
     let user = JSON.parse(sessionStorage.getItem('user'));
 
     if(user) {

@@ -8,7 +8,6 @@ import (
 // RegisterController struct
 type RegisterController struct {
 	vendor.Controller
-	operation *model.User
 }
 
 // Index 注册
@@ -19,32 +18,46 @@ func (c *RegisterController) Index() {
 
 	if HasParam(postData, "username") == false || HasParam(postData, "password") == false || HasParam(postData, "email") == false {
 		result.ErrorNo = 24
-
 		JSONReturn(c.GetResponseWriter(), result)
 		return
 	}
-	userType := 1
-	c.operation = model.NewUser()
-	user, errorNo := c.operation.Register(postData["username"], postData["email"], postData["password"], userType)
 
-	result.ErrorNo = errorNo
+	user := model.NewUser()
+	user.Username = postData["username"]
+	if !user.CheckName() {
+		result.ErrorNo = 103
+		JSONReturn(c.GetResponseWriter(), result)
+		return
+	}
 
-	if errorNo == 0 {
+	user.Email = postData["email"]
+	if !user.CheckEmail() {
+		result.ErrorNo = 104
+		JSONReturn(c.GetResponseWriter(), result)
+		return
+	}
+	user.Password = postData["password"]
+	user.Type = 1
+
+	if user.Register() {
 		// 获取token
-		tokenOperation := model.NewToken()
+		token := model.NewToken()
 		auth := user.GetAuthName(user.Type)
-		token, errorNo := tokenOperation.Obtian(user.ID, user.Username, auth, 7200)
 
-		if errorNo == 0 {
+		if token.Obtian(user.ID, user.Username, auth, 7200) {
+			result.ErrorNo = 0
 			sess := globalSessions.SessionStart(c.GetResponseWriter(), c.GetRequest())
 
 			sess.Set("token", token)
 			result.Data = token
+		} else {
+			result.ErrorNo = 105
 		}
 
+	} else {
+		result.ErrorNo = 106
 	}
 
 	JSONReturn(c.GetResponseWriter(), result)
-	defer c.operation.CloseDb()
 	return
 }

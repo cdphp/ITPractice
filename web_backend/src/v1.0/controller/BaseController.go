@@ -119,32 +119,33 @@ func Paginator(data []map[string]string, page, limit int) map[string]interface{}
 }
 
 // ValidateToken 验证token
-func ValidateToken(token string, w http.ResponseWriter, r *http.Request) (*model.Token, int) {
+func ValidateToken(tokenStr string, w http.ResponseWriter, r *http.Request) (*model.Token, int) {
 
 	sess := globalSessions.SessionStart(w, r)
-	var tokenObj *model.Token
-	var errorNo int
+	var token = model.NewToken()
+	errorNo := 0
 
 	sessionRes := sess.Get("token")
 	fmt.Println("session:", sessionRes)
 	if sessionRes == nil {
-		operation := model.NewToken()
-		tokenObj, errorNo = operation.Validate(token)
+
+		if !token.Validate(tokenStr) {
+			errorNo = 201
+		}
 	} else {
-		tokenObj = sessionRes.(*model.Token)
+		token = sessionRes.(*model.Token)
 
 		// token过期
-		if time.Now().Unix()-tokenObj.CreatedAt > tokenObj.Expire {
+		if time.Now().Unix()-token.CreatedAt > token.Expire {
 			sess.Delete("token")
 			errorNo = 201
 		}
 	}
 
 	if errorNo == 0 {
-		sess := globalSessions.SessionStart(w, r)
 
-		sess.Set("token", tokenObj)
-		return tokenObj, 0
+		sess.Set("token", token)
+		return token, 0
 	}
 
 	return nil, errorNo

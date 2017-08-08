@@ -21,6 +21,7 @@ create table temp (
 /**
  * users 用户表
  * id 主键
+ * unique_key
  * username 用户名
  * email 邮箱
  * password 密码
@@ -32,6 +33,7 @@ create table temp (
 drop table if exists users;
 create table users (
     id int not null primary key auto_increment,
+    unique_key char(32) not null,
     username varchar(30) not null,
     email varchar(50) not null,
     password char(32) not null,
@@ -78,7 +80,7 @@ create table users_info (
 drop table if exists tokens;
  create table tokens (
    id int not null primary key auto_increment,
-   token varchar(64) not null,
+   token char(32) not null,
    user_id int not null,
    username varchar(30) not null,
    expire int not null,

@@ -10,12 +10,12 @@ import (
 // LoginController struct
 type LoginController struct {
 	vendor.Controller
-	operation *model.User
 }
 
+// Initialize 初始化
 func (c *LoginController) Initialize() {
 	fmt.Println("login controller intialize ")
-	c.operation = model.NewUser()
+
 }
 
 // Index 登录验证
@@ -31,26 +31,30 @@ func (c *LoginController) Index() {
 		return
 	}
 
-	user, errorNo := c.operation.Auth(postData["username"], postData["password"])
-	if errorNo == 0 {
+	user := model.NewUser()
+	user.Username = postData["username"]
+
+	var errorNo int
+	if user.Auth(postData["password"]) {
 		// 获取token
-		tokenOperation := model.NewToken()
+		token := model.NewToken()
 		auth := user.GetAuthName(user.Type)
 
-		var token *model.Token
-		token, errorNo = tokenOperation.Obtian(user.ID, user.Username, auth, 7200)
-
-		if errorNo == 0 {
+		if token.Obtian(user.ID, user.Username, auth, 7200) {
+			errorNo = 0
 			sess := globalSessions.SessionStart(c.GetResponseWriter(), c.GetRequest())
 
 			sess.Set("token", token)
 			result.Data = token
+		} else {
+			errorNo = 105
 		}
 
+	} else {
+		errorNo = 102
 	}
-	result.ErrorNo = errorNo
 
+	result.ErrorNo = errorNo
 	JSONReturn(c.GetResponseWriter(), result)
-	defer c.operation.CloseDb()
 	return
 }

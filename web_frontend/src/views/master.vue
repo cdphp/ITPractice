@@ -10,15 +10,16 @@
 
       <div class="col-sm-4" v-for="item in users">
         <div class="master">
-          <div class="bg" :style="bgFormat(item.bg)">
+          <div class="bg" :style="bgFormat(item.info.bg)">
 
           </div>
           <div class="headpic">
-            <img :src="item.avatar" />
+            <img :src="item.info.avatar" />
           </div>
           <div class="content">
-          <div class="username">{{item.name}}</div>
-          <p class="digest">{{item.about}}</p>
+          <div class="username">{{item.username}}</div>
+          <p class="digest" v-if="item.about">{{item.about}}</p>
+          <p class="digest" v-else>暂无内容</p>
           <button class="btn btn-blue btn-block" v-on:click="viewUser(item.id)">查看更多</button>
           </div>
 
@@ -33,12 +34,13 @@
 </section>
 </template>
 <script>
-import {} from '../api/api'
+import {getUserListPage} from '../api/api'
 
 export default {
   data() {
     return {
       users: [],
+      page: 1,
     }
   },
   methods: {
@@ -48,14 +50,18 @@ export default {
     //获取用户列表
     getUsers: function () {
       let para = {
-
+        page : this.page,
       };
       this.loading = true;
       //NProgress.start();
-      getUserList(para).then((res) => {
+      getUserListPage(para).then(res => {
+        if(res.errorNo == 0) {
+          this.users = res.data;
+          console.log("result:",this.users);
+          this.loading = false;
+        }
 
-        this.users = res.users;
-        this.loading = false;
+
         //NProgress.done();
       });
     },
@@ -92,6 +98,7 @@ border-top-right-radius:5px;}
 }
 .master .headpic img {
   width:80px;
+  height:80px;
   border-radius:50%;
   border: 3px solid #fff;
   box-shadow: 0 1px 1px rgba(0,0,0,0.1);

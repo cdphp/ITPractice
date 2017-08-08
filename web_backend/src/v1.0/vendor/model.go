@@ -1,9 +1,7 @@
 package vendor
 
 import (
-	"crypto/md5"
 	"database/sql"
-	"encoding/hex"
 	"fmt"
 	// comment
 	_ "github.com/go-sql-driver/mysql"
@@ -43,14 +41,6 @@ func (m *Model) InstanceDb() {
 		m.ModelManager = db
 	}
 
-}
-
-// Md5 加密
-func (m *Model) Md5(str string) string {
-	md5Ctx := md5.New()
-	md5Ctx.Write([]byte(str))
-	cipherStr := md5Ctx.Sum(nil)
-	return hex.EncodeToString(cipherStr)
 }
 
 // CloseDb func
@@ -173,7 +163,7 @@ func (m *Model) Find(conditions map[string]string) []map[string]string {
 		result = append(result, item)
 
 	}
-	defer m.CloseDb()
+	//defer m.CloseDb()
 
 	return result
 }

@@ -32,3 +32,5 @@ export const register = params => { return instance.post(`/register`, params).th
 export const getArticleListPage = params => { return instance.get(`/article`, {params: params}).then(res => res.data); };
 
 export const getUserListPage = params => { return instance.get(`/user`, {params: params}).then(res => res.data); };
+
+export const getUser = params => {return instance.get(`/user/${params.id}`).then(res => res.data);}

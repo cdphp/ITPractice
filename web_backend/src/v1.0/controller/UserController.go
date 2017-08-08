@@ -16,8 +16,21 @@ type UserController struct {
 
 // Index function
 func (c *UserController) Index() {
-	fmt.Fprintln(c.GetResponseWriter(), "Hello,welcome to user module")
-	return
+	user := model.NewUser()
+
+	page, err := strconv.Atoi(c.GetQuery("page"))
+	if err != nil {
+		page = 1
+	}
+
+	limit := GetLimit()
+	data := user.ListData(page, limit)
+
+	result := new(Result)
+	result.ErrorNo = 0
+	result.Data = data
+
+	JSONReturn(c.GetResponseWriter(), result)
 
 }
 
@@ -33,15 +46,16 @@ func (c *UserController) Get() {
 	c.operation = model.NewUser()
 
 	params := c.GetParams()
-	uid, _ := strconv.Atoi(params[1])
+	id, _ := strconv.Atoi(params[1])
 
-	user, errorNo := c.operation.Get(uid)
+	user, errorNo := c.operation.Get(id)
 
+	fmt.Println(user)
 	result := new(Result)
 	result.ErrorNo = errorNo
 	result.Data = &user
 
-	defer c.operation.CloseDb()
+	JSONReturn(c.GetResponseWriter(), result)
 
 }
 

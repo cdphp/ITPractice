@@ -11,17 +11,20 @@
               </div>
               <div class="box-content no-padding">
               <div class="headpic">
-                <img src="../../assets/imgs/profile_big.jpg" />
+                <img :src="info.avatar" />
               </div>
               </div>
               <div class="box-content">
-              <h4>破晓</h4>
-              <p class="muted text-indent">正义的伙伴,低级全栈</p>
+              <h4>{{user.username}}</h4>
+              <h6>标签</h6>
+              <p class="muted text-indent" v-if="info.labels">{{info.labels}}</p>
+              <p class="muted text-indent" v-else>暂无内容</p>
               <h6>个人介绍</h6>
-              <p class="muted text-indent">这个家伙很懒，什么都没有留下...</p>
-
-              <button class="btn btn-red btn-block follow" v-if="canAttention">关注</button>
+              <p class="muted text-indent" v-if="info.about">{{info.about}}</p>
+              <p class="muted text-indent" v-else>暂无内容</p>
               <a href="#/article/add" class="btn btn-blue btn-block follow" v-if="isSelf">发表新文章</a>
+              <button class="btn btn-red btn-block follow" v-else>关注</button>
+
               </div>
 
             </div>
@@ -84,10 +87,12 @@
   </section>
 </template>
 <script>
-import {getArticleListPage} from '../../api/api'
+import {getArticleListPage,getUser} from '../../api/api'
 export default {
   data() {
     return {
+      user:{},
+      info:{},
       canAttention:true,
       isSelf: false,
       followers: [
@@ -112,16 +117,38 @@ export default {
     }
   },
   methods: {
+    getUserInfo(id) {
+      let para = {id :id};
+      getUser(para).then(res => {
+
+        if(res.errorNo == 0 ) {
+          this.user = res.data;
+          this.info = res.data.info;
+        }else {
+          this.$router.push({ path: '/404' });
+        }
+      });
+    },
     getArticles() {
-      getArticleListPage().then((res)=>function () {
+      getArticleListPage().then(res=>{
         console.log(res);
       });
     }
   },
   mounted() {
     var id = this.$route.query.id;
-    console.log(id);
+
+    var user = sessionStorage.getItem('user');
+
+    if (user) {
+      user = JSON.parse(user);
+      this.isSelf = user.user_id==id?true:false;
+
+    }
+
+
     this.getArticles();
+    this.getUserInfo(id);
   }
 
 }

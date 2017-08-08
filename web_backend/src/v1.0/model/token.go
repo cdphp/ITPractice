@@ -30,37 +30,34 @@ func NewToken() *Token {
 }
 
 // Obtian 获取token
-func (t *Token) Obtian(userID int64, username, auth string, expire int64) (*Token, int) {
-	t.Token = t.Md5(strconv.FormatInt(time.Now().UnixNano(), 10))
+func (t *Token) Obtian(userID int64, username, auth string, expire int64) bool {
+	t.Token = vendor.Md5(strconv.FormatInt(time.Now().UnixNano(), 10))
 	t.UserID = userID
 	t.Username = username
 	t.Expire = expire
 	t.Auth = auth
 	t.CreatedAt = time.Now().Unix()
 
-	if t.Add() {
-		return t, 0
-	}
-	return nil, 23
+	return t.Add()
 }
 
 // Validate 验证
-func (t *Token) Validate(token string) (*Token, int) {
-	sql := "select id,user_id,username,expire,auth,logout_at,created_at from " + t.Resource + " where token=? and is_delete=0"
+func (t *Token) Validate(token string) bool {
+	sql := "select id,user_id, username,expire,auth,logout_at,created_at from " + t.Resource + " where token=? and is_delete=0"
 	err := t.ModelManager.QueryRow(sql, token).Scan(&t.ID, &t.UserID, &t.Username, &t.Expire, &t.Auth, &t.LogoutAt, &t.CreatedAt)
 
 	// 没找到token
 	if err != nil {
-		return nil, 201
+		return false
 	}
 
 	// token过期
 	if time.Now().Unix()-t.CreatedAt > t.Expire {
-		return nil, 201
+		return false
 	}
 	defer t.CloseDb()
 
-	return t, 0
+	return true
 }
 
 // Add 添加

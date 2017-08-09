@@ -11,15 +11,15 @@
               {{article.title}}
             </div>
             <div class="about muted text-center">
-              <span class="item">天府盐煎肉</span>
-              <span class="item"><i class="el-icon-time"></i> 2017-07-11</span>
+              <span class="item">{{article.author_name}}</span>
+              <span class="item"><i class="el-icon-time"></i> {{formatTime(article.created_at)}}</span>
             </div>
             <div class="about muted text-right">
               <span class="item"><i class="el-icon-star-off"></i> 20</span>
               <span class="item"><span class="glyphicon glyphicon-eye-open"></span> 20</span>
             </div>
             <div class="content">
-              {{article.content}}
+              <div v-html="article.content"></div>
             </div>
           </div>
 
@@ -88,6 +88,7 @@
 </template>
 <script>
 import {getArticle} from '../../api/api'
+import util from '../../common/js/util'
 export default {
   data() {
     return {
@@ -118,15 +119,18 @@ export default {
   },
   methods: {
     getArticleInfo(id) {
-    let para = {id :id};
-    getArticle(para).then(res => {
+      let para = {id :id};
+      getArticle(para).then(res => {
 
-      if(res.errorNo == 0 ) {
-        this.article = res.data;
-      }else {
-        this.$router.push({ path: '/404' });
-      }
-    });
+        if(res.errorNo == 0 ) {
+          this.article = res.data;
+        }else {
+          this.$router.push({ path: '/404' });
+        }
+      });
+    },
+    formatTime(unixTime) {
+      return util.formatDate.format(new Date(unixTime*1000),'yy-MM-dd');
     }
   },
   mounted() {

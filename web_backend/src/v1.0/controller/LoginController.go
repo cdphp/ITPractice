@@ -32,10 +32,10 @@ func (c *LoginController) Index() {
 	}
 
 	user := model.NewUser()
-	user.Username = postData["username"]
+	user.Username = postData["username"].(string)
 
 	var errorNo int
-	if user.Auth(postData["password"]) {
+	if user.Auth(postData["password"].(string)) {
 		// 获取token
 		token := model.NewToken()
 		auth := user.GetAuthName(user.Type)

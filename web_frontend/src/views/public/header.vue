@@ -28,7 +28,7 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{username}} <span class="caret"></span></a>
         <ul class="dropdown-menu">
 
-          <li><router-link :to="{ path: 'user', query: { id: user_id }}">个人中心</router-link></li>
+          <li><router-link :to="{ path: '/user', query: { id: user_id }}">个人中心</router-link></li>
 
           <li role="separator" class="divider"></li>
           <li><a href="javascript:void(0)" v-on:click="logout">退出登录</a></li>

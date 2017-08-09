@@ -43,7 +43,7 @@ func GetErrorMsg(no int) string {
 }
 
 // HasParam 判断是否有key存在
-func HasParam(params map[string]string, key string) bool {
+func HasParam(params map[string]interface{}, key string) bool {
 	if _, ok := params[key]; ok {
 		return true
 	}

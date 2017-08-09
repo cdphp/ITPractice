@@ -34,7 +34,11 @@
           <div class="col-sm-9">
             <div class="box">
               <div class="box-header">
-                <h5>他的文章</h5>
+                <h5 class="box-title" v-if="isSelf">我的文章</h5>
+                <h5 class="box-title" v-else>他的文章</h5>
+                <div class="box-tools">
+                <a class="btn btn-blue" href="#/article/add">发布文章</a>
+                </div>
               </div>
               <div class="box-content">
                 <div class="none" v-if="articles.length==0">暂无内容</div>
@@ -53,7 +57,8 @@
 
             <div class="box">
               <div class="box-header">
-                <h5>谁在关注</h5>
+              <h5 v-if="isSelf">我的粉丝</h5>
+              <h5 v-else>他的粉丝</h5>
               </div>
               <div class="box-content">
                 <div class="none" v-if="followers.length==0">暂无内容</div>
@@ -68,7 +73,8 @@
 
             <div class="box">
               <div class="box-header">
-                <h5>他关注的人</h5>
+                <h5 v-if="isSelf">我的偶像</h5>
+                <h5 v-else>他的偶像</h5>
               </div>
               <div class="box-content">
                 <div class="none" v-if="attentions.length==0">暂无内容</div>
@@ -107,16 +113,7 @@ export default {
         }
       ],
       attentions: [],
-      articles:[
-        {
-          'id': 1,
-          'title':'OpenStack大规模部署详解',
-        },
-        {
-          'id': 2,
-          'title':'Web前端知识体系精简',
-        }
-      ],
+      articles:[],
     }
   },
   methods: {
@@ -127,14 +124,20 @@ export default {
         if(res.errorNo == 0 ) {
           this.user = res.data;
           this.info = res.data.info;
+
+          this.getArticles(id);
+
         }else {
           this.$router.push({ path: '/404' });
         }
       });
     },
-    getArticles() {
-      getArticleListPage().then(res=>{
-        console.log(res);
+    getArticles(id) {
+      let para = {uid :id};
+      getArticleListPage(para).then(res=>{
+        if(res.errorNo == 0 ) {
+          this.articles = res.data;
+        }
       });
     },
     viewArticle(id) {
@@ -152,9 +155,8 @@ export default {
 
     }
 
-
-    this.getArticles();
     this.getUserInfo(id);
+
   }
 
 }

@@ -167,3 +167,12 @@ func (m *Model) Find(conditions map[string]string) []map[string]string {
 
 	return result
 }
+
+func (m *Model) Where(conditions map[string]string) string {
+	conditions["is_delete"] = "0"
+	where := ""
+	for key, value := range conditions {
+		where += key + "=" + value + " "
+	}
+	return where
+}

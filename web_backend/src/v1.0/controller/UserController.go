@@ -43,20 +43,31 @@ func (c *UserController) List() {
 
 // Get function
 func (c *UserController) Get() {
-	c.operation = model.NewUser()
+	user := model.NewUser()
+	result := new(Result)
 
 	params := c.GetParams()
-	id, _ := strconv.Atoi(params[1])
+	id, err := strconv.ParseInt(params[1], 10, 64)
+	if err != nil {
+		result.ErrorNo = 24
+		JSONReturn(c.GetResponseWriter(), result)
+		return
+	}
 
-	user, errorNo := c.operation.Get(id)
+	user.ID = id
+	if !user.Get() {
+		result.ErrorNo = 22
+		JSONReturn(c.GetResponseWriter(), result)
+		return
+	}
 
 	fmt.Println(user)
-	result := new(Result)
-	result.ErrorNo = errorNo
-	result.Data = &user
+
+	result.ErrorNo = 0
+	result.Data = user
 
 	JSONReturn(c.GetResponseWriter(), result)
-
+	return
 }
 
 // Add func
@@ -67,8 +78,37 @@ func (c *UserController) Add() {
 
 // Update func
 func (c *UserController) Update() {
+	result := new(Result)
+	params := c.GetParams()
+	id, err := strconv.ParseInt(params[1], 10, 64)
+	if err != nil {
+		result.ErrorNo = 24
+		JSONReturn(c.GetResponseWriter(), result)
+		return
+	}
+
 	postData := c.GetPosts()
-	fmt.Println(postData)
+	user := model.NewUser()
+	user.ID = id
+
+	if HasParam(postData, "labels") {
+		user.Info.Labels = postData["labels"].(string)
+	}
+
+	if HasParam(postData, "about") {
+		user.Info.About = postData["about"].(string)
+	}
+
+	if !user.UpdateInfo() {
+		result.ErrorNo = 25
+		JSONReturn(c.GetResponseWriter(), result)
+		return
+	}
+
+	result.ErrorNo = 0
+	JSONReturn(c.GetResponseWriter(), result)
+	return
+
 }
 
 // Delete func

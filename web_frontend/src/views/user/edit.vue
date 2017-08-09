@@ -38,19 +38,19 @@
               <div class="form-group">
                 <label for="labels" class="col-sm-2 control-label">标签</label>
                 <div class="col-sm-6">
-                <input type="text" class="form-control" id="labels" placeholder="...">
+                <input type="text" class="form-control" id="labels" placeholder="..." v-model="info.labels">
                 </div>
               </div>
               <div class="form-group">
                 <label for="about" class="col-sm-2 control-label">个性签名</label>
                 <div class="col-sm-10">
-                  <textarea class="form-control" id="about" placeholder="自由发挥..">{{info.about}}</textarea>
+                  <textarea class="form-control" id="about" placeholder="自由发挥.." v-model="info.about"></textarea>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-default">保存</button>
+                  <button class="btn btn-blue" v-on:click="updateInfo">保存</button>
                 </div>
               </div>
               </div>
@@ -68,7 +68,19 @@
 
           <div class="row">
             <div class="col-sm-8">
-              <img id="image" :src="info.avatar" />
+              <div class="avatar">
+                <img id="image" :src="info.avatar" />
+              </div>
+
+            </div>
+            <div class="col-sm-4">
+            <button class="btn btn-blue fileinput-button">
+              <span>选择图片</span>
+              <input type="file" @change="onFileChange">
+          </button>
+          <button class="btn btn-blue" v-on:click="saveAvatar">
+            保存头像
+          </button>
             </div>
           </div>
           </div>
@@ -82,12 +94,20 @@
   </section>
 </template>
 <script>
-import {getArticleListPage,getUser} from '../../api/api'
+import {getArticleListPage,getUser,editUser} from '../../api/api'
+
 export default {
   data() {
+
     return {
       user:{},
       info:{},
+      option: {
+        aspectRatio: 1 / 1,
+        crop: function(e) {
+          console.log(e);
+        }
+      },
 
     }
   },
@@ -104,22 +124,74 @@ export default {
         }
       });
     },
+    updateInfo() {
+      var that = this;
+      let para = {
+        id: this.user.id,
+        labels: this.info.labels,
+        about: this.info.about,
+      }
+      editUser(para).then(res => {
+
+        if(res.errorNo == 0 ) {
+          
+          this.$router.push({ path: '/user?id='+ that.user.id});
+        }else {
+          this.$message({
+          message: res.errorMsg,
+          type: 'error'
+        });
+        }
+      });
+
+    },
+    onFileChange(e) {
+
+
+        var files = e.target.files || e.dataTransfer.files;
+        if (!files.length)
+          return;
+        var file = files[0];
+        var URL = window.URL || window.webkitURL;
+        if (/^image\/\w+$/.test(file.type)) {
+          var uploadedImageType = file.type;
+
+          if (uploadedImageURL) {
+            URL.revokeObjectURL(uploadedImageURL);
+          }
+
+          var uploadedImageURL = URL.createObjectURL(file);
+          $("#image").cropper('destroy').attr('src', uploadedImageURL).cropper(this.option);
+
+        } else {
+          window.alert('Please choose an image file.');
+        }
+        /*
+        var vm = this;
+
+        var image = new Image();
+      var reader = new FileReader();
+      reader.onload = (e) => {
+        console.log(e.target.result);
+        vm.info.avatar = e.target.result;
+      };
+      reader.readAsDataURL(files[0]);
+      */
+
+    },
+    saveAvatar() {
+      this.$message({
+        message: "上传功能还未实现，先等等",
+        type: 'warning'
+      });
+
+
+
+    }
 
   },
   updated() {
-  $('#image').cropper({
-aspectRatio: 16 / 9,
-crop: function(e) {
-  // Output the result data for cropping image.
-  console.log(e.x);
-  console.log(e.y);
-  console.log(e.width);
-  console.log(e.height);
-  console.log(e.rotate);
-  console.log(e.scaleX);
-  console.log(e.scaleY);
-}
-});
+  $("#image").cropper(this.option);
   },
   mounted() {
 
@@ -139,5 +211,23 @@ crop: function(e) {
 }
 </script>
 <style scoped>
+.fileinput-button {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+        }
 
+        .fileinput-button input{
+            position:absolute;
+            right: 0px;
+            top: 0px;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            font-size: 200px;
+        }
+        .avatar {
+          width:400px;
+
+          padding-left: 50px;
+        }
 </style>

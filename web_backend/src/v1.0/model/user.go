@@ -73,15 +73,17 @@ func (u *User) ListData(page, row int) Users {
 }
 
 // Get 根据id获取数据
-func (u *User) Get(id int) (*User, int) {
+func (u *User) Get() bool {
 
-	sql := "select id,username,email,type,created_at,updated_at from " + u.Resource + " where id=?"
-	err := u.ModelManager.QueryRow(sql, id).Scan(&u.ID, &u.Username, &u.Email, &u.Type, &u.CreatedAt, &u.UpdatedAt)
+	sql := "select username,email,type,created_at,updated_at from " + u.Resource + " where id=?"
+	err := u.ModelManager.QueryRow(sql, u.ID).Scan(&u.Username, &u.Email, &u.Type, &u.CreatedAt, &u.UpdatedAt)
+
+	defer u.CloseDb()
 
 	if err == nil && u.GetInfo() {
-		return u, 0
+		return true
 	}
-	return nil, 101
+	return false
 
 }
 
@@ -209,21 +211,22 @@ func (u *User) AddInfo() bool {
 // UpdateInfo 修改用户信息
 func (u *User) UpdateInfo() bool {
 	u.Info.UpdatedAt = time.Now().Unix()
-	stmt, err := u.ModelManager.Prepare("update users_ifo set avatar=?,bg=?,about=?,labels=?,updated_at=? where id=?")
-
-	defer stmt.Close()
-	defer u.CloseDb()
+	stmt, err := u.ModelManager.Prepare("update users_info set about=?,labels=?,updated_at=? where user_id=?")
 
 	if err != nil {
+		fmt.Println("err:", err)
 		return false
 	}
 
-	res, err := stmt.Exec(u.Info.Avatar, u.Info.Bg, u.Info.About, u.Info.Labels, u.Info.UpdatedAt, u.Info.ID)
+	res, err := stmt.Exec(u.Info.About, u.Info.Labels, u.Info.UpdatedAt, u.ID)
 	if err != nil {
 		return false
 	}
 
 	affect, _ := res.RowsAffected()
 	fmt.Println(affect)
+
+	defer stmt.Close()
+	defer u.CloseDb()
 	return true
 }

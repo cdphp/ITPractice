@@ -132,21 +132,20 @@ input, select {
 }
 .box-header .box-title {
     display: inline-block;
-    padding: 0;
-    margin: 0;
     text-overflow: ellipsis;
     float: left;
+    
 }
 .box-header .box-tools {
   display: block;
     float: none;
-    margin-top: 0;
+
     position: relative;
-    padding: 0;
+
     text-align: right;
 }
 .box-header .box-tools a {
-  
+
 }
 .box-header .icon {margin-left:10px;}
 .box-content {

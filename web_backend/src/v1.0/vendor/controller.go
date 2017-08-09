@@ -78,7 +78,7 @@ func (c *Controller) GetQuery(param string) string {
 }
 
 // GetPosts 获取post数据
-func (c *Controller) GetPosts() map[string]string {
+func (c *Controller) GetPosts() map[string]interface{} {
 	request := c.GetRequest()
 
 	request.ParseForm()
@@ -87,7 +87,7 @@ func (c *Controller) GetPosts() map[string]string {
 	postData, _ := ioutil.ReadAll(request.Body)
 	request.Body.Close()
 
-	result := make(map[string]string)
+	result := make(map[string]interface{})
 	if err := json.Unmarshal([]byte(postData), &result); err != nil {
 		panic(err)
 	}

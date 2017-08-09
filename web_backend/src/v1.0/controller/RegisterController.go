@@ -23,20 +23,20 @@ func (c *RegisterController) Index() {
 	}
 
 	user := model.NewUser()
-	user.Username = postData["username"]
+	user.Username = postData["username"].(string)
 	if !user.CheckName() {
 		result.ErrorNo = 103
 		JSONReturn(c.GetResponseWriter(), result)
 		return
 	}
 
-	user.Email = postData["email"]
+	user.Email = postData["email"].(string)
 	if !user.CheckEmail() {
 		result.ErrorNo = 104
 		JSONReturn(c.GetResponseWriter(), result)
 		return
 	}
-	user.Password = postData["password"]
+	user.Password = postData["password"].(string)
 	user.Type = 1
 
 	if user.Register() {

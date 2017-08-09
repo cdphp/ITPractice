@@ -5,8 +5,10 @@ import Main from './views/layouts/main.vue'
 import Invest from './views/invest.vue'
 import Master from './views/master.vue'
 import User from './views/user/index.vue'
+import UserEdit from './views/user/edit.vue'
 import Article from './views/article/index.vue'
-//import ArticleAdd from './views/article/add.vue'
+import ArticleAdd from './views/article/add.vue'
+import ArticleInfo from './views/article/info.vue'
 import Register from './views/reg.vue'
 let routes = [
     {
@@ -19,8 +21,9 @@ let routes = [
           { path: '/master', component: Master, name: 'Master', hidden: true },
           { path: '/invest', component: Invest, name: '调查', hidden: true },
           { path: '/user', component: User, name: '用户主页', hidden: true },
-          //{ path: '/article/add', component: ArticleAdd, name: '写文章', hidden: true },
-
+          { path: '/user/edit', component: UserEdit, name: '用户编辑', hidden: true },
+          { path: '/article/add', component: ArticleAdd, name: '写文章', hidden: true },
+          { path: '/article/info', component: ArticleInfo, name: '文章详情', hidden: true },
         ],
     },
     {

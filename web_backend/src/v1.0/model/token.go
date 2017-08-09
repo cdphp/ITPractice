@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 
@@ -46,6 +47,7 @@ func (t *Token) Validate(token string) bool {
 	sql := "select id,user_id, username,expire,auth,logout_at,created_at from " + t.Resource + " where token=? and is_delete=0"
 	err := t.ModelManager.QueryRow(sql, token).Scan(&t.ID, &t.UserID, &t.Username, &t.Expire, &t.Auth, &t.LogoutAt, &t.CreatedAt)
 
+	fmt.Println("tokenObj:", t)
 	// 没找到token
 	if err != nil {
 		return false
@@ -53,6 +55,7 @@ func (t *Token) Validate(token string) bool {
 
 	// token过期
 	if time.Now().Unix()-t.CreatedAt > t.Expire {
+		fmt.Println("expired")
 		return false
 	}
 	defer t.CloseDb()

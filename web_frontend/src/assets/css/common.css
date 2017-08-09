@@ -117,6 +117,7 @@ input, select {
 .none {text-align: center;color:#bbb;padding:10px;}
 .more {text-align: center;color:#bbb;padding:10px;cursor: pointer;}
 .box {background: #fff;margin:20px 10px;}
+
 .box-header {
   text-align: left;
   border-color: #e7eaec;
@@ -127,6 +128,25 @@ input, select {
     margin-bottom: 0;
     padding: 13px 15px 7px;
     min-height: 48px;
+
+}
+.box-header .box-title {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    text-overflow: ellipsis;
+    float: left;
+}
+.box-header .box-tools {
+  display: block;
+    float: none;
+    margin-top: 0;
+    position: relative;
+    padding: 0;
+    text-align: right;
+}
+.box-header .box-tools a {
+  
 }
 .box-header .icon {margin-left:10px;}
 .box-content {

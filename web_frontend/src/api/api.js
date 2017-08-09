@@ -29,8 +29,12 @@ export const requestLogin = params => { return instance.post(`/login`, params).t
 
 export const register = params => { return instance.post(`/register`, params).then(res => res.data); };
 
-export const getArticleListPage = params => { return instance.get(`/article`, {params: params}).then(res => res.data); };
 
 export const getUserListPage = params => { return instance.get(`/user`, {params: params}).then(res => res.data); };
 
 export const getUser = params => {return instance.get(`/user/${params.id}`).then(res => res.data);}
+
+export const getArticleListPage = params => { return instance.get(`/article`, {params: params}).then(res => res.data); };
+
+export const addArticle = params => { return instance.post(`/article`, params).then(res => res.data); };
+export const getArticle = params => {return instance.get(`/article/${params.id}`).then(res => res.data);}

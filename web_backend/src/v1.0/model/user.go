@@ -59,6 +59,7 @@ func (u *User) ListData(page, row int) Users {
 
 	var result Users
 	for rows.Next() {
+
 		var user = NewUser()
 		err = rows.Scan(&user.ID, &user.Username, &user.Email)
 		if err == nil && user.GetInfo() {
@@ -66,6 +67,8 @@ func (u *User) ListData(page, row int) Users {
 		}
 
 	}
+	rows.Close()
+	u.CloseDb()
 	return result
 }
 
@@ -87,6 +90,7 @@ func (u *User) GetInfo() bool {
 	sql := "select id,avatar,bg,about,labels from users_info where user_id=?"
 
 	err := u.ModelManager.QueryRow(sql, u.ID).Scan(&u.Info.ID, &u.Info.Avatar, &u.Info.Bg, &u.Info.About, &u.Info.Labels)
+	defer u.CloseDb()
 
 	if err == nil {
 
@@ -184,8 +188,8 @@ func (u *User) GetAuthName(auth int) string {
 func (u *User) AddInfo() bool {
 
 	u.Info.UserID = u.ID
-	u.Info.Avatar = "http://120.77.153.236:4869/38c934d558c5b12766781553c6279a32"
-	u.Info.Bg = "http://120.77.153.236:4869/cdfe10a6b3eab163cdd3401388ecf8f6"
+	u.Info.Avatar = "http://ouecw69lw.bkt.clouddn.com/profile_big.jpg"
+	u.Info.Bg = "http://ouecw69lw.bkt.clouddn.com/insta-2.jpg"
 	u.Info.CreatedAt = time.Now().Unix()
 
 	//插入数据

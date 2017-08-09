@@ -11,21 +11,27 @@
               <div class="box-content">
               <div class="form-horizontal">
                 <div class="form-group">
-                  <label for="inputEmail3" class="col-sm-2 control-label">标题</label>
+                  <label for="title" class="col-sm-2 control-label">标题</label>
                   <div class="col-sm-6">
-                    <input type="text" class="form-control" id="title" placeholder="填写标题">
+                    <input type="text" class="form-control" id="title" placeholder="填写标题" v-model="title">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="digest" class="col-sm-2 control-label">摘要</label>
+                  <div class="col-sm-10">
+                    <textarea type="text" rows="4" class="form-control" id="digest" placeholder="填写摘要" v-model="digest"></textarea>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="content" class="col-sm-2 control-label">内容</label>
                   <div class="col-sm-10">
-                    <Ueditor @ready="editorReady"></Ueditor>
+                    <vue-editor v-model="content"></vue-editor>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <div class="col-sm-offset-2 col-sm-10">
-                    <button  class="btn btn-blue">确定</button>
+                    <button  class="btn btn-blue" v-on:click="add">确定</button>
                   </div>
                 </div>
                 </div>
@@ -48,26 +54,64 @@
   </section>
 </template>
 <script>
-import Ueditor from '../../../components/Ueditor'
-
+import {addArticle} from '../../api/api'
+import { VueEditor } from 'vue2-editor'
 export default {
   data(){
     return{
+      title: '',
+      digest: '',
       content:''
     }
   },
-  name: 'app',
   components: {
-    Ueditor
-  },
-  methods: {
-    editorReady (instance) {
-      instance.setContent('填写内容');
+      VueEditor
+   },
 
-      instance.addListener('contentChange', () => {
-        this.content = instance.getContent();
+
+  methods: {
+    add() {
+      if(this.title=='') {
+        this.$message({
+          message: '标题不能为空',
+          type: 'warning'
+        });
+        return
+      }
+
+      if(this.digest=='') {
+        this.$message({
+          message: '摘要不能为空',
+          type: 'warning'
+        });
+        return
+      }
+
+      if(this.content=='') {
+        this.$message({
+          message: '内容不能为空',
+          type: 'warning'
+        });
+        return
+      }
+      var para = {title: this.title,digest: this.digest, content: this.content};
+      addArticle(para).then(res => {
+        this.logining = false;
+
+        if (res.errorNo != 0) {
+          this.$message({
+            message: res.errorMsg,
+            type: 'error'
+          });
+        } else {
+
+          this.$router.push({ path: '/article/info?id='+res.data.id });
+        }
       });
-    },
+    }
   },
+  mounted() {
+
+  }
 }
 </script>

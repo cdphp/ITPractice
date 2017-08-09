@@ -8,6 +8,7 @@
             <div class="user-sidebar box">
               <div class="box-header">
                 <h5>基本信息</h5>
+
               </div>
               <div class="box-content no-padding">
               <div class="headpic">
@@ -22,7 +23,7 @@
               <h6>个人介绍</h6>
               <p class="muted text-indent" v-if="info.about">{{info.about}}</p>
               <p class="muted text-indent" v-else>暂无内容</p>
-              <a href="#/article/add" class="btn btn-blue btn-block follow" v-if="isSelf">发表新文章</a>
+              <a href="#/user/edit" class="btn btn-danger btn-block follow" v-if="isSelf">修改信息</a>
               <button class="btn btn-red btn-block follow" v-else>关注</button>
 
               </div>
@@ -39,7 +40,7 @@
                 <div class="none" v-if="articles.length==0">暂无内容</div>
               <ul class="articles" v-if="articles.length">
                 <li class="item" v-for="item in articles">
-                  <a href="#/article" class="text-blue">
+                  <a href="javascript:void(0)" v-on:click="viewArticle(item.id)" class="text-blue">
                     <div class="title"><i class="el-icon-information"></i>{{item.title}}</div>
                   </a>
 
@@ -108,9 +109,11 @@ export default {
       attentions: [],
       articles:[
         {
+          'id': 1,
           'title':'OpenStack大规模部署详解',
         },
         {
+          'id': 2,
           'title':'Web前端知识体系精简',
         }
       ],
@@ -133,6 +136,9 @@ export default {
       getArticleListPage().then(res=>{
         console.log(res);
       });
+    },
+    viewArticle(id) {
+      this.$router.push({ path: '/article/info?id='+id });
     }
   },
   mounted() {

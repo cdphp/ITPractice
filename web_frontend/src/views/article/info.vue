@@ -87,7 +87,7 @@
 </section>
 </template>
 <script>
-import {getArticleListPage} from '../../api/api'
+import {getArticle} from '../../api/api'
 export default {
   data() {
     return {
@@ -117,10 +117,21 @@ export default {
     }
   },
   methods: {
+    getArticleInfo(id) {
+    let para = {id :id};
+    getArticle(para).then(res => {
 
+      if(res.errorNo == 0 ) {
+        this.article = res.data;
+      }else {
+        this.$router.push({ path: '/404' });
+      }
+    });
+    }
   },
   mounted() {
-  
+    var id = this.$route.query.id;
+    this.getArticleInfo(id);
   },
 }
 </script>

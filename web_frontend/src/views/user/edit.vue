@@ -94,7 +94,7 @@
   </section>
 </template>
 <script>
-import {getArticleListPage,getUser,editUser} from '../../api/api'
+import {getArticleListPage,getUser,editUser,upload} from '../../api/api'
 
 export default {
   data() {
@@ -134,7 +134,7 @@ export default {
       editUser(para).then(res => {
 
         if(res.errorNo == 0 ) {
-          
+
           this.$router.push({ path: '/user?id='+ that.user.id});
         }else {
           this.$message({
@@ -180,12 +180,22 @@ export default {
 
     },
     saveAvatar() {
+      var that = this;
       this.$message({
         message: "上传功能还未实现，先等等",
         type: 'warning'
       });
+      $("#image").cropper('getCroppedCanvas').toBlob(function (blob) {
 
-
+        var fd = new FormData();
+        fd.append('file', blob);
+        console.log(blob);
+        
+          upload(fd)
+          .then(res=>{
+            console.log(res);
+          })
+      });
 
     }
 

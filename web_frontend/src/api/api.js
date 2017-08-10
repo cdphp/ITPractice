@@ -39,3 +39,18 @@ export const getArticleListPage = params => { return instance.get(`/article`, {p
 
 export const addArticle = params => { return instance.post(`/article`, params).then(res => res.data); };
 export const getArticle = params => {return instance.get(`/article/${params.id}`).then(res => res.data);}
+
+export const getCommentListPage = params => { return instance.get(`/comment`, {params: params}).then(res => res.data); };
+export const addComment = params => { return instance.post(`/comment`, params).then(res => res.data); };
+
+
+var uploadInstance = axios.create({
+  baseURL: '/file',
+  timeout: 2500,
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
+
+});
+
+export const upload = params => {return uploadInstance.post(`/upload`, params).then(res => res.data);}

@@ -18,7 +18,7 @@
           </div>
           <div class="content">
           <div class="username">{{item.username}}</div>
-          <p class="digest" v-if="item.about">{{item.about}}</p>
+          <p class="digest" v-if="item.info.labels">{{item.info.labels}}</p>
           <p class="digest" v-else>暂无内容</p>
           <button class="btn btn-blue btn-block" v-on:click="viewUser(item.id)">查看更多</button>
           </div>

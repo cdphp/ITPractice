@@ -88,7 +88,7 @@
   .login-bg {
     width:100%;
     height:100%;
-    background-image:url('../assets/imgs/login_bg.jpg');
+    background-image:url('http://ouecw69lw.bkt.clouddn.com/login_bg.jpg');
     background-size:cover;
 
   }

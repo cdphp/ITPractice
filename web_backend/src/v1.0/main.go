@@ -28,8 +28,8 @@ func main() {
 	router.RegisterController("ArticleUpdate", "/article/:id", "PUT", &controller.ArticleController{}, "Update")
 	router.RegisterController("ArticleDelete", "/article/:id", "DELETE", &controller.ArticleController{}, "Delete")
 
-	router.RegisterController("Static", "/static", "GET", &controller.StaticController{}, "Index")
-
+	router.RegisterController("CommentList", "/comment", "GET", &controller.CommentController{}, "Index")
+	router.RegisterController("CommentAdd", "/comment", "POST", &controller.CommentController{}, "Add")
 	port := "8085"
 	fmt.Println("Server started at http://localhost:" + port)
 	log.Fatal(http.ListenAndServe(":"+port, router)) //启动server

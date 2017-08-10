@@ -18,8 +18,6 @@
     <ul class="nav navbar-nav">
       <li class="active"><a href="#">门户 <span class="sr-only">(current)</span></a></li>
       <li><a href="#/master">传承</a></li>
-      <li><a href="#/invest">调查</a></li>
-
     </ul>
 
 

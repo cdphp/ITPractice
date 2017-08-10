@@ -25,7 +25,7 @@ type Article struct {
 }
 
 // Articles array
-type Articles []*Article
+type Articles []Article
 
 // NewArticle 初始化
 func NewArticle() *Article {
@@ -53,7 +53,7 @@ func (a *Article) ListData(conditions map[string]string, page, row int) Articles
 	var result Articles
 	for rows.Next() {
 
-		var article = NewArticle()
+		var article Article
 		err = rows.Scan(&article.ID, &article.Title, &article.Digest, &article.Content, &article.UserID, &article.CreatedAt)
 		if err == nil {
 			result = append(result, article)
@@ -62,8 +62,8 @@ func (a *Article) ListData(conditions map[string]string, page, row int) Articles
 		}
 
 	}
-	rows.Close()
-	a.CloseDb()
+	defer rows.Close()
+	defer a.CloseDb()
 	return result
 }
 

@@ -37,7 +37,7 @@
                 <h5 class="box-title" v-if="isSelf">我的文章</h5>
                 <h5 class="box-title" v-else>他的文章</h5>
                 <div class="box-tools">
-                <a class="btn btn-blue" href="#/article/add">发布文章</a>
+                <a class="btn btn-blue" href="#/article/add" v-if="isSelf">发布文章</a>
                 </div>
               </div>
               <div class="box-content">

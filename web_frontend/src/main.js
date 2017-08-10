@@ -3,19 +3,13 @@ import Vue from 'vue'
 import App from './App'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
-import './assets/css/common.css'
 
-import './assets/css/bootstrap.min.css'
-import './assets/js/bootstrap.min.js'
 import VueRouter from 'vue-router'
 import store from './vuex/store'
 import Vuex from 'vuex'
 //import NProgress from 'nprogress'
 //import 'nprogress/nprogress.css'
 import routes from './routes'
-import Mock from './mock'
-Mock.bootstrap();
-import 'font-awesome/css/font-awesome.min.css'
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)
@@ -30,8 +24,8 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-
-  if (to.path == '/needLogin') {
+  var needLogin = ['/article/add']
+  if (needLogin.indexOf(to.path)!=-1) {
     let user = JSON.parse(sessionStorage.getItem('user'));
 
     if(user) {

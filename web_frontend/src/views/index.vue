@@ -5,8 +5,8 @@
     <div class="row">
       <div class="col-md-10 col-md-offset-1 caption">
         <div class="col-md-6">
-          <h1>学以致用</h1>
-          <p>在知识的海洋里遨游，在兴趣的天空中飞翔.</p>
+          <h1 class="title">学以致用</h1>
+          <p class="content">在知识的海洋里遨游，在兴趣的天空中飞翔.</p>
 
           <a class="btn btn-blue" href="#/master">开始学习</a>
         </div>
@@ -63,8 +63,16 @@ export default {
 
 .caption {
   margin-top: 30px;
-
   color: #5d5d5d;
+}
+.caption .title {
+font-size: 36px;
+margin-top:20px;
+margin-bottom:20px;
+}
+.caption .content {
+margin-top:20px;
+margin-bottom:20px;
 }
 
 .graybg {

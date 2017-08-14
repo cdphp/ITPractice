@@ -16,6 +16,7 @@ type UserController struct {
 
 // Index function
 func (c *UserController) Index() {
+	fmt.Println("host:", c.GetRequest().Host)
 	user := model.NewUser()
 
 	page, err := strconv.Atoi(c.GetQuery("page"))
@@ -23,8 +24,12 @@ func (c *UserController) Index() {
 		page = 1
 	}
 
-	limit := GetLimit()
-	data := user.ListData(page, limit)
+	row, err := strconv.Atoi(c.GetQuery("row"))
+	if err != nil {
+		row = GetLimit()
+	}
+
+	data := user.ListData(page, row)
 
 	result := new(Result)
 	result.ErrorNo = 0

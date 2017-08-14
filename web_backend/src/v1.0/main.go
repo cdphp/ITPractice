@@ -21,6 +21,7 @@ func main() {
 	router.RegisterController("UserUpdate", "/user/:id", "PUT", &controller.UserController{}, "Update")
 	router.RegisterController("Login", "/login", "POST", &controller.LoginController{}, "Index")
 	router.RegisterController("Register", "/register", "POST", &controller.RegisterController{}, "Index")
+	router.RegisterController("RegisterValidate", "/register/validate", "POST", &controller.RegisterController{}, "Validate")
 
 	router.RegisterController("ArticleList", "/article", "GET", &controller.ArticleController{}, "Index")
 	router.RegisterController("ArticleAdd", "/article", "POST", &controller.ArticleController{}, "Add")
@@ -30,6 +31,9 @@ func main() {
 
 	router.RegisterController("CommentList", "/comment", "GET", &controller.CommentController{}, "Index")
 	router.RegisterController("CommentAdd", "/comment", "POST", &controller.CommentController{}, "Add")
+
+	router.RegisterController("CommonMail", "/common/mail", "POST", &controller.CommonController{}, "Mail")
+
 	port := "8085"
 	fmt.Println("Server started at http://localhost:" + port)
 	log.Fatal(http.ListenAndServe(":"+port, router)) //启动server

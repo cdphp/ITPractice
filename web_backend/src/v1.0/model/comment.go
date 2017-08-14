@@ -90,6 +90,20 @@ func (c *Comment) Add() bool {
 	defer c.CloseDb()
 
 	if err == nil {
+		score := NewScore()
+		user := NewUser()
+
+		score.UserID = c.UserID
+		score.Action = "comment"
+		score.Num = 2
+		score.Type = 1
+
+		user.ID = c.UserID
+
+		if score.Add() && user.Upgrade(score.Num) {
+			fmt.Println("奖励发送成功")
+		}
+
 		c.ID = id
 		return true
 	}

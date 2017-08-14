@@ -28,6 +28,8 @@ instance.interceptors.request.use(function (config) {
 export const requestLogin = params => { return instance.post(`/login`, params).then(res => res.data); };
 
 export const register = params => { return instance.post(`/register`, params).then(res => res.data); };
+export const validateEmail = params => { return instance.post(`/register/validate`, params).then(res => res.data); };
+export const sendMail = params => { return instance.post(`/common/mail`, params).then(res => res.data); };
 
 
 export const getUserListPage = params => { return instance.get(`/user`, {params: params}).then(res => res.data); };

@@ -6,6 +6,7 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"net/smtp"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -155,4 +156,40 @@ func ValidateToken(tokenStr string, w http.ResponseWriter, r *http.Request) (*mo
 // GetLimit return limit
 func GetLimit() int {
 	return 10
+}
+
+// SendToMail 发送邮件
+func SendToMail(to, subject, body, mailtype string) error {
+	config := model.NewConfig()
+
+	user := config.Get("mail_user")
+	password := config.Get("mail_pass")
+	host := config.Get("mail_host")
+
+	hp := strings.Split(host, ":")
+	auth := smtp.PlainAuth("", user, password, hp[0])
+
+	var contentType string
+	if mailtype == "html" {
+		contentType = "Content-Type: text/" + mailtype + "; charset=UTF-8"
+	} else {
+		contentType = "Content-Type: text/plain" + "; charset=UTF-8"
+	}
+
+	msg := []byte("To: " + to + "\r\nFrom: " + user + ">\r\nSubject: " + subject + "\r\n" + contentType + "\r\n\r\n" + body)
+	sendTo := strings.Split(to, ";")
+	err := smtp.SendMail(host, auth, user, sendTo, msg)
+	return err
+}
+
+// Grade 奖励元气(action:write,comment)
+func Grade(userID int64, action string, num int) bool {
+	score := model.NewScore()
+
+	score.UserID = userID
+	score.Action = action
+	score.Num = num
+	score.Type = 1
+
+	return score.Add()
 }

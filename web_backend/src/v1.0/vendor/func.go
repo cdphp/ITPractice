@@ -6,6 +6,14 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"io"
+	"strings"
+)
+
+const (
+	//BASE64字符表,不要有重复
+	base64Table        = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+	hashFunctionHeader = "hong"
+	hashFunctionFooter = "ker"
 )
 
 // Substr 截取字符串
@@ -39,4 +47,19 @@ func UniqueID() string {
 		return ""
 	}
 	return Md5(base64.URLEncoding.EncodeToString(b))
+}
+
+var coder = base64.NewEncoding(base64Table)
+
+// Base64Encode base64加密
+func Base64Encode(str string) string {
+	var src []byte = []byte(hashFunctionHeader + str + hashFunctionFooter)
+	return string([]byte(coder.EncodeToString(src)))
+}
+
+// Base64Decode base64解密
+func Base64Decode(str string) (string, error) {
+	var src []byte = []byte(str)
+	by, err := coder.DecodeString(string(src))
+	return strings.Replace(strings.Replace(string(by), hashFunctionHeader, "", -1), hashFunctionFooter, "", -1), err
 }

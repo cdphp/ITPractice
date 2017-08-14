@@ -50,11 +50,11 @@
 
         <div class="box">
           <div class="box-header">
-            相关评论({{comments.length}})
+            相关评论({{length}})
           </div>
           <div class="box-content">
-            <div class="none" v-if="comments.length==0">暂无内容</div>
-            <ul class="comments" v-if="comments.length">
+            <div class="none" v-if="length==0">暂无内容</div>
+            <ul class="comments" v-else>
               <li v-for="(item,index) in comments">
               <div class="media">
                 <div class="media-left">
@@ -100,6 +100,7 @@ export default {
         title: '',
         content: '',
       },
+      length:0,
       comments:[],
       commentContent:'',
     }
@@ -126,8 +127,9 @@ export default {
       let para = {target_id :id};
       getCommentListPage(para).then(res => {
 
-        if(res.errorNo == 0 ) {
+        if(res.errorNo == 0 &&res.data!=null) {
           this.comments = res.data;
+          this.length = this.comments.length;
         }
       });
     },

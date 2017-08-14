@@ -16,6 +16,7 @@ type User struct {
 	Email        string   `json:"email"`
 	Password     string   `json:"-"`
 	Type         int      `json:"type"`
+	State        int      `json:"state"`
 	CreatedAt    int64    `json:"created_at"`
 	UpdatedAt    int64    `json:"updated_at"`
 	Info         Userinfo `json:"info"`
@@ -30,6 +31,7 @@ type Userinfo struct {
 	Bg        string `json:"bg"`
 	About     string `json:"about"`
 	Labels    string `json:"labels"`
+	Score     int    `json:"score"`
 	CreatedAt int64  `json:"created_at"`
 	UpdatedAt int64  `json:"updated_at"`
 }
@@ -49,7 +51,7 @@ func NewUser() *User {
 func (u *User) ListData(page, row int) Users {
 	start := (page - 1) * row
 
-	sql := "SELECT id,username,email FROM " + u.Resource + " where is_delete=0 and type=1 limit " + strconv.Itoa(start) + "," + strconv.Itoa(row)
+	sql := "SELECT id,user_id,avatar,bg,about,labels,score FROM users_info where is_delete=0 order by score desc limit " + strconv.Itoa(start) + "," + strconv.Itoa(row)
 
 	rows, err := u.ModelManager.Query(sql)
 
@@ -61,8 +63,10 @@ func (u *User) ListData(page, row int) Users {
 	for rows.Next() {
 
 		var user = NewUser()
-		err = rows.Scan(&user.ID, &user.Username, &user.Email)
-		if err == nil && user.GetInfo() {
+		err = rows.Scan(&user.Info.ID, &user.Info.UserID, &user.Info.Avatar, &user.Info.Bg, &user.Info.About, &user.Info.Labels, &user.Info.Score)
+
+		user.ID = user.Info.ID
+		if err == nil && user.GetUsername() {
 			result = append(result, user)
 		}
 
@@ -75,16 +79,56 @@ func (u *User) ListData(page, row int) Users {
 // Get 根据id获取数据
 func (u *User) Get() bool {
 
-	sql := "select username,email,type,created_at,updated_at from " + u.Resource + " where id=?"
-	err := u.ModelManager.QueryRow(sql, u.ID).Scan(&u.Username, &u.Email, &u.Type, &u.CreatedAt, &u.UpdatedAt)
-
-	defer u.CloseDb()
+	sql := "select username,email,type,state,created_at,updated_at from " + u.Resource + " where id=?"
+	err := u.ModelManager.QueryRow(sql, u.ID).Scan(&u.Username, &u.Email, &u.Type, &u.State, &u.CreatedAt, &u.UpdatedAt)
 
 	if err == nil && u.GetInfo() {
 		return true
 	}
 	return false
 
+}
+
+// GetUsername 根据id获取用户名
+func (u *User) GetUsername() bool {
+
+	sql := "select username from " + u.Resource + " where id=?"
+	err := u.ModelManager.QueryRow(sql, u.ID).Scan(&u.Username)
+
+	if err == nil {
+		return true
+	}
+	return false
+
+}
+
+// FindByKey 根据key查询
+func (u *User) FindByKey() bool {
+	sql := "select id,username,email,type,state,created_at,updated_at from " + u.Resource + " where unique_key=?"
+
+	err := u.ModelManager.QueryRow(sql, u.UniqueKey).Scan(&u.ID, &u.Username, &u.Email, &u.Type, &u.State, &u.CreatedAt, &u.UpdatedAt)
+	fmt.Println("key:", u.UniqueKey)
+
+	if err == nil {
+
+		fmt.Println(err)
+		return true
+	}
+	return false
+}
+
+// FindByEmail 根据email查询
+func (u *User) FindByEmail() bool {
+	sql := "select id,username,email,type,state,created_at,updated_at from " + u.Resource + " where email=?"
+
+	err := u.ModelManager.QueryRow(sql, u.Email).Scan(&u.ID, &u.Username, &u.Email, &u.Type, &u.State, &u.CreatedAt, &u.UpdatedAt)
+
+	if err == nil {
+
+		fmt.Println(err)
+		return true
+	}
+	return false
 }
 
 // GetInfo 根据id获取用户信息
@@ -122,8 +166,8 @@ func (u *User) Add() bool {
 // Auth 验证
 func (u *User) Auth(password string) bool {
 
-	sql := "select id,email,password,type,created_at,updated_at from users where username=?"
-	err := u.ModelManager.QueryRow(sql, u.Username).Scan(&u.ID, &u.Email, &u.Password, &u.Type, &u.CreatedAt, &u.UpdatedAt)
+	sql := "select id,email,password,type,state,created_at,updated_at from users where username=?"
+	err := u.ModelManager.QueryRow(sql, u.Username).Scan(&u.ID, &u.Email, &u.Password, &u.Type, &u.State, &u.CreatedAt, &u.UpdatedAt)
 
 	if err != nil {
 		return false
@@ -208,6 +252,30 @@ func (u *User) AddInfo() bool {
 	return true
 }
 
+// Update 修改用户信息
+func (u *User) Update() bool {
+
+	u.UpdatedAt = time.Now().Unix()
+	stmt, err := u.ModelManager.Prepare("update " + u.Resource + " set type=?,state=?,updated_at=? where id=?")
+
+	if err != nil {
+		fmt.Println("err:", err)
+		return false
+	}
+
+	res, err := stmt.Exec(u.Type, u.State, u.UpdatedAt, u.ID)
+	if err != nil {
+		return false
+	}
+
+	affect, _ := res.RowsAffected()
+	fmt.Println(affect)
+
+	defer stmt.Close()
+	defer u.CloseDb()
+	return true
+}
+
 // UpdateInfo 修改用户信息
 func (u *User) UpdateInfo() bool {
 	u.Info.UpdatedAt = time.Now().Unix()
@@ -219,6 +287,29 @@ func (u *User) UpdateInfo() bool {
 	}
 
 	res, err := stmt.Exec(u.Info.About, u.Info.Labels, u.Info.UpdatedAt, u.ID)
+	if err != nil {
+		return false
+	}
+
+	affect, _ := res.RowsAffected()
+	fmt.Println(affect)
+
+	defer stmt.Close()
+	defer u.CloseDb()
+	return true
+}
+
+// Upgrade 升级元气
+func (u *User) Upgrade(num int) bool {
+	u.Info.UpdatedAt = time.Now().Unix()
+	stmt, err := u.ModelManager.Prepare("update users_info set score=score+? where user_id=?")
+
+	if err != nil {
+		fmt.Println("err:", err)
+		return false
+	}
+
+	res, err := stmt.Exec(num, u.ID)
 	if err != nil {
 		return false
 	}

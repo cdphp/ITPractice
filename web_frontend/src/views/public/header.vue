@@ -68,15 +68,15 @@
         },
     },
     mounted() {
-      var user = sessionStorage.getItem('user');
+    var user = sessionStorage.getItem('user');
+    
+    if (user) {
+      this.isLogin = true
+      user = JSON.parse(user);
 
-      if (user) {
-        this.isLogin = true
-        user = JSON.parse(user);
-
-        this.username = user.username;
-        this.user_id = user.user_id;
-      }
+      this.username = user.username;
+      this.user_id = user.user_id;
+    }
     }
   }
 </script>

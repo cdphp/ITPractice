@@ -226,3 +226,14 @@ a.text-gray:hover{color:#333;text-decoration:none;}
     line-height: 1;
     outline: none;
 }
+.registerContainer {
+  background: #fff;
+  width: 500px;
+  height: 500px;
+  margin: 0 auto;
+  position: relative;
+}
+.login-footer {
+  text-align: center;
+  
+}

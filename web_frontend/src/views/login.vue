@@ -30,9 +30,10 @@
     data() {
       return {
         logining: false,
+        
         ruleForm2: {
-          account: 'user',
-          checkPass: '123456'
+          account: '',
+          checkPass: ''
         },
         rules2: {
           account: [
@@ -52,6 +53,7 @@
         this.$refs.ruleForm2.resetFields();
       },
       handleSubmit2(ev) {
+
         var _this = this;
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
@@ -64,13 +66,30 @@
               //NProgress.done();
 
               if (res.errorNo != 0) {
+                if(res.errorNo==110) {
+                this.$confirm(res.errorMsg, '提示', {
+                 confirmButtonText: '确定',
+                 cancelButtonText: '取消',
+                 type: 'warning'
+               }).then(() => {
+                 this.$router.push({path: '/reg', query: {ref:"login",email:res.data.email}});
+               }).catch(() => {
+
+               });
+                }else {
                 this.$message({
                   message: res.errorMsg,
                   type: 'error'
                 });
+                }
+
               } else {
                 sessionStorage.setItem('user', JSON.stringify(res.data));
-                this.$router.push({ path: '/' });
+                if(this.checked) {
+                  localStorage.setItem('name',this.ruleForm2.account);
+                }
+
+                window.location.reload();
               }
             });
           } else {
@@ -79,6 +98,15 @@
           }
         });
       }
+    },
+    mounted() {
+      var user = sessionStorage.getItem('user');
+      console.log("user",user);
+      if (user) {
+        this.$router.push({ path: '/' });
+      }
+      this.ruleForm2.account = localStorage.getItem('user');
+
     }
   }
 
@@ -88,14 +116,14 @@
   .login-bg {
     width:100%;
     height:100%;
-    background-image:url('http://ouecw69lw.bkt.clouddn.com/login_bg.jpg');
+
     background-size:cover;
 
   }
   .login-container {
 
     margin: 0px auto;
-    top:180px;
+    top:20px;
     position: relative;
     width: 350px;
     padding: 35px 35px 15px 35px;

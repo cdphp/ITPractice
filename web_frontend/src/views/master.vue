@@ -27,7 +27,10 @@
       </div>
 
 
+
     </div>
+    <div class="more" v-if="nomore">没有啦</div>
+    <div class="more" v-on:click="loadMore" v-else>查看更多</div>
 
   </div>
 </div>
@@ -41,9 +44,14 @@ export default {
     return {
       users: [],
       page: 1,
+      nomore: false,
     }
   },
   methods: {
+    loadMore() {
+      this.page++;
+      this.getUsers();
+    },
     bgFormat(bg) {
       return {backgroundImage:'url('+bg+')'}
     },
@@ -51,12 +59,18 @@ export default {
     getUsers: function () {
       let para = {
         page : this.page,
+        row : 12,
       };
       this.loading = true;
       //NProgress.start();
       getUserListPage(para).then(res => {
         if(res.errorNo == 0) {
-          this.users = res.data;
+          if(res.data) {
+            this.users.push.apply(this.users, res.data);
+          }else {
+            this.nomore = true;
+          }
+
           console.log("result:",this.users);
           this.loading = false;
         }
@@ -117,4 +131,5 @@ border-top-right-radius:5px;}
 .master a {
 margin-top:20px;
 }
+
 </style>

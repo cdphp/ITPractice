@@ -96,6 +96,20 @@ func (a *Article) Add() bool {
 	defer a.CloseDb()
 
 	if err == nil {
+		score := NewScore()
+		user := NewUser()
+
+		score.UserID = a.UserID
+		score.Action = "write"
+		score.Num = 10
+		score.Type = 1
+
+		user.ID = a.UserID
+
+		if score.Add() && user.Upgrade(score.Num) {
+			fmt.Println("奖励发送成功")
+		}
+
 		a.ID = id
 		return true
 	}

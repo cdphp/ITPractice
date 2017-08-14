@@ -26,7 +26,6 @@ func (c *LoginController) Index() {
 
 	if HasParam(postData, "username") == false || HasParam(postData, "password") == false {
 		result.ErrorNo = 24
-
 		JSONReturn(c.GetResponseWriter(), result)
 		return
 	}
@@ -36,6 +35,14 @@ func (c *LoginController) Index() {
 
 	var errorNo int
 	if user.Auth(postData["password"].(string)) {
+		// 判断是否通过邮箱验证
+		if user.State == 0 {
+			result.ErrorNo = 110
+
+			result.Data = &model.User{Email: vendor.Base64Encode(user.Email)}
+			JSONReturn(c.GetResponseWriter(), result)
+			return
+		}
 		// 获取token
 		token := model.NewToken()
 		auth := user.GetAuthName(user.Type)

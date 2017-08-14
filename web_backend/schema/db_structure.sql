@@ -26,6 +26,7 @@ create table temp (
  * email 邮箱
  * password 密码
  * type 类型(1:普通用户,2:高级用户,3:管理员)
+ * state 状态(0:待认证,1:已认证,2:已停用)
  * is_delete 是否删除
  * created_at 创建时间
  * updated_at 更新时间
@@ -38,6 +39,7 @@ create table users (
     email varchar(50) not null,
     password char(32) not null,
     type tinyint not null default 1,
+    state tinyint not null default 0,
     is_delete tinyint not null default 0,
     created_at int not null default 0,
     updated_at int not null default 0
@@ -60,6 +62,7 @@ create table users_info (
     bg varchar(100) not null default '',
     about varchar(255) not null default '',
     labels varchar(255) not null default '',
+    score int not null default 0,
     is_delete tinyint not null default 0,
     created_at int not null default 0,
     updated_at int not null default 0
@@ -138,6 +141,45 @@ drop table if exists tokens;
      content varchar(255) not null,
      target_id int not null,
      root_id int not null default 0,
+     is_delete tinyint not null default 0,
+     created_at int not null default 0,
+     updated_at int not null default 0
+ )charset=utf8;
+
+ /**
+  * configs 配置
+  * id 主键
+  *
+  * is_delete 是否删除
+  * created_at 创建时间
+  * updated_at 更新时间
+  */
+ drop table if exists configs;
+ create table configs (
+     id int not null primary key auto_increment,
+     name varchar(30) not null,
+     value varchar(255) not null,
+     description varchar(255) not null default '',
+     is_delete tinyint not null default 0,
+     created_at int not null default 0,
+     updated_at int not null default 0
+ )charset=utf8;
+
+ /**
+  * scores 示例
+  * id 主键
+  *
+  * is_delete 是否删除
+  * created_at 创建时间
+  * updated_at 更新时间
+  */
+ drop table if exists scores;
+ create table scores (
+     id int not null primary key auto_increment,
+     user_id int not null,
+     action varchar(30) not null,
+     num int not null default 0,
+     type tinyint not null default 0,
      is_delete tinyint not null default 0,
      created_at int not null default 0,
      updated_at int not null default 0

@@ -136,7 +136,6 @@ func (u *User) GetInfo() bool {
 	sql := "select id,avatar,bg,about,labels from users_info where user_id=?"
 
 	err := u.ModelManager.QueryRow(sql, u.ID).Scan(&u.Info.ID, &u.Info.Avatar, &u.Info.Bg, &u.Info.About, &u.Info.Labels)
-	defer u.CloseDb()
 
 	if err == nil {
 
@@ -272,7 +271,7 @@ func (u *User) Update() bool {
 	fmt.Println(affect)
 
 	defer stmt.Close()
-	defer u.CloseDb()
+
 	return true
 }
 
@@ -295,7 +294,7 @@ func (u *User) UpdateInfo() bool {
 	fmt.Println(affect)
 
 	defer stmt.Close()
-	defer u.CloseDb()
+
 	return true
 }
 
@@ -318,6 +317,6 @@ func (u *User) Upgrade(num int) bool {
 	fmt.Println(affect)
 
 	defer stmt.Close()
-	defer u.CloseDb()
+
 	return true
 }

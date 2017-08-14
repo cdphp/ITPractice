@@ -63,7 +63,7 @@ func (a *Article) ListData(conditions map[string]string, page, row int) Articles
 
 	}
 	defer rows.Close()
-	defer a.CloseDb()
+
 	return result
 }
 
@@ -73,7 +73,6 @@ func (a *Article) Get() bool {
 	sql := "select title,digest,content,user_id,labels,clicks,created_at from " + a.Resource + " where id=?"
 	err := a.ModelManager.QueryRow(sql, a.ID).Scan(&a.Title, &a.Digest, &a.Content, &a.UserID, &a.Labels, &a.Clicks, &a.CreatedAt)
 
-	defer a.CloseDb()
 	if err != nil {
 		return false
 	}
@@ -93,7 +92,6 @@ func (a *Article) Add() bool {
 	id, err := res.LastInsertId()
 
 	defer stmt.Close()
-	defer a.CloseDb()
 
 	if err == nil {
 		score := NewScore()
@@ -123,7 +121,6 @@ func (a *Article) Update() bool {
 	stmt, err := a.ModelManager.Prepare("update " + a.Resource + " set title=?,digest=?,content=?,labels=?,clicks=?,updated_at=? where id=?")
 
 	defer stmt.Close()
-	defer a.CloseDb()
 
 	if err != nil {
 		return false
@@ -147,7 +144,6 @@ func (a *Article) Delete() bool {
 		return false
 	}
 	defer stmt.Close()
-	defer a.CloseDb()
 
 	_, err = stmt.Exec(1, a.ID)
 	if err != nil {

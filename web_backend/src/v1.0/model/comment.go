@@ -69,7 +69,7 @@ func (c *Comment) ListData(conditions map[string]string, page, row int) Comments
 
 	}
 	defer rows.Close()
-	defer c.CloseDb()
+
 	return result
 }
 
@@ -87,7 +87,6 @@ func (c *Comment) Add() bool {
 	id, err := res.LastInsertId()
 
 	defer stmt.Close()
-	defer c.CloseDb()
 
 	if err == nil {
 		score := NewScore()

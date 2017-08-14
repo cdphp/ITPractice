@@ -58,7 +58,6 @@ func (t *Token) Validate(token string) bool {
 		fmt.Println("expired")
 		return false
 	}
-	defer t.CloseDb()
 
 	return true
 }

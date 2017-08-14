@@ -54,7 +54,6 @@ func (s *Score) Add() bool {
 	}
 
 	defer stmt.Close()
-	defer s.CloseDb()
 
 	if err == nil {
 		s.ID = id

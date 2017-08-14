@@ -43,13 +43,31 @@
 ### 本地部署
   * 安装环境(go)
     根据[官方文档](http://docscn.studygolang.com/doc/)安装最新版本的golang
-  * 获取mux包
+
+
+### 项目部署
+## v1.0
+  初步实现restful
+   * 获取mux包
+      ```
+      go get "github.com/gorilla/mux"
+      go get "github.com/go-sql-driver/mysql"
+      ```
+    * 运行
+      ```
+      cd src/v1.0
+      go run main.go
+      ```
+## v2.0
+    使用`github.com/gin-gonic/gin`和`github.com/jinzhu/gorm`对项目进行优化重构
+    * 获取package
     ```
-    go get "github.com/gorilla/mux"
-    go get "github.com/go-sql-driver/mysql"
+    go get "github.com/gin-gonic/gin"
+    go get -u "github.com/jinzhu/gorm"
     ```
-  * 运行
+
+    * 运行
     ```
-    cd src/v1.0
+    cd src/v2.0
     go run main.go
     ```

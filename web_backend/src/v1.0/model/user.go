@@ -119,9 +119,9 @@ func (u *User) FindByKey() bool {
 
 // FindByEmail 根据email查询
 func (u *User) FindByEmail() bool {
-	sql := "select id,username,email,type,state,created_at,updated_at from " + u.Resource + " where email=?"
+	sql := "select id,unique_key,username,email,type,state,created_at,updated_at from " + u.Resource + " where email=?"
 
-	err := u.ModelManager.QueryRow(sql, u.Email).Scan(&u.ID, &u.Username, &u.Email, &u.Type, &u.State, &u.CreatedAt, &u.UpdatedAt)
+	err := u.ModelManager.QueryRow(sql, u.Email).Scan(&u.ID, &u.UniqueKey, &u.Username, &u.Email, &u.Type, &u.State, &u.CreatedAt, &u.UpdatedAt)
 
 	if err == nil {
 

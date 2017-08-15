@@ -6,7 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// User map the true table structure
+// User 用户基本数据，对应数据表格
 type User struct {
 	ID        uint
 	Username  string `gorm:"size:50;not null;unique"`
@@ -20,7 +20,7 @@ type User struct {
 	UpdatedAt int64 `gorm:"not null;default:0"`
 }
 
-// TransformedUser output json
+// TransformedUser 对外输出json
 type TransformedUser struct {
 	ID        uint   `json:"id"`
 	Username  string `json:"username"`
@@ -34,7 +34,7 @@ type TransformedUser struct {
 	CreatedAt int64  `json:"created_at"`
 }
 
-// Profile store user other info
+// Profile 用户信息
 type Profile struct {
 	ID        uint
 	UserID    uint   `gorm:"not null"`
@@ -47,7 +47,7 @@ type Profile struct {
 	UpdatedAt int64  `gorm:"not null;default:0"`
 }
 
-// BeforeCreate func
+// BeforeCreate 创建数据前的初始化
 func (user *User) BeforeCreate(scope *gorm.Scope) error {
 	err := scope.SetColumn("CreatedAt", time.Now().Unix())
 	return err

@@ -10,17 +10,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// UserData json
+// UserData 用于接收row data json
 type UserData struct {
 	Username string `json:"username" binding:"required"`
 	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
-// CreateUser func
+// CreateUser 创建用户
 func CreateUser(c *gin.Context) {
 	var userData UserData
+
+	// 解析row data
 	c.BindJSON(&userData)
+
 	if userData.Username == "" || userData.Email == "" || userData.Password == "" {
 		errorNo := 24
 		c.JSON(http.StatusNotAcceptable, gin.H{
@@ -76,7 +79,7 @@ func CreateUser(c *gin.Context) {
 
 }
 
-// ListUser func
+// ListUser 用户列表
 func ListUser(c *gin.Context) {
 	page, _ := c.GetQuery("page")
 	current, err := strconv.Atoi(page)

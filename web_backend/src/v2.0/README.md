@@ -1,4 +1,4 @@
-###v2.0
+###v2.0   
 使用`github.com/gin-gonic/gin`和`github.com/jinzhu/gorm`对项目进行优化重构
 
 * 获取package

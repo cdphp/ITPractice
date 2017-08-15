@@ -62,11 +62,13 @@ func CreateUser(c *gin.Context) {
 	if err := db.Create(&user).Error; err == nil {
 		profile := models.Profile{
 			UserID: user.ID,
+			Avatar: "http://ouecw69lw.bkt.clouddn.com/profile_big.jpg",
 		}
 		db.Create(&profile)
+		errorNo := 0
 		c.JSON(http.StatusCreated, gin.H{
-			"errorNo":    0,
-			"message":    "user created successfully!",
+			"errorNo":    errorNo,
+			"message":    GetMsg(errorNo),
 			"resourceId": user.ID,
 		})
 
@@ -81,8 +83,8 @@ func CreateUser(c *gin.Context) {
 
 // ListUser 用户列表
 func ListUser(c *gin.Context) {
-	page, _ := c.GetQuery("page")
-	current, err := strconv.Atoi(page)
+
+	current, err := strconv.Atoi(c.DefaultQuery("page", "1"))
 	if err != nil {
 		current = 1
 	}
@@ -103,7 +105,11 @@ func ListUser(c *gin.Context) {
 		_users = append(_users, models.TransformedUser{
 			ID:       user.ID,
 			Username: user.Username,
+			Email:    user.Email,
 			Avatar:   profile.Avatar,
+			About:    profile.About,
+			Labels:   profile.Labels,
+			Score:    profile.Score,
 		})
 	}
 
@@ -115,17 +121,46 @@ func ListUser(c *gin.Context) {
 	})
 }
 
-// FetchSingleUser func
+// FetchSingleUser 获取个人信息
 func FetchSingleUser(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"errorNo": 24,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	var user models.User
+	var profile models.Profile
+	db := Database()
+	db.Where("id=?", id).First(&user).Related(&profile)
+
+	_user := models.TransformedUser{
+		ID:       user.ID,
+		Username: user.Username,
+		Email:    user.Email,
+		Avatar:   profile.Avatar,
+		About:    profile.About,
+		Labels:   profile.Labels,
+		Score:    profile.Score,
+	}
+	errorNo := 0
+	c.JSON(http.StatusOK, gin.H{
+		"errorNo": errorNo,
+		"message": GetMsg(errorNo),
+		"data":    _user,
+	})
 
 }
 
-// UpdateUser func
+// UpdateUser 修改个人信息
 func UpdateUser(c *gin.Context) {
 
 }
 
-// DeleteUser func
+// DeleteUser 删除
 func DeleteUser(c *gin.Context) {
 
 }

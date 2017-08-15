@@ -16,10 +16,17 @@ func main() {
 	db := Database()
 	db.AutoMigrate(&models.User{})
 	db.AutoMigrate(&models.Profile{})
+	db.AutoMigrate(&models.Token{})
 	defer db.Close()
 
 	router := gin.Default()
-	users := router.Group("/api/users")
+	common := router.Group("/api")
+	{
+		common.POST("/register", controllers.Register)
+		common.POST("/login", controllers.Login)
+	}
+
+	users := router.Group("/api/user")
 	{
 		users.POST("/", controllers.CreateUser)
 		users.GET("/", controllers.ListUser)

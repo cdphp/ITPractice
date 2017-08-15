@@ -52,3 +52,16 @@ func (user *User) BeforeCreate(scope *gorm.Scope) error {
 	err := scope.SetColumn("CreatedAt", time.Now().Unix())
 	return err
 }
+
+// BeforeCreate 创建数据前的初始化
+func (profile *Profile) BeforeCreate(scope *gorm.Scope) error {
+	if err := scope.SetColumn("CreatedAt", time.Now().Unix()); err != nil {
+		return err
+	}
+
+	if err := scope.SetColumn("Score", 10); err != nil {
+		return err
+	}
+
+	return nil
+}

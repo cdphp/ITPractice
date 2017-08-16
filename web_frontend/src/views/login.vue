@@ -25,12 +25,12 @@
 
 <script>
   import { requestLogin } from '../api/api';
-  //import NProgress from 'nprogress'
+
   export default {
     data() {
       return {
         logining: false,
-        
+
         ruleForm2: {
           account: '',
           checkPass: ''
@@ -38,11 +38,11 @@
         rules2: {
           account: [
             { required: true, message: '请输入账号', trigger: 'blur' },
-            //{ validator: validaePass }
+
           ],
           checkPass: [
             { required: true, message: '请输入密码', trigger: 'blur' },
-            //{ validator: validaePass2 }
+
           ]
         },
         checked: true
@@ -59,26 +59,26 @@
           if (valid) {
 
             this.logining = true;
-            //NProgress.start();
-            var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
+
+            var loginParams = { account: this.ruleForm2.account, password: this.ruleForm2.checkPass };
             requestLogin(loginParams).then(res => {
+
               this.logining = false;
-              //NProgress.done();
 
               if (res.errorNo != 0) {
                 if(res.errorNo==110) {
-                this.$confirm(res.errorMsg, '提示', {
+                this.$confirm(res.message, '提示', {
                  confirmButtonText: '确定',
                  cancelButtonText: '取消',
                  type: 'warning'
                }).then(() => {
-                 this.$router.push({path: '/reg', query: {ref:"login",email:res.data.email}});
+                 this.$router.push({path: '/reg', query: {ref:"login",email:res.email}});
                }).catch(() => {
 
                });
                 }else {
                 this.$message({
-                  message: res.errorMsg,
+                  message: res.message,
                   type: 'error'
                 });
                 }

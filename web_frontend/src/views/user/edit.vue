@@ -12,7 +12,7 @@
             </div>
             <div class="box-content no-padding">
             <div class="headpic">
-              <img :src="info.avatar" />
+              <img :src="user.avatar" />
             </div>
             </div>
             <div class="box-content">
@@ -38,13 +38,13 @@
               <div class="form-group">
                 <label for="labels" class="col-sm-2 control-label">标签</label>
                 <div class="col-sm-6">
-                <input type="text" class="form-control" id="labels" placeholder="..." v-model="info.labels">
+                <input type="text" class="form-control" id="labels" placeholder="..." v-model="user.labels">
                 </div>
               </div>
               <div class="form-group">
                 <label for="about" class="col-sm-2 control-label">个性签名</label>
                 <div class="col-sm-10">
-                  <textarea class="form-control" id="about" placeholder="自由发挥.." v-model="info.about"></textarea>
+                  <textarea class="form-control" id="about" placeholder="自由发挥.." v-model="user.about"></textarea>
                 </div>
               </div>
 
@@ -69,7 +69,7 @@
           <div class="row">
             <div class="col-sm-8">
               <div class="avatar">
-                <img id="image" :src="info.avatar" />
+                <img id="image" :src="user.avatar" />
               </div>
 
             </div>
@@ -94,14 +94,13 @@
   </section>
 </template>
 <script>
-import {getArticleListPage,getUser,editUser,upload} from '../../api/api'
+import {getArticleListPage,getUser,editUser} from '../../api/api'
 
 export default {
   data() {
 
     return {
       user:{},
-      info:{},
       option: {
         aspectRatio: 1 / 1,
         crop: function(e) {
@@ -118,7 +117,7 @@ export default {
 
         if(res.errorNo == 0 ) {
           this.user = res.data;
-          this.info = res.data.info;
+
         }else {
           this.$router.push({ path: '/404' });
         }
@@ -128,8 +127,8 @@ export default {
       var that = this;
       let para = {
         id: this.user.id,
-        labels: this.info.labels,
-        about: this.info.about,
+        labels: this.user.labels,
+        about: this.user.about,
       }
       editUser(para).then(res => {
 
@@ -138,7 +137,7 @@ export default {
           this.$router.push({ path: '/user?id='+ that.user.id});
         }else {
           this.$message({
-          message: res.errorMsg,
+          message: res.message,
           type: 'error'
         });
         }
@@ -190,11 +189,7 @@ export default {
         var fd = new FormData();
         fd.append('file', blob);
         console.log(blob);
-        
-          upload(fd)
-          .then(res=>{
-            console.log(res);
-          })
+
       });
 
     }

@@ -12,16 +12,16 @@
               </div>
               <div class="box-content no-padding">
               <div class="headpic">
-                <img :src="info.avatar" />
+                <img :src="user.avatar" />
               </div>
               </div>
               <div class="box-content">
               <h4>{{user.username}}</h4>
               <h6>标签</h6>
-              <p class="muted text-indent" v-if="info.labels">{{info.labels}}</p>
+              <p class="muted text-indent" v-if="user.labels">{{user.labels}}</p>
               <p class="muted text-indent" v-else>暂无内容</p>
               <h6>个人介绍</h6>
-              <p class="muted text-indent" v-if="info.about">{{info.about}}</p>
+              <p class="muted text-indent" v-if="user.about">{{user.about}}</p>
               <p class="muted text-indent" v-else>暂无内容</p>
               <a href="#/user/edit" class="btn btn-danger btn-block follow" v-if="isSelf">修改信息</a>
               <button class="btn btn-red btn-block follow" v-else>关注</button>
@@ -99,7 +99,6 @@ export default {
   data() {
     return {
       user:{},
-      info:{},
       canAttention:true,
       isSelf: false,
       followers: [
@@ -123,7 +122,6 @@ export default {
 
         if(res.errorNo == 0 ) {
           this.user = res.data;
-          this.info = res.data.info;
 
           this.getArticles(id);
 
@@ -135,7 +133,7 @@ export default {
     getArticles(id) {
       let para = {uid :id};
       getArticleListPage(para).then(res=>{
-        if(res.errorNo == 0 ) {
+        if(res.errorNo == 0 && res.data != null ) {
           this.articles = res.data;
         }
       });

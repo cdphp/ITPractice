@@ -28,31 +28,19 @@ instance.interceptors.request.use(function (config) {
 export const requestLogin = params => { return instance.post(`/login`, params).then(res => res.data); };
 
 export const register = params => { return instance.post(`/register`, params).then(res => res.data); };
-export const validateEmail = params => { return instance.post(`/register/validate`, params).then(res => res.data); };
-export const sendMail = params => { return instance.post(`/common/mail`, params).then(res => res.data); };
+export const validateEmail = params => { return instance.post(`/validate`, params).then(res => res.data); };
+export const sendMail = params => { return instance.post(`/mail`, params).then(res => res.data); };
 
 
-export const getUserListPage = params => { return instance.get(`/user`, {params: params}).then(res => res.data); };
+export const getUserListPage = params => { return instance.get(`/user/`, {params: params}).then(res => res.data); };
 
 export const getUser = params => {return instance.get(`/user/${params.id}`).then(res => res.data);}
 export const editUser = params => {return instance.put(`/user/${params.id}`, params).then(res => res.data);}
 
-export const getArticleListPage = params => { return instance.get(`/article`, {params: params}).then(res => res.data); };
+export const getArticleListPage = params => { return instance.get(`/article/`, {params: params}).then(res => res.data); };
 
-export const addArticle = params => { return instance.post(`/article`, params).then(res => res.data); };
+export const addArticle = params => { return instance.post(`/article/`, params).then(res => res.data); };
 export const getArticle = params => {return instance.get(`/article/${params.id}`).then(res => res.data);}
 
-export const getCommentListPage = params => { return instance.get(`/comment`, {params: params}).then(res => res.data); };
-export const addComment = params => { return instance.post(`/comment`, params).then(res => res.data); };
-
-
-var uploadInstance = axios.create({
-  baseURL: '/file',
-  timeout: 2500,
-  headers: {
-    'Content-Type': 'multipart/form-data',
-  },
-
-});
-
-export const upload = params => {return uploadInstance.post(`/upload`, params).then(res => res.data);}
+export const getCommentListPage = params => { return instance.get(`/comment/`, {params: params}).then(res => res.data); };
+export const addComment = params => { return instance.post(`/comment/`, params).then(res => res.data); };

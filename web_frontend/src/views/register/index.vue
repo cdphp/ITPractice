@@ -130,12 +130,10 @@
         //NProgress.done();
         if (res.errorNo !== 0) {
           this.$message({
-            message: res.errorMsg,
+            message: res.message,
             type: 'error'
           });
           this.sendSuccess = false;
-        }else {
-          this.ruleForm2.email = res.data.email;
         }
 
       });
@@ -165,7 +163,7 @@
               //NProgress.done();
               if (data.errorNo !== 0) {
                 this.$message({
-                  message: data.errorMsg,
+                  message: data.message,
                   type: 'error'
                 });
               } else {

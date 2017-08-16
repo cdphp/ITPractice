@@ -41,7 +41,7 @@
 
             <div class="form-group">
               <div class="col-sm-offset-1 col-sm-10">
-                <button  class="btn btn-blue" v-on:click="addComment">提交</button>
+                <button  class="btn btn-blue" :disable="loading" v-on:click="addComment">提交</button>
               </div>
             </div>
             </div>
@@ -59,7 +59,7 @@
               <div class="media">
                 <div class="media-left">
                   <a href="javascript:void(0)" v-on:click="viewUser(item.user_id)">
-                    <img class="media-object img-circle-head" :src="item.author.info.avatar">
+                    <img class="media-object img-circle-head" :src="item.avatar">
                   </a>
                 </div>
                 <div class="media-body">
@@ -69,7 +69,8 @@
               </div>
               </li>
               <li>
-                <div class="more">查看更多</div>
+              <div class="more" v-if="nomore">没有啦</div>
+              <div class="more" v-on:click="loadMore" v-else>查看更多</div>
               </li>
             </ul>
 
@@ -103,9 +104,16 @@ export default {
       length:0,
       comments:[],
       commentContent:'',
+      nomore: false,
+      page: 1,
+      loading: false,
     }
   },
   methods: {
+  loadMore() {
+    this.page++;
+    this.getComments();
+  },
     getArticleInfo(id) {
       let para = {id :id};
       getArticle(para).then(res => {
@@ -123,21 +131,35 @@ export default {
     viewUser(id) {
       this.$router.push({ path: '/user?id='+id });
     },
-    getComments(id) {
-      let para = {target_id :id};
+    getComments() {
+      let para = {target_id :this.id,page: this.page};
       getCommentListPage(para).then(res => {
 
-        if(res.errorNo == 0 &&res.data!=null) {
-          this.comments = res.data;
-          this.length = this.comments.length;
+        if(res.errorNo == 0) {
+          this.length = res.total;
+          if(res.data) {
+            this.comments.push.apply(this.comments, res.data);
+          }else {
+            this.nomore = true;
+          }
         }
       });
     },
 
     addComment() {
+      if(this.commentContent=='') {
+        this.$message({
+          message: '请先填写评论内容',
+          type: 'warning'
+        });
+        return
+      }
+      this.loading = true;
       let para = {
         target_id :this.id,
         content: this.commentContent,
+        type: "1",
+        root_id: "0",
       };
       addComment(para).then(res => {
 
@@ -147,13 +169,16 @@ export default {
             type: 'success'
           });
           this.commentContent = '';
-          this.getComments(para.target_id);
+          this.page = 1;
+          this.comments = [];
+          this.getComments();
         }else {
         this.$message({
           message: res.errorMsg,
           type: 'error'
         });
         }
+        this.loading = false;
       });
     },
   },
@@ -161,7 +186,7 @@ export default {
     var id = this.$route.query.id;
     this.id = id;
     this.getArticleInfo(id);
-    this.getComments(id);
+    this.getComments();
   },
 }
 </script>

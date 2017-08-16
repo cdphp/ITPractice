@@ -2,7 +2,7 @@ import babelpolyfill from 'babel-polyfill'
 import Vue from 'vue'
 import App from './App'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
+//import 'element-ui/lib/theme-default/index.css'
 
 import VueRouter from 'vue-router'
 import store from './vuex/store'
@@ -29,9 +29,10 @@ router.beforeEach((to, from, next) => {
     let user = JSON.parse(sessionStorage.getItem('user'));
 
     if(user) {
+      console.log("token:",user)
       if(user.created_at+user.expire < new Date().getTime()/1000) {
-        sessionStorage.removeItem('user');
-        next({ path: '/login' })
+        //sessionStorage.removeItem('user');
+        //next({ path: '/login' })
       }else {
         next()
       }

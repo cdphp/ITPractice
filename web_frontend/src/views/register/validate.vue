@@ -39,7 +39,7 @@ export default {
       validateEmail(para).then(res => {
       if (res.errorNo != 0) {
         this.$message({
-          message: res.errorMsg,
+          message: res.message,
           type: 'error'
         });
       } else {

@@ -173,10 +173,18 @@ export default {
           this.comments = [];
           this.getComments();
         }else {
+        if (res.errorNo == 201 ) {
         this.$message({
-          message: res.errorMsg,
+          message: "请先登录",
           type: 'error'
         });
+        }else {
+        this.$message({
+          message: res.message,
+          type: 'error'
+        });
+        }
+
         }
         this.loading = false;
       });

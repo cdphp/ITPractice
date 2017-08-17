@@ -1,4 +1,4 @@
-## 修仙网站前台项目
+## web-frontend
   项目使用[vue.js](https://cn.vuejs.org/)+[Bootstrap](http://www.bootcss.com/)实现
 
 ## 部署
@@ -24,9 +24,6 @@
      * api
      * assets
      * common
-     * components - your vue components
-     * mock
-     * styles
      * views - your pages
      * vuex
      * App.vue

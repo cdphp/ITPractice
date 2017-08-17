@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"lib"
 
 	"controllers"
 	"models"
@@ -63,8 +64,16 @@ func main() {
 
 // Database init func
 func Database() *gorm.DB {
+	myConfig := new(lib.Config)
+	myConfig.InitConfig(lib.GetCurrentDir() + "/configs/configs.ini")
+	host := myConfig.Read("database", "host")
+	port := myConfig.Read("database", "port")
+	user := myConfig.Read("database", "user")
+	password := myConfig.Read("database", "password")
+	dbname := myConfig.Read("database", "dbname")
+
 	//open a db connection
-	db, err := gorm.Open("mysql", "root:hongker@/it_practice2?charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", user+":"+password+"@tcp("+host+":"+port+")/"+dbname+"?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		fmt.Println(err)
 		panic("failed to connect database")

@@ -7,7 +7,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
-	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -29,7 +28,7 @@ var globalSessions *lib.Manager
 func init() {
 	db = Database()
 
-	logger, _ = seelog.LoggerFromConfigAsFile(GetCurrentDir() + "/configs/seelog.xml")
+	logger, _ = seelog.LoggerFromConfigAsFile(lib.GetCurrentDir() + "/configs/seelog.xml")
 	logger.Info("Start Working")
 	defer logger.Flush()
 
@@ -37,10 +36,17 @@ func init() {
 	go globalSessions.GC()
 }
 
-// Database init func
 func Database() *gorm.DB {
+	myConfig := new(lib.Config)
+	myConfig.InitConfig(lib.GetCurrentDir() + "/configs/configs.ini")
+	host := myConfig.Read("database", "host")
+	port := myConfig.Read("database", "port")
+	user := myConfig.Read("database", "user")
+	password := myConfig.Read("database", "password")
+	dbname := myConfig.Read("database", "dbname")
+
 	//open a db connection
-	orm, err := gorm.Open("mysql", "root:hongker@/it_practice2?charset=utf8&parseTime=True&loc=Local")
+	orm, err := gorm.Open("mysql", user+":"+password+"@tcp("+host+":"+port+")/"+dbname+"?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		fmt.Println(err)
 		panic("failed to connect database")
@@ -112,20 +118,11 @@ func Now() int64 {
 func GetMsg(no int) string {
 	myConfig := new(lib.Config)
 
-	myConfig.InitConfig(GetCurrentDir() + "/configs/configs.ini")
+	myConfig.InitConfig(lib.GetCurrentDir() + "/configs/configs.ini")
 
 	msg := myConfig.Read("error", strconv.Itoa(no))
 
 	return msg
-}
-
-// GetCurrentDir 获取当前路径
-func GetCurrentDir() string {
-	dir, err := filepath.Abs("./")
-	if err != nil {
-		fmt.Println(err)
-	}
-	return strings.Replace(dir, "\\", "/", -1)
 }
 
 // IsEmail 验证邮箱格式
@@ -149,7 +146,7 @@ func SendMail(to string, content map[string]string) {
 	fmt.Println(mail)
 
 	myConfig := new(lib.Config)
-	myConfig.InitConfig(GetCurrentDir() + "/configs/configs.ini")
+	myConfig.InitConfig(lib.GetCurrentDir() + "/configs/configs.ini")
 	host := myConfig.Read("default", "host")
 
 	if content["type"] == "validate" {

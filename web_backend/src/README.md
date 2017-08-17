@@ -9,7 +9,7 @@
 
 * 运行
     ```
-    cd src/v0.0.2
+    cd src
     go run main.go
     ```
 

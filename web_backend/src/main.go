@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"v0.0.2/controllers"
-	"v0.0.2/models"
+	"controllers"
+	"models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"

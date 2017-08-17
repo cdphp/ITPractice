@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"v0.0.2/models"
+	"models"
 )
 
 func init() {

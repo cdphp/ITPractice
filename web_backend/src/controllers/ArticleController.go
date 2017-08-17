@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"v0.0.2/models"
+	"models"
 
 	"github.com/gin-gonic/gin"
 )

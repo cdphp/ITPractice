@@ -13,8 +13,8 @@ import (
 	"strings"
 	"time"
 
-	"v0.0.2/lib"
-	"v0.0.2/models"
+	"lib"
+	"models"
 
 	seelog "github.com/cihub/seelog"
 	"github.com/gin-gonic/gin"

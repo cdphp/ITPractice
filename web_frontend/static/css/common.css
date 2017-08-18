@@ -190,7 +190,7 @@ a.btn-red:hover,button.btn-red:hover,a.btn-red:focus,button.btn-red:focus {
 .text-primary {color:#16A085;}
 .text-blue{color:#3498DB;}
 .text-red{color:#e74c3c}
-.text-gray{color:#888888}
+.text-gray{color:#666}
 .text-black {color:#2C3E50;}
 a.text-blue,a.text-red,a.text-gray,a.text-primary,a.text-black {
   -webkit-transition:all .2s linear;
@@ -288,3 +288,4 @@ footer p {
   background:#fff;
 }
 .img-circle-head {width:50px;height:50px;border-radius:50%;}
+.right {float:right;}

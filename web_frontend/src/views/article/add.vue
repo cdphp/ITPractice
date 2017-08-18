@@ -31,7 +31,7 @@
 
                 <div class="form-group">
                   <div class="col-sm-offset-2 col-sm-10">
-                    <button  class="btn btn-blue" v-on:click="add">确定</button>
+                    <button  class="btn btn-blue" :disable="loading" v-on:click="add">确定</button>
                   </div>
                 </div>
                 </div>
@@ -61,7 +61,8 @@ export default {
     return{
       title: '',
       digest: '',
-      content:''
+      content:'',
+      loading: false,
     }
   },
   components: {
@@ -94,18 +95,20 @@ export default {
         });
         return
       }
+      this.loading = true;
       var para = {title: this.title,digest: this.digest, content: this.content};
       addArticle(para).then(res => {
-        this.logining = false;
+
 
         if (res.errorNo != 0) {
           this.$message({
-            message: res.errorMsg,
+            message: res.message,
             type: 'error'
           });
+          this.loading = false;
         } else {
 
-          this.$router.push({ path: '/article/info?id='+res.data.id });
+          this.$router.push({ path: '/article/info?id='+res.resourceId });
         }
       });
     }

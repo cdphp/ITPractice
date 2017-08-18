@@ -10,15 +10,15 @@
 
       <div class="col-sm-4" v-for="item in users">
         <div class="master">
-          <div class="bg" :style="bgFormat(item.info.bg)">
+          <div class="bg">
 
           </div>
           <div class="headpic">
-            <img :src="item.info.avatar" />
+            <img :src="item.avatar" />
           </div>
           <div class="content">
           <div class="username">{{item.username}}</div>
-          <p class="digest" v-if="item.info.labels">{{item.info.labels}}</p>
+          <p class="digest" v-if="item.labels">{{item.labels}}</p>
           <p class="digest" v-else>暂无内容</p>
           <button class="btn btn-blue btn-block" v-on:click="viewUser(item.id)">查看更多</button>
           </div>
@@ -52,14 +52,12 @@ export default {
       this.page++;
       this.getUsers();
     },
-    bgFormat(bg) {
-      return {backgroundImage:'url('+bg+')'}
-    },
+
     //获取用户列表
     getUsers: function () {
       let para = {
         page : this.page,
-        row : 12,
+        row : 6,
       };
       this.loading = true;
       //NProgress.start();
@@ -103,8 +101,13 @@ export default {
   border-radius:5px;
   margin-bottom:30px;
 }
-.master .bg {height:150px;background-size:cover;border-top-left-radius:5px;
-border-top-right-radius:5px;}
+.master .bg {
+height:150px;
+background-size:cover;
+border-top-left-radius:5px;
+border-top-right-radius:5px;
+background:url(http://ouecw69lw.bkt.clouddn.com/insta-2.jpg);
+}
 .master .content {padding:10px 30px;}
 .master .headpic {
   width:100%;

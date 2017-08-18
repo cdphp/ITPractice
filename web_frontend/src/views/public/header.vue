@@ -69,7 +69,7 @@
     },
     mounted() {
     var user = sessionStorage.getItem('user');
-    
+
     if (user) {
       this.isLogin = true
       user = JSON.parse(user);
@@ -81,36 +81,5 @@
   }
 </script>
 <style scoped>
-.navbar {
-  margin-bottom:0px;
-}
-.navbar-default {
-    padding:15px;
-    background-color: transparent;
 
-    border-style:none none solid none;
-
-}
-.navbar-default .navbar-nav>li a {
-    color: #545e6b;
-    font-weight: 600;
-    font-size: 14px;
-    -webkit-transition:all .2s linear;
-    -moz-transition:all .2s linear;
-    -o-transition:all .2s linear;
-    color:#5d5d5d;
-}
-.navbar-default .navbar-nav>li a:hover {
-  color:#F8B08D;
-}
-.navbar-brand {
-  padding:7px 15px;
-}
-.navbar-brand img {
-    width: 97px;
-    height: 30px;
-}
-.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
-  background:#fff;
-}
 </style>

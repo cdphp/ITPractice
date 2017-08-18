@@ -12,7 +12,7 @@
 	export default {
 		data() {
 			return {
-				test:123,
+
 			}
 		},
 		components: {
@@ -20,7 +20,7 @@
 			MyFooter
 		},
 		mounted() {
-			console.log("mounted from main:",this.test)
+			
 		}
 	}
 

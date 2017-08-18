@@ -1,22 +1,11 @@
-/*
-import Login from './views/login.vue'
-import NotFound from './views/404.vue'
-import Index from './views/index.vue'
-import Main from './views/layouts/main.vue'
-import Invest from './views/invest.vue'
-import Master from './views/master.vue'
-import User from './views/user/index.vue'
-import UserEdit from './views/user/edit.vue'
-import Article from './views/article/index.vue'
-import ArticleAdd from './views/article/add.vue'
-import ArticleInfo from './views/article/info.vue'
-import Register from './views/reg.vue'
-*/
+
+const Index = resolve => require(['./views/index.vue'], resolve)
+const Login = resolve => require(['./views/common/login.vue'], resolve)
 const Register = resolve => require(['./views/register/index.vue'], resolve)
 const RegisterValidate = resolve => require(['./views/register/validate.vue'], resolve)
-const Login = resolve => require(['./views/login.vue'], resolve)
-const NotFound = resolve => require(['./views/404.vue'], resolve)
-const Index = resolve => require(['./views/index.vue'], resolve)
+
+const NotFound = resolve => require(['./views/common/404.vue'], resolve)
+
 const Main = resolve => require(['./views/layouts/main.vue'], resolve)
 const Master = resolve => require(['./views/master.vue'], resolve)
 const User = resolve => require(['./views/user/index.vue'], resolve)

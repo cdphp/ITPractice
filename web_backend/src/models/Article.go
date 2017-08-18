@@ -29,6 +29,7 @@ type TransformedArticle struct {
 	Content   string `json:"content"`
 	UserID    int64  `json:"user_id"`
 	Author    string `json:"author"`
+	Avatar    string `json:"avatar"`
 	Labels    string `json:"labels"`
 	Clicks    uint   `json:"clicks"`
 	CreatedAt int64  `json:"created_at"`

@@ -187,15 +187,19 @@ a.btn-red:hover,button.btn-red:hover,a.btn-red:focus,button.btn-red:focus {
   background:#ec7063;
   color:#fff;
 }
+.text-primary {color:#16A085;}
 .text-blue{color:#3498DB;}
 .text-red{color:#e74c3c}
 .text-gray{color:#888888}
-a.text-blue,a.text-red,a.text-gray {
+.text-black {color:#2C3E50;}
+a.text-blue,a.text-red,a.text-gray,a.text-primary,a.text-black {
   -webkit-transition:all .2s linear;
   -moz-transition:all .2s linear;
   -o-transition:all .2s linear;
   text-decoration:none;
 }
+a.text-black:hover{color:#34495E;text-decoration:none;}
+a.text-primary:hover{color:#1ABC9C;text-decoration:none;}
 a.text-blue:hover{color:#5dade2;text-decoration:none;}
 a.text-red:hover{color:#ec7063;text-decoration:none;}
 a.text-gray:hover{color:#333;text-decoration:none;}
@@ -283,3 +287,4 @@ footer p {
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
   background:#fff;
 }
+.img-circle-head {width:50px;height:50px;border-radius:50%;}

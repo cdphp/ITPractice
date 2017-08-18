@@ -103,8 +103,9 @@ func ListArticle(c *gin.Context) {
 	//transforms the users for building a good response
 	for _, article := range articles {
 		var user models.User
+		var profile models.Profile
 		db.Model(&article).Related(&user)
-
+		db.Model(&user).Related(&profile)
 		_articles = append(_articles, models.TransformedArticle{
 			ID:        article.ID,
 			Title:     article.Title,
@@ -112,6 +113,7 @@ func ListArticle(c *gin.Context) {
 			Digest:    article.Digest,
 			UserID:    user.ID,
 			Author:    user.Username,
+			Avatar:    profile.Avatar,
 			Labels:    article.Labels,
 			Clicks:    article.Clicks,
 			CreatedAt: article.CreatedAt,

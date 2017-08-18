@@ -19,7 +19,7 @@
               <span class="item"><span class="glyphicon glyphicon-eye-open"></span> 20</span>
             </div>
             <div class="content">
-              <div v-html="article.content"></div>
+              <div v-html="compiledMarkdown"></div>
             </div>
           </div>
 
@@ -93,6 +93,8 @@
 <script>
 import {getArticle, getCommentListPage,addComment} from '../../api/api'
 import util from '../../common/js/util'
+import marked from 'marked'
+
 export default {
   data() {
     return {
@@ -101,6 +103,7 @@ export default {
         title: '',
         content: '',
       },
+      input: '# hello',
       length:0,
       comments:[],
       commentContent:'',
@@ -195,6 +198,11 @@ export default {
     this.id = id;
     this.getArticleInfo(id);
     this.getComments();
+  },
+  computed: {
+    compiledMarkdown: function () {
+      return marked(this.article.content, { sanitize: true })
+    }
   },
 }
 </script>

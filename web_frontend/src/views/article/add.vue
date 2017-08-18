@@ -3,7 +3,7 @@
     <div class="wrapper gray-bg">
       <div class="container">
         <div class="row">
-          <div class="col-sm-9">
+          <div class="col-sm-12">
             <div class="box">
               <div class="box-header">
                 撰写
@@ -25,7 +25,7 @@
                 <div class="form-group">
                   <label for="content" class="col-sm-2 control-label">内容</label>
                   <div class="col-sm-10">
-                    <vue-editor v-model="content"></vue-editor>
+                    <mavon-editor v-model="content"/>
                   </div>
                 </div>
 
@@ -39,13 +39,7 @@
             </div>
           </div>
 
-          <div class="col-sm-3">
-            <div class="box">
-              <div class="box-header">
-                其他
-              </div>
-            </div>
-          </div>
+
 
         </div>
 
@@ -55,7 +49,9 @@
 </template>
 <script>
 import {addArticle} from '../../api/api'
-import { VueEditor } from 'vue2-editor'
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+
 export default {
   data(){
     return{
@@ -66,9 +62,8 @@ export default {
     }
   },
   components: {
-      VueEditor
-   },
-
+    'mavon-editor': mavonEditor.mavonEditor
+  },
 
   methods: {
     add() {

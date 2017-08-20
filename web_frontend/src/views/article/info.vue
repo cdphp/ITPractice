@@ -7,14 +7,14 @@
         <div class="box">
 
           <div class="box-content article">
-            <div class="title">
+            <h1 class="title">
               {{article.title}}
+            </h1>
+            <div class="subtitle muted">
+              <span class="item">作者：{{article.author}}</span>
+              <span class="item">发布时间： {{formatTime(article.created_at)}}</span>
             </div>
-            <div class="about muted text-center">
-              <span class="item">{{article.author_name}}</span>
-              <span class="item"><i class="el-icon-time"></i> {{formatTime(article.created_at)}}</span>
-            </div>
-            <div class="about muted text-right">
+            <div class="subtitle muted text-right">
               <span class="item"><i class="el-icon-star-off"></i> 20</span>
               <span class="item"><span class="glyphicon glyphicon-eye-open"></span> 20</span>
             </div>
@@ -80,8 +80,29 @@
         </div>
       </div>
       <div class="col-sm-3">
-        <div class="box">
-          <div class="box-header">他的其他文章</div>
+        <div class="user-sidebar box">
+          <div class="box-header">
+            <h5>基本信息</h5>
+
+          </div>
+          <div class="box-content no-padding">
+          <div class="headpic">
+            <img :src="user.avatar" />
+          </div>
+          </div>
+          <div class="box-content">
+          <h4>{{user.username}}</h4>
+          <h6>标签</h6>
+          <p class="muted text-indent" v-if="user.labels">{{user.labels}}</p>
+          <p class="muted text-indent" v-else>暂无内容</p>
+          <h6>个人介绍</h6>
+          <p class="muted text-indent" v-if="user.about">{{user.about}}</p>
+          <p class="muted text-indent" v-else>暂无内容</p>
+          <a href="#/user/edit" class="btn btn-danger btn-block follow" v-if="isSelf">修改信息</a>
+          <button class="btn btn-red btn-block follow" v-else>关注</button>
+
+          </div>
+
         </div>
       </div>
     </div>
@@ -91,7 +112,7 @@
 </section>
 </template>
 <script>
-import {getArticle, getCommentListPage,addComment} from '../../api/api'
+import {getArticle, getCommentListPage,addComment,getUser} from '../../api/api'
 import util from '../../common/js/util'
 import marked from 'marked'
 
@@ -110,6 +131,8 @@ export default {
       nomore: false,
       page: 1,
       loading: false,
+      isSelf: false,
+      user:{},
     }
   },
   methods: {
@@ -123,8 +146,21 @@ export default {
 
         if(res.errorNo == 0 ) {
           this.article = res.data;
+          this.getUserInfo(this.article.user_id);
         }else {
           this.$router.push({ path: '/404' });
+        }
+      });
+    },
+    getUserInfo(id) {
+      let para = {id :id};
+      getUser(para).then(res => {
+
+        if(res.errorNo == 0 ) {
+          this.user = res.data;
+
+
+
         }
       });
     },
@@ -198,6 +234,16 @@ export default {
     this.id = id;
     this.getArticleInfo(id);
     this.getComments();
+
+    var user = sessionStorage.getItem('user');
+
+    if (user) {
+      user = JSON.parse(user);
+      this.isSelf = user.user_id==id?true:false;
+
+    }
+
+
   },
   computed: {
     compiledMarkdown: function () {
@@ -211,12 +257,20 @@ export default {
 .article {}
 .article .title {
   font-size:28px;
-  text-align:center;
-  margin:20px;
+
+  margin:20px 0px;
 }
-.article .about{padding:10px;}
-.article .about span.item{margin:15px;}
-.article .content {margin:30px;}
+.article .subtitle .item{
+  margin-right:20px;
+}
+
+.article .content {
+margin:30px 0px;
+padding: 10px 0px;
+font-size: 16px;
+  line-height: 1.8;
+  word-wrap: break-word;
+}
 .comments li {
   margin-top:10px;
   margin-bottom:10px;

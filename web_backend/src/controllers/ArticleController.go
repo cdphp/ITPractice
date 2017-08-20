@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -255,5 +256,65 @@ func UpdateArticle(c *gin.Context) {
 
 // DeleteArticle 删除
 func DeleteArticle(c *gin.Context) {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 
+	if err != nil {
+		errorNo := 24
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"errorNo": errorNo,
+			"message": GetMsg(errorNo),
+		})
+		return
+	}
+
+	// 查看article是否存在
+	var article models.Article
+	if err = db.Where("id=?", id).First(&article).Error; err != nil {
+		errorNo := 22
+		c.JSON(http.StatusCreated, gin.H{
+			"errorNo": errorNo,
+			"message": GetMsg(errorNo),
+		})
+		return
+	}
+
+	// 验证token
+	var token models.Token
+	token.Token = c.GetHeader("Token")
+
+	if ValidateToken(&token, c) == false {
+		errorNo := 201
+		c.JSON(http.StatusCreated, gin.H{
+			"errorNo": errorNo,
+			"message": GetMsg(errorNo),
+		})
+		return
+	}
+
+	// 判断是否有权修改
+	if token.UserID != article.UserID {
+		errorNo := 22
+		c.JSON(http.StatusCreated, gin.H{
+			"errorNo": errorNo,
+			"message": GetMsg(errorNo),
+		})
+		return
+	}
+
+	if err := db.Model(&article).UpdateColumn("is_delete", true).Error; err != nil {
+		fmt.Println("err:", err)
+		errorNo := 26
+		c.JSON(http.StatusCreated, gin.H{
+			"errorNo": errorNo,
+			"message": GetMsg(errorNo),
+		})
+		return
+	}
+
+	errorNo := 0
+	c.JSON(http.StatusOK, gin.H{
+		"errorNo": errorNo,
+		"message": GetMsg(errorNo),
+	})
+	return
 }

@@ -13,6 +13,7 @@ const UserEdit = resolve => require(['./views/user/edit.vue'], resolve)
 const Article = resolve => require(['./views/article/index.vue'], resolve)
 const ArticleAdd = resolve => require(['./views/article/add.vue'], resolve)
 const ArticleInfo = resolve => require(['./views/article/info.vue'], resolve)
+const ArticleEdit = resolve => require(['./views/article/edit.vue'], resolve)
 let routes = [
     {
         path: '/',
@@ -27,7 +28,7 @@ let routes = [
           { path: '/user/edit', component: UserEdit, name: '用户编辑', hidden: true },
           { path: '/article/add', component: ArticleAdd, name: '写文章', hidden: true },
           { path: '/article/info', component: ArticleInfo, name: '文章详情', hidden: true },
-
+          { path: '/article/edit', component: ArticleEdit, name: '文章编辑', hidden: true },
           { path: '/reg', component: Register, name: '注册', hidden: true },
           { path: '/reg/validate', component: RegisterValidate, name: '等待验证', hidden: true },
 

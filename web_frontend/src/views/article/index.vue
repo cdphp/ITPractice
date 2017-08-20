@@ -6,7 +6,7 @@
       <div class="col-sm-9">
         <div class="box articles">
 
-          <div class="box-content" v-for="(item,index) in articles" >
+          <div class="box-content" v-for="(item,index) in articles">
           <div class="title"><h1><a href="javascript:void(0)" v-on:click="viewArticle(item.id)" class="text-black">{{item.title}}</a></h1></div>
 
           <div class="content text-gray" v-html="compiledMarkdown(item.content)"></div>

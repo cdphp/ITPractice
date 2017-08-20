@@ -41,6 +41,8 @@ export const getArticleListPage = params => { return instance.get(`/article/`, {
 
 export const addArticle = params => { return instance.post(`/article/`, params).then(res => res.data); };
 export const getArticle = params => {return instance.get(`/article/${params.id}`).then(res => res.data);}
+export const delArticle = params => { return instance.delete(`/article/${params.id}`).then(res => res.data); };
+export const editArticle = params => {return instance.put(`/article/${params.id}`, params).then(res => res.data);}
 
 export const getCommentListPage = params => { return instance.get(`/comment/`, {params: params}).then(res => res.data); };
 export const addComment = params => { return instance.post(`/comment/`, params).then(res => res.data); };

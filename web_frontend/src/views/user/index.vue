@@ -6,86 +6,103 @@
         <div class="row">
           <div class="col-sm-3">
             <div class="user-sidebar box">
-              <div class="box-header">
-                <h5>基本信息</h5>
 
-              </div>
-              <div class="box-content no-padding">
-              <div class="headpic">
+              <div class="box-content no-border headpic">
+              <div class=" userinfo">
                 <img :src="user.avatar" />
               </div>
+              <h4 class="text-center">{{user.username}}</h4>
+              <p class="labels text-center" v-if="user.labels">{{user.labels}}</p>
+
+
+              <div class="btns" v-if="isSelf">
+                <a href="#/user/edit" class="btn btn-default btn-block btn-ellipse follow">修改信息</a>
+              </div>
+              <div class="btns" v-else>
+
+                <button class="btn btn-blue btn-block btn-ellipse follow">关 注 <i class="fa fa-plus" aria-hidden="true"></i></button>
+                <button class="btn btn-default btn-block btn-ellipse follow">私 信 <i class="fa fa-envelope-o" aria-hidden="true"></i></button>
+              </div>
+              </div>
+              <div class="box-content counts">
+
+                  <div class="item">
+                    <div class="num">100</div>
+                    <div class="title">文章</div>
+                  </div>
+                  <div class="item">
+                    <div class="num">50</div>
+                    <div class="title">弟子</div>
+                  </div>
+
+                <div class="clearfix"></div>
               </div>
               <div class="box-content">
-              <h4>{{user.username}}</h4>
-              <h6>标签</h6>
-              <p class="muted text-indent" v-if="user.labels">{{user.labels}}</p>
-              <p class="muted text-indent" v-else>暂无内容</p>
-              <h6>个人介绍</h6>
-              <p class="muted text-indent" v-if="user.about">{{user.about}}</p>
-              <p class="muted text-indent" v-else>暂无内容</p>
-              <a href="#/user/edit" class="btn btn-danger btn-block follow" v-if="isSelf">修改信息</a>
-              <button class="btn btn-red btn-block follow" v-else>关注</button>
 
+              <p class="about text-indent" v-if="user.about">{{user.about}}</p>
+              <p class="about text-indent" v-else>暂无内容</p>
               </div>
 
             </div>
           </div>
 
-          <div class="col-sm-9">
+          <div class="col-sm-6">
             <div class="box">
-              <div class="box-header">
-                <h5 class="box-title" v-if="isSelf">我的文章</h5>
-                <h5 class="box-title" v-else>他的文章</h5>
-                <div class="box-tools">
-                <a class="btn btn-blue" href="#/article/add" v-if="isSelf">发布文章</a>
+              <div class="box-header no-border">
+                <h5 class="box-title">文章</h5>
+              </div>
+              <div class="box-content"  v-if="articles.length==0">
+                <div class="none ">暂无数据</div>
+              </div>
+              <div class="box-content articles" v-for="item in articles">
+                <div class="item">
+                  <a href="#" class="title text-blue">
+                  <i class="fa fa-info-circle" aria-hidden="true"></i> {{item.title}}
+                  <span class="muted right time">{{formatTime(item.created_at)}}</span>
+                  </a>
+                  <div class="footer">
+                    <span class="muted">点击量：{{item.clicks}}</span>
+                    <span class="muted right" v-if="isSelf">
+                      <a href="javascript:void(0)" v-on:click="editArticle(item.id)" class="text-blue"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                      <a href="javascript:void(0)" v-on:click="delArticle(item.id)" class="text-red"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div class="box-content">
-                <div class="none" v-if="articles.length==0">暂无内容</div>
-              <ul class="articles" v-if="articles.length">
-                <li class="item" v-for="item in articles">
-                  <a href="javascript:void(0)" v-on:click="viewArticle(item.id)" class="text-blue">
-                    <div class="title"><i class="el-icon-information"></i>{{item.title}}</div>
-                  </a>
+
+            </div>
+
+          </div>
+          <div class="col-sm-3">
+          <div class="box">
+            <div class="box-header no-border">
+
+              <h5 class="box-title">关注的人</h5>
+            </div>
+            <div class="box-content">
+              <div class="none" v-if="followers.length==0">暂无内容</div>
+              <ul class="follows" v-else>
+                <li v-for="(item,index) in followers">
+                <div class="media">
+                  <div class="media-left">
+                    <a href="javascript:void(0)" >
+                      <img class="media-object img-circle-head" :src="item.avatar">
+                    </a>
+                  </div>
+                  <div class="media-body">
+                    <div class="media-heading"><span class="username">{{item.username}}</span>
+                    </div>
+                    <div class="labels">xxxxx</div>
+                  </div>
+                </div>
+                </li>
+                <li>
 
                 </li>
-
               </ul>
-              </div>
-
+              <div class="clearfix"></div>
             </div>
-
-            <div class="box">
-              <div class="box-header">
-              <h5 v-if="isSelf">我的粉丝</h5>
-              <h5 v-else>他的粉丝</h5>
-              </div>
-              <div class="box-content">
-                <div class="none" v-if="followers.length==0">暂无内容</div>
-                <ul class="followers" v-if="followers.length">
-                  <li v-for="item in followers">
-                    <a href="#"><img class="img-circle" src="../../assets/imgs/user.png" :title="item.username"/></a>
-                  </li>
-                </ul>
-                <div class="clearfix"></div>
-              </div>
-            </div>
-
-            <div class="box">
-              <div class="box-header">
-                <h5 v-if="isSelf">我的偶像</h5>
-                <h5 v-else>他的偶像</h5>
-              </div>
-              <div class="box-content">
-                <div class="none" v-if="attentions.length==0">暂无内容</div>
-                <ul class="followers" v-if="attentions.length">
-                  <li v-for="item in attentions">
-                    <a href="#"><img class="img-circle" src="../../assets/imgs/user.png" :title="item.username"/></a>
-                  </li>
-                </ul>
-                <div class="clearfix"></div>
-              </div>
-            </div>
+          </div>
 
           </div>
         </div>
@@ -94,7 +111,9 @@
   </section>
 </template>
 <script>
-import {getArticleListPage,getUser} from '../../api/api'
+import {getArticleListPage,getUser,delArticle} from '../../api/api'
+import util from '../../common/js/util'
+import marked from 'marked'
 export default {
   data() {
     return {
@@ -103,12 +122,14 @@ export default {
       isSelf: false,
       followers: [
         {
+          user_id: 1,
           username:'hongker',
-          avatar:''
+          avatar:'http://ouecw69lw.bkt.clouddn.com/profile_big.jpg'
         },
         {
+          user_id: 2,
           username:'test001',
-          avatar:''
+          avatar:'http://ouecw69lw.bkt.clouddn.com/profile_big.jpg'
         }
       ],
       attentions: [],
@@ -116,6 +137,43 @@ export default {
     }
   },
   methods: {
+  loadMore() {
+    this.page++;
+    this.getArticles();
+  },
+  formatTime(unixTime) {
+    return util.formatDate.format(new Date(unixTime*1000),'yy-MM-dd hh:mm');
+  },
+  delArticle(id) {
+    this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let para = {id: id};
+        delArticle(para).then(res => {
+
+          if(res.errorNo==0) {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+          }else {
+          this.$message({
+            type: 'error',
+            message: res.message
+          });
+          }
+        });
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+  },
+
     getUserInfo(id) {
       let para = {id :id};
       getUser(para).then(res => {
@@ -140,6 +198,12 @@ export default {
     },
     viewArticle(id) {
       this.$router.push({ path: '/article/info?id='+id });
+    },
+    editArticle(id) {
+      this.$router.push({ path: '/article/edit?id='+id });
+    },
+    compiledMarkdown(content) {
+      return marked(content.substring(0,200), { sanitize: true })
     }
   },
   mounted() {
@@ -155,7 +219,8 @@ export default {
 
     this.getUserInfo(id);
 
-  }
+  },
+
 
 }
 </script>
@@ -163,6 +228,26 @@ export default {
 
   .user-sidebar {
     width:100%;
+    margin:10px;
+  }
+  .user-sidebar .headpic {
+    padding-bottom: 0px;
+    margin:10px 5px 5px 5px;
+  }
+  .labels, .about{
+    margin: 10px 0px;
+    font-size:14px;
+
+  }
+  .labels {
+    color:#888;
+  }
+  .about {
+    color:#333;
+  }
+
+  .user-sidebar .btns{
+    padding:0px 50px;
 
   }
   .user-sidebar .username {
@@ -170,23 +255,36 @@ export default {
   }
   .user-sidebar .follow {
     margin:20px 0px;
+
+  }
+  .userinfo {
+    text-align: center;
   }
 
   .headpic {
+    margin: 20px auto;
 
   }
+  .headpic p {font-size:14px;}
   .headpic img {
-    width:100%;
+    width:70px;
+    height:70px;
+    border-radius: 50%;
   }
+
   .articles {
     width:100%;
   }
-  .articles li.item {
-    padding:10px 20px;
-  }
-  .articles li.item a {
+
+  .articles .item a.title {
+    font-size:18px;
+    padding:5px 0px;
     display:block;
     text-decoration:none;
+
+  }
+  .articles .item .time {
+    font-size:14px;
   }
 
   .articles .title {
@@ -196,10 +294,59 @@ export default {
   .articles .title i {
     margin-right:10px;
   }
+  .articles .footer {
+    padding-top:10px;
+    font-size:14px;
+  }
   .followers li {
     width:60px;
     float:left;
     margin:10px;
   }
+  .counts {
+    padding: 0px;
+    margin: 0px;
+  }
+  .counts .item {
+    float:left;
+    width:50%;
+    height:100%;
+    padding:12px 10px;
+    text-align: center;
+    border-right: 1px solid #eee;
+
+  }
+  .counts .item .num {
+    padding-bottom:10px;
+    color:#000;
+    font-weight:blod;
+    font-size:14px;
+  }
+  .counts .item .title {
+    color:#c1c1c1;
+    font-size:14px;
+  }
+  .attentions {
+    margin-top:10px;
+
+  }
+  .attentions .title {
+    color:#666;
+    font-size: 14px;
+  }
+  .follows {
+    padding:10px 0px;
+  }
+
+  .follows .username {
+    font-size: 14px;
+  }
+  .follows .labels {
+    color:#888;
+  }
+  .follows .follow {
+
+  }
+
 
 </style>

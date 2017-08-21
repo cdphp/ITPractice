@@ -6,15 +6,11 @@ import (
 	"strconv"
 	"time"
 
-	"golang.org/x/net/context"
-
 	"models"
 
 	"lib"
 
 	"github.com/gin-gonic/gin"
-	"github.com/qiniu/api.v7/auth/qbox"
-	"github.com/qiniu/api.v7/storage"
 )
 
 func init() {
@@ -388,29 +384,8 @@ func Upload(c *gin.Context) {
 		localFile = res
 	}
 
-	putPolicy := storage.PutPolicy{
-		Scope: bucket,
-	}
-	mac := qbox.NewMac(accessKey, secretKey)
-	upToken := putPolicy.UploadToken(mac)
-	cfg := storage.Config{}
-	// 空间对应的机房
-	cfg.Zone = &storage.ZoneHuanan
-	// 是否使用https域名
-	cfg.UseHTTPS = false
-	// 上传是否使用CDN上传加速
-	cfg.UseCdnDomains = false
-	// 构建表单上传的对象
-	formUploader := storage.NewFormUploader(&cfg)
-	ret := storage.PutRet{}
-	// 可选配置
-	putExtra := storage.PutExtra{
-		Params: map[string]string{
-			"x:name": "github logo",
-		},
-	}
+	url, err := UploadFile(localFile, key)
 
-	err := formUploader.PutFile(context.Background(), &ret, upToken, key, localFile, &putExtra)
 	if err != nil {
 		errorNo := 28
 		c.JSON(http.StatusOK, gin.H{
@@ -420,12 +395,12 @@ func Upload(c *gin.Context) {
 		return
 
 	}
-	fmt.Println(ret.Key, ret.Hash)
+
 	errorNo := 0
 	c.JSON(http.StatusOK, gin.H{
 		"errorNo": errorNo,
 		"message": GetMsg(errorNo),
-		"url":     "http://ouecw69lw.bkt.clouddn.com/" + ret.Key,
+		"url":     url,
 	})
 	return
 }

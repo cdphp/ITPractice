@@ -203,3 +203,16 @@ func ValidateToken(token *models.Token, c *gin.Context) bool {
 
 	return true
 }
+
+// Upload 上传文件
+func UploadFile(filepath, key string) (string, error) {
+	uploader := lib.Uploader{
+		AccessKey: GetDbConfig("qiniu_accessKey"),
+		SecretKey: GetDbConfig("qiniu_secretKey"),
+		Bucket:    GetDbConfig("qiniu_bucket"),
+	}
+
+	res, err := uploader.Upload(filepath, key)
+	url := GetDbConfig("qiniu_host") + res
+	return url, err
+}

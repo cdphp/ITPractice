@@ -1,2 +1,3 @@
 web_frontend/node_modules
 web_frontend/package-lock.json
+web_backend/src/log/common.log

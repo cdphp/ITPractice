@@ -98,7 +98,7 @@ func ListArticle(c *gin.Context) {
 	if err != nil {
 		db.Order("created_at desc").Offset((current - 1) * row).Limit(row).Find(&articles)
 	} else {
-		db.Where("user_id=?", uid).Order("created_at desc").Offset((current - 1) * row).Limit(row).Find(&articles)
+		db.Where("is_delete=0 and user_id=?", uid).Order("created_at desc").Offset((current - 1) * row).Limit(row).Find(&articles)
 	}
 
 	//transforms the users for building a good response

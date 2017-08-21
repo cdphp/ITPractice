@@ -6,8 +6,15 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/gin-gonic/gin"
+	"golang.org/x/net/context"
+
 	"models"
+
+	"lib"
+
+	"github.com/gin-gonic/gin"
+	"github.com/qiniu/api.v7/auth/qbox"
+	"github.com/qiniu/api.v7/storage"
 )
 
 func init() {
@@ -335,6 +342,90 @@ func Mail(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"errorNo": errorNo,
 		"message": GetMsg(errorNo),
+	})
+	return
+}
+
+var (
+	accessKey = "9lq_6tRciBvyJPZE88U3IOBaDCdpba_cuGF1IGWv"
+	secretKey = "oQ_PsPA24wughLtzaWBkuG_zOhJ3VQwQMvpaJ43R"
+	bucket    = "itwebimagesource"
+)
+
+// Upload 上传
+func Upload(c *gin.Context) {
+	type UploadData struct {
+		Type    string `json:"type" binding:"required"`
+		Content string `json:"content" binding:"required"`
+	}
+
+	var uploadData UploadData
+
+	// 解析row data
+	if err := c.BindJSON(&uploadData); err != nil {
+		errorNo := 24
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"errorNo": errorNo,
+			"message": GetMsg(errorNo),
+		})
+		return
+	}
+
+	var localFile, key string
+
+	if uploadData.Type == "image" { //上传图片
+
+		key = Md5(strconv.FormatInt(time.Now().UnixNano(), 10))
+
+		var baseName string
+		baseName = "/tmp/" + key
+
+		res, err := lib.SaveImageToDisk(baseName, uploadData.Content)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		localFile = res
+	}
+
+	putPolicy := storage.PutPolicy{
+		Scope: bucket,
+	}
+	mac := qbox.NewMac(accessKey, secretKey)
+	upToken := putPolicy.UploadToken(mac)
+	cfg := storage.Config{}
+	// 空间对应的机房
+	cfg.Zone = &storage.ZoneHuanan
+	// 是否使用https域名
+	cfg.UseHTTPS = false
+	// 上传是否使用CDN上传加速
+	cfg.UseCdnDomains = false
+	// 构建表单上传的对象
+	formUploader := storage.NewFormUploader(&cfg)
+	ret := storage.PutRet{}
+	// 可选配置
+	putExtra := storage.PutExtra{
+		Params: map[string]string{
+			"x:name": "github logo",
+		},
+	}
+
+	err := formUploader.PutFile(context.Background(), &ret, upToken, key, localFile, &putExtra)
+	if err != nil {
+		errorNo := 28
+		c.JSON(http.StatusOK, gin.H{
+			"errorNo": errorNo,
+			"message": GetMsg(errorNo),
+		})
+		return
+
+	}
+	fmt.Println(ret.Key, ret.Hash)
+	errorNo := 0
+	c.JSON(http.StatusOK, gin.H{
+		"errorNo": errorNo,
+		"message": GetMsg(errorNo),
+		"url":     "http://ouecw69lw.bkt.clouddn.com/" + ret.Key,
 	})
 	return
 }

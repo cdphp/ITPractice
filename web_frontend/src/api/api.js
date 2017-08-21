@@ -30,6 +30,7 @@ export const requestLogin = params => { return instance.post(`/login`, params).t
 export const register = params => { return instance.post(`/register`, params).then(res => res.data); };
 export const validateEmail = params => { return instance.post(`/validate`, params).then(res => res.data); };
 export const sendMail = params => { return instance.post(`/mail`, params).then(res => res.data); };
+export const upload = params => { return instance.post(`/upload`, params).then(res => res.data); };
 
 
 export const getUserListPage = params => { return instance.get(`/user/`, {params: params}).then(res => res.data); };

@@ -171,8 +171,9 @@ func FetchSingleUser(c *gin.Context) {
 // UpdateUser 修改个人信息
 func UpdateUser(c *gin.Context) {
 	type UpdateData struct {
-		Labels string `json:"labels" binding:"required"`
-		About  string `json:"about" binding:"required"`
+		Labels string `json:"labels"`
+		About  string `json:"about"`
+		Avatar string `json:"avatar"`
 	}
 
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
@@ -222,7 +223,20 @@ func UpdateUser(c *gin.Context) {
 	var updateData UpdateData
 	c.BindJSON(&updateData)
 
-	if err = db.Model(models.Profile{}).Where("user_id=?", token.UserID).UpdateColumns(models.Profile{Labels: updateData.Labels, About: updateData.About}).Error; err != nil {
+	var profile models.Profile
+	if updateData.About != "" {
+		profile.About = updateData.About
+	}
+
+	if updateData.Labels != "" {
+		profile.Labels = updateData.Labels
+	}
+
+	if updateData.Avatar != "" {
+		profile.Avatar = updateData.Avatar
+	}
+
+	if err = db.Model(models.Profile{}).Where("user_id=?", token.UserID).UpdateColumns(profile).Error; err != nil {
 		errorNo := 25
 		c.JSON(http.StatusCreated, gin.H{
 			"errorNo": errorNo,

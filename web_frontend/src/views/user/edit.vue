@@ -94,12 +94,13 @@
   </section>
 </template>
 <script>
-import {getArticleListPage,getUser,editUser} from '../../api/api'
+import {getArticleListPage,getUser,editUser,upload} from '../../api/api'
 
 export default {
   data() {
 
     return {
+      id: 0,
       user:{},
       option: {
         aspectRatio: 1 / 1,
@@ -112,6 +113,7 @@ export default {
   },
   methods: {
     getUserInfo(id) {
+      this.id = id;
       let para = {id :id};
       getUser(para).then(res => {
 
@@ -134,7 +136,7 @@ export default {
 
         if(res.errorNo == 0 ) {
 
-          this.$router.push({ path: '/user?id='+ that.user.id});
+          this.$router.push({ path: '/user?id='+ this.user.id});
         }else {
           this.$message({
           message: res.message,
@@ -165,32 +167,50 @@ export default {
         } else {
           window.alert('Please choose an image file.');
         }
-        /*
-        var vm = this;
 
-        var image = new Image();
-      var reader = new FileReader();
-      reader.onload = (e) => {
-        console.log(e.target.result);
-        vm.info.avatar = e.target.result;
-      };
-      reader.readAsDataURL(files[0]);
-      */
 
     },
     saveAvatar() {
-      var that = this;
-      this.$message({
-        message: "上传功能还未实现，先等等",
-        type: 'warning'
-      });
-      $("#image").cropper('getCroppedCanvas').toBlob(function (blob) {
+      var base64Data = $("#image").cropper('getCroppedCanvas').toDataURL('image/jpeg');
+      let para = {type:"image", content: base64Data}
+      upload(para).then(res => {
+        if(res.errorNo!=0) {
+          this.$message({
+            type: 'error',
+            message: '已取消上传'
+          });
+          return
+        }
 
-        var fd = new FormData();
-        fd.append('file', blob);
-        console.log(blob);
+        this.$confirm('确实将此图片上传为头像么?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            let para = {id: this.id, avatar: res.url};
+            editUser(para).then(res => {
 
+              if(res.errorNo == 0 ) {
+
+                this.$router.push({ path: '/user?id='+ this.user.id});
+              }else {
+                this.$message({
+                message: res.message,
+                type: 'error'
+              });
+              }
+            });
+
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消上传'
+            });
+          });
       });
+
+
+
 
     }
 
@@ -229,6 +249,7 @@ export default {
             opacity: 0;
             -ms-filter: 'alpha(opacity=0)';
             font-size: 200px;
+            cursor:pointer;
         }
         .avatar {
           width:400px;

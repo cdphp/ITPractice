@@ -76,6 +76,21 @@ func Substr(str string, start int, end int) string {
 	return string(rs[start:end])
 }
 
+// GetAuthName 获取等级名称
+func GetAuthName(auth uint) string {
+	var name string
+	if auth == 1 {
+		name = "User"
+	} else if auth == 2 {
+		name = "Master"
+	} else if auth == 3 {
+		name = "Custodian"
+	} else if auth == 4 {
+		name = "Manager"
+	}
+	return name
+}
+
 // Md5 加密
 func Md5(str string) string {
 	md5Ctx := md5.New()

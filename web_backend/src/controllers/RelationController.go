@@ -105,12 +105,15 @@ func ListRelation(c *gin.Context) {
 
 	var relations []models.Relation
 	var _relations []models.TransformedRelation
+	var total int
 
 	uid, err := strconv.Atoi(c.Query("uid"))
 	if err != nil {
 		db.Where("is_delete=0").Offset((current - 1) * row).Limit(row).Find(&relations)
+		db.Model(&models.Relation{}).Where("is_delete=0").Count(&total)
 	} else {
 		db.Where("is_delete=0 and master_id=?", uid).Offset((current - 1) * row).Limit(row).Find(&relations)
+		db.Model(&models.Relation{}).Where("is_delete=0 and master_id=?", uid).Count(&total)
 	}
 
 	//transforms the users for building a good response
@@ -136,6 +139,7 @@ func ListRelation(c *gin.Context) {
 		"errorNo": errorNo,
 		"message": GetMsg(errorNo),
 		"data":    _relations,
+		"total":   total,
 	})
 
 }

@@ -18,8 +18,8 @@
           </div>
           <div class="content">
           <div class="username">{{item.username}}</div>
-          <p class="digest" v-if="item.labels">{{item.labels}}</p>
-          <p class="digest" v-else>暂无内容</p>
+          <p class="muted text-center" >{{formatAuth(item.auth)}}</p>
+
           <button class="btn btn-blue btn-block" v-on:click="viewUser(item.id)">查看更多</button>
           </div>
 
@@ -38,6 +38,7 @@
 </template>
 <script>
 import {getUserListPage} from '../api/api'
+import util from '../common/js/util'
 
 export default {
   data() {
@@ -51,6 +52,9 @@ export default {
     loadMore() {
       this.page++;
       this.getUsers();
+    },
+    formatAuth(auth) {
+      return util.getAuthName(auth);
     },
 
     //获取用户列表

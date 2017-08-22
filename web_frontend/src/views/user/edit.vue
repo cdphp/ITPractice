@@ -47,6 +47,12 @@
                   <textarea class="form-control" id="about" placeholder="自由发挥.." v-model="user.about"></textarea>
                 </div>
               </div>
+              <div class="form-group">
+                <label for="about" class="col-sm-2 control-label">Github</label>
+                <div class="col-sm-10">
+                  <textarea class="form-control" id="github" placeholder="你的github.." v-model="user.github"></textarea>
+                </div>
+              </div>
 
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
@@ -131,6 +137,7 @@ export default {
         id: this.user.id,
         labels: this.user.labels,
         about: this.user.about,
+        github: this.user.github,
       }
       editUser(para).then(res => {
 

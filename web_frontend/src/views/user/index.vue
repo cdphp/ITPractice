@@ -12,7 +12,7 @@
                 <img :src="user.avatar" />
               </div>
               <h4 class="text-center">{{user.username}}</h4>
-              <p class="labels text-center" v-if="user.labels">{{user.labels}}</p>
+              <p class="labels text-center">{{formatAuth(user.auth)}}</p>
 
 
               <div class="btns" v-if="isSelf">
@@ -21,27 +21,32 @@
               </div>
               <div class="btns" v-else>
 
-                <button v-if="!isMaster" class="btn btn-blue btn-block btn-ellipse follow" v-on:click="follow" :disable="following">拜 师 <i class="fa fa-plus" aria-hidden="true"></i></button>
+                <button v-if="!isMaster && user.auth!='User'" class="btn btn-blue btn-block btn-ellipse follow" v-on:click="follow" :disable="following">拜 师 <i class="fa fa-plus" aria-hidden="true"></i></button>
                 <button class="btn btn-default btn-block btn-ellipse follow">私 信 <i class="fa fa-envelope-o" aria-hidden="true"></i></button>
               </div>
               </div>
               <div class="box-content counts">
 
                   <div class="item">
-                    <div class="num">100</div>
+                    <div class="num">{{totalArticle}}</div>
                     <div class="title">文章</div>
                   </div>
                   <div class="item">
-                    <div class="num">50</div>
+                    <div class="num">{{totalPupil}}</div>
                     <div class="title">弟子</div>
                   </div>
 
                 <div class="clearfix"></div>
               </div>
               <div class="box-content">
-
+              <p class="about text-indent">{{user.labels}}</p>
               <p class="about text-indent" v-if="user.about">{{user.about}}</p>
               <p class="about text-indent" v-else>暂无内容</p>
+              </div>
+              <div class="box-content" v-if="user.github">
+
+                  <p class="github"><a v-bind:href="user.github" target="_blank" class="text-blue" ><i class="fa fa-github" aria-hidden="true"></i>{{user.github}}</a></p>
+
               </div>
 
             </div>
@@ -114,7 +119,7 @@
 <script>
 import {getArticleListPage,getUser,delArticle,getRelationListPage, addRelation} from '../../api/api'
 import util from '../../common/js/util'
-import marked from 'marked'
+
 export default {
   data() {
     return {
@@ -126,6 +131,8 @@ export default {
       articles:[],
       following: false,
       isMaster: false,
+      totalArticle:0,
+      totalPupil:0,
     }
   },
   methods: {
@@ -135,6 +142,9 @@ export default {
   },
   formatTime(unixTime) {
     return util.formatDate.format(new Date(unixTime*1000),'yy-MM-dd hh:mm');
+  },
+  formatAuth(auth) {
+    return util.getAuthName(auth);
   },
   delArticle(id) {
     this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -186,6 +196,7 @@ export default {
       getArticleListPage(para).then(res=>{
         if(res.errorNo == 0 && res.data != null ) {
           this.articles = res.data;
+          this.totalArticle = res.total;
         }
       });
     },
@@ -194,6 +205,7 @@ export default {
       getRelationListPage(para).then(res=>{
         if(res.errorNo == 0 && res.data != null ) {
           this.pupils = res.data;
+          this.totalPupil = res.total;
         }
       });
     },
@@ -203,9 +215,7 @@ export default {
     editArticle(id) {
       this.$router.push({ path: '/article/edit?id='+id });
     },
-    compiledMarkdown(content) {
-      return marked(content.substring(0,200), { sanitize: true })
-    },
+
     follow() {
       this.following = true;
       this.$confirm('确定要拜其为师么?', '提示', {
@@ -222,6 +232,7 @@ export default {
                 message: '拜师成功!'
               });
               this.isMaster = true;
+              this.getPupils(this.user.id)
             }else {
               this.$message({
                 type: 'error',
@@ -380,6 +391,16 @@ export default {
   }
   .follows .follow {
 
+  }
+   p.github{
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+  color:#00B1ED;
+  }
+  .github i {
+    font-size:20px;
+    margin-right:10px;
   }
 
 

@@ -237,19 +237,6 @@ func Login(c *gin.Context) {
 
 }
 
-// GetAuthName 获取等级名称
-func GetAuthName(auth uint) string {
-	var name string
-	if auth == 1 {
-		name = "User"
-	} else if auth == 2 {
-		name = "Master"
-	} else {
-		name = "Admin"
-	}
-	return name
-}
-
 // Validate 邮箱验证
 func Validate(c *gin.Context) {
 	var validateData ValidateData

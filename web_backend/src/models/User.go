@@ -25,6 +25,7 @@ type User struct {
 type TransformedUser struct {
 	ID        int64  `json:"id"`
 	Username  string `json:"username"`
+	Auth      string `json:"auth"`
 	Email     string `json:"email"`
 	Type      uint   `json:"type"`
 	State     uint   `json:"state"`
@@ -33,6 +34,7 @@ type TransformedUser struct {
 	Labels    string `json:"labels"`
 	Score     int    `json:"score"`
 	IsMaster  bool   `json:"is_master"`
+	Github    string `json:"github"`
 	CreatedAt int64  `json:"created_at"`
 }
 
@@ -44,6 +46,7 @@ type Profile struct {
 	About     string `gorm:"not null"`
 	Labels    string `gorm:"not null"`
 	Score     int    `gorm:"not null;default:0"`
+	Github    string `gorm:"not null"`
 	IsDelete  bool   `gorm:"not null;default:0"`
 	CreatedAt int64  `gorm:"not null"`
 	UpdatedAt int64  `gorm:"not null;default:0"`

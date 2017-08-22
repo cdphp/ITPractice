@@ -112,6 +112,7 @@ func ListUser(c *gin.Context) {
 			Username: user.Username,
 			Email:    user.Email,
 			Avatar:   profile.Avatar,
+			Auth:     GetAuthName(user.Type),
 			About:    profile.About,
 			Labels:   profile.Labels,
 			Score:    profile.Score,
@@ -172,6 +173,8 @@ func FetchSingleUser(c *gin.Context) {
 		About:    profile.About,
 		Labels:   profile.Labels,
 		Score:    profile.Score,
+		Auth:     GetAuthName(user.Type),
+		Github:   profile.Github,
 		IsMaster: isMaster,
 	}
 	errorNo := 0
@@ -190,6 +193,7 @@ func UpdateUser(c *gin.Context) {
 		Labels string `json:"labels"`
 		About  string `json:"about"`
 		Avatar string `json:"avatar"`
+		Github string `json:"github"`
 	}
 
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
@@ -250,6 +254,10 @@ func UpdateUser(c *gin.Context) {
 
 	if updateData.Avatar != "" {
 		profile.Avatar = updateData.Avatar
+	}
+
+	if updateData.Github != "" {
+		profile.Github = updateData.Github
 	}
 
 	if err = db.Model(models.Profile{}).Where("user_id=?", token.UserID).UpdateColumns(profile).Error; err != nil {

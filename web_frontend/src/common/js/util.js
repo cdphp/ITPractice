@@ -7,6 +7,25 @@ function padding(s, len) {
 };
 
 export default {
+    getAuthName: function(auth) {
+      switch (auth) {
+        case 'User':
+          return "初学门童";
+          break;
+        case 'Master':
+          return "武学大师";
+          break;
+        case 'Custodian':
+          return "护法长老";
+          break;
+        case 'Manager':
+          return "掌门人";
+          break;
+        default:
+          return "游侠";
+
+      }
+    },
     getQueryStringByName: function (name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
         var r = window.location.search.substr(1).match(reg);

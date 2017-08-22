@@ -91,14 +91,16 @@ func ListArticle(c *gin.Context) {
 
 	var articles []models.Article
 	var _articles []models.TransformedArticle
-
+	var total int
 	row := GetLimit()
 
 	uid, err := strconv.Atoi(c.Query("uid"))
 	if err != nil {
 		db.Where("is_delete=0").Order("created_at desc").Offset((current - 1) * row).Limit(row).Find(&articles)
+		db.Model(&models.Article{}).Where("is_delete=0").Count(&total)
 	} else {
 		db.Where("is_delete=0 and user_id=?", uid).Order("created_at desc").Offset((current - 1) * row).Limit(row).Find(&articles)
+		db.Model(&models.Article{}).Where("is_delete=0 and user_id=?", uid).Count(&total)
 	}
 
 	//transforms the users for building a good response
@@ -126,6 +128,7 @@ func ListArticle(c *gin.Context) {
 		"errorNo": errorNo,
 		"message": GetMsg(errorNo),
 		"data":    _articles,
+		"total":   total,
 	})
 }
 

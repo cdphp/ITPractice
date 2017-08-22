@@ -16,6 +16,7 @@
 
 
               <div class="btns" v-if="isSelf">
+                <a href="#/article/add" class="btn btn-blue btn-block btn-ellipse follow">发布文章</a>
                 <a href="#/user/edit" class="btn btn-default btn-block btn-ellipse follow">修改信息</a>
               </div>
               <div class="btns" v-else>
@@ -56,7 +57,7 @@
               </div>
               <div class="box-content articles" v-for="item in articles">
                 <div class="item">
-                  <a href="#" class="title text-blue">
+                  <a href="javascript:void(0)" v-on:click="viewArticle(item.id)" class="title text-blue">
                   <i class="fa fa-info-circle" aria-hidden="true"></i> {{item.title}}
                   <span class="muted right time">{{formatTime(item.created_at)}}</span>
                   </a>

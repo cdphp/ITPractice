@@ -48,7 +48,7 @@
           <div class="msg-content">
             <p>感谢您注册修仙门派</p>
 
-            <p>我们已经像您的邮箱发送一封注册邮箱，请登录您的邮箱完成验证。</p>
+            <p>我们已经向您的邮箱发送一封注册邮箱，请登录您的邮箱完成验证。</p>
           </div>
 
           <a href="javascript:void(0)" class="btn btn-blue" v-on:click="goValidate">立刻登录邮箱完成验证</a>

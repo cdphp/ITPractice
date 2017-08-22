@@ -96,7 +96,7 @@ func ListArticle(c *gin.Context) {
 
 	uid, err := strconv.Atoi(c.Query("uid"))
 	if err != nil {
-		db.Order("created_at desc").Offset((current - 1) * row).Limit(row).Find(&articles)
+		db.Where("is_delete=0").Order("created_at desc").Offset((current - 1) * row).Limit(row).Find(&articles)
 	} else {
 		db.Where("is_delete=0 and user_id=?", uid).Order("created_at desc").Offset((current - 1) * row).Limit(row).Find(&articles)
 	}

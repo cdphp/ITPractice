@@ -1,60 +1,58 @@
 <template>
 <section>
-<div class="wrapper gray-bg">
+<div class="wrapper">
   <div class="container">
     <div class="row">
-      <div class="col-sm-9">
-        <div class="box">
+      <div class="col-sm-8 col-sm-offset-2">
 
-          <div class="box-content article">
+
+          <div class="article">
             <h1 class="title">
-              {{article.title}}
+              <a href="#" class="text-blue">{{article.title}}</a>
             </h1>
             <div class="subtitle muted">
-              <span class="item">作者：{{article.author}}</span>
-              <span class="item">发布时间： {{formatTime(article.created_at)}}</span>
+              <span class="item">{{article.author}}</span>
+              <span class="item">发布于： {{formatTime(article.created_at)}}</span>
             </div>
             <div class="subtitle muted text-right">
               <span class="item"><i class="el-icon-star-off"></i> 20</span>
               <span class="item"><span class="glyphicon glyphicon-eye-open"></span> 20</span>
             </div>
-            <div class="content">
-              <div v-html="compiledMarkdown"></div>
-            </div>
+
+              <div v-html="compiledMarkdown" class="content"></div>
+
           </div>
 
-        </div>
 
-        <div class="box">
-          <div class="box-header">
-            发表评论
-          </div>
-          <div class="box-content">
+
+        <div class="box no-border">
+
+          <div class="box-content ">
           <div class="form-horizontal">
 
             <div class="form-group">
-              <label for="content" class="col-sm-1 control-label">内容</label>
-              <div class="col-sm-8">
-                <textarea rows="4" class="form-control" id="content" placeholder="填写评论" v-model="commentContent"></textarea>
+              <div class="col-sm-12">
+                <textarea rows="3" class="form-control" id="content" placeholder="填写评论" v-model="commentContent"></textarea>
               </div>
             </div>
 
             <div class="form-group">
-              <div class="col-sm-offset-1 col-sm-10">
-                <button  class="btn btn-blue" :disable="loading" v-on:click="addComment">提交</button>
+              <div class="col-sm-12 text-right">
+                <button  class="btn btn-blue" :disable="loading" v-on:click="addComment">评论</button>
               </div>
             </div>
             </div>
           </div>
         </div>
 
-        <div class="box">
-          <div class="box-header">
+        <div class="box ">
+          <div class="box-header no-border">
             相关评论({{length}})
           </div>
-          <div class="box-content">
+          <div class="box-content no-border">
             <div class="none" v-if="length==0">暂无内容</div>
-            <ul class="comments" v-else>
+            <div v-else>
+            <ul class="comments" >
               <li v-for="(item,index) in comments">
               <div class="media">
                 <div class="media-left">
@@ -68,43 +66,19 @@
                 </div>
               </div>
               </li>
-              <li>
-              <div class="more" v-if="nomore">没有啦</div>
-              <div class="more" v-on:click="loadMore" v-else>查看更多</div>
-              </li>
+
             </ul>
 
+            <div class="more" v-if="nomore">没有啦</div>
+            <div class="more" v-on:click="loadMore" v-else>查看更多</div>
+            </div>
+
 
 
           </div>
         </div>
       </div>
-      <div class="col-sm-3">
-        <div class="user-sidebar box">
-          <div class="box-header">
-            <h5>基本信息</h5>
 
-          </div>
-          <div class="box-content no-padding">
-          <div class="headpic">
-            <img :src="user.avatar" />
-          </div>
-          </div>
-          <div class="box-content">
-          <h4>{{user.username}}</h4>
-          <h6>标签</h6>
-          <p class="muted text-indent" v-if="user.labels">{{user.labels}}</p>
-          <p class="muted text-indent" v-else>暂无内容</p>
-          <h6>个人介绍</h6>
-          <p class="muted text-indent" v-if="user.about">{{user.about}}</p>
-          <p class="muted text-indent" v-else>暂无内容</p>
-          <a href="#/user/edit" class="btn btn-danger btn-block follow" v-if="isSelf">修改信息</a>
-          <button class="btn btn-red btn-block follow" v-else>关注</button>
-
-          </div>
-
-        </div>
-      </div>
     </div>
 
   </div>
@@ -256,21 +230,35 @@ export default {
 
 .article {}
 .article .title {
-  font-size:28px;
+  font-size:30px;
 
   margin:20px 0px;
+}
+.article .title a {
+  color:#303030;
+  -webkit-transition:all .2s linear;
+  -moz-transition:all .2s linear;
+  -o-transition:all .2s linear;
+}
+.article .title a:hover {
+  color:#069;
 }
 .article .subtitle .item{
   margin-right:20px;
 }
 
+
 .article .content {
 margin:30px 0px;
 padding: 10px 0px;
-font-size: 16px;
+font-size: 20px;
   line-height: 1.8;
   word-wrap: break-word;
+  color:#303030;
+
 }
+
+
 .comments li {
   margin-top:10px;
   margin-bottom:10px;

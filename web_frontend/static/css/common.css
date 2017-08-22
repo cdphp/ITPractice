@@ -1,4 +1,4 @@
-html,body {font-family: 'Open Sans','Helvetica Neue',Arial,sans-serif}
+html,body {font-family: 'Stdin Default', Georgia, 'Times New Roman', Times, serif,Arial,sans-serif}
 a {text-decoration: none;cursor: pointer;}
 
 ul li {list-style: none;}
@@ -9,7 +9,7 @@ ul li {list-style: none;}
     line-height: 0px;
 }
 html, body, div, span, object, iframe,
-p, blockquote, pre,
+ blockquote, pre,
 abbr, address, cite, code,
 del, dfn, em, img, ins, kbd, q, samp,
 small, strong, sub, sup, var,
@@ -26,7 +26,7 @@ time, mark, audio, video {
     outline:0;
     font-size:100%;
     vertical-align:baseline;
-    background:transparent;
+    /* background:transparent; */
 }
 
 body {
@@ -310,3 +310,4 @@ footer p {
   border:none;
 }
 .font-small {font-size:14px;}
+p {margin-bottom: 10px;}

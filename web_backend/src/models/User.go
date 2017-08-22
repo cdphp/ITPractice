@@ -32,6 +32,7 @@ type TransformedUser struct {
 	About     string `json:"about"`
 	Labels    string `json:"labels"`
 	Score     int    `json:"score"`
+	IsMaster  bool   `json:"is_master"`
 	CreatedAt int64  `json:"created_at"`
 }
 

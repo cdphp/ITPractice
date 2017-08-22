@@ -21,7 +21,7 @@
               </div>
               <div class="btns" v-else>
 
-                <button class="btn btn-blue btn-block btn-ellipse follow">关 注 <i class="fa fa-plus" aria-hidden="true"></i></button>
+                <button v-if="!isMaster" class="btn btn-blue btn-block btn-ellipse follow" v-on:click="follow" :disable="following">拜 师 <i class="fa fa-plus" aria-hidden="true"></i></button>
                 <button class="btn btn-default btn-block btn-ellipse follow">私 信 <i class="fa fa-envelope-o" aria-hidden="true"></i></button>
               </div>
               </div>
@@ -78,12 +78,12 @@
           <div class="box">
             <div class="box-header no-border">
 
-              <h5 class="box-title">关注的人</h5>
+              <h5 class="box-title">徒弟</h5>
             </div>
             <div class="box-content">
-              <div class="none" v-if="followers.length==0">暂无内容</div>
+              <div class="none" v-if="pupils.length==0">暂无内容</div>
               <ul class="follows" v-else>
-                <li v-for="(item,index) in followers">
+                <li v-for="(item,index) in pupils">
                 <div class="media">
                   <div class="media-left">
                     <a href="javascript:void(0)" >
@@ -93,7 +93,7 @@
                   <div class="media-body">
                     <div class="media-heading"><span class="username">{{item.username}}</span>
                     </div>
-                    <div class="labels">xxxxx</div>
+                    <div class="labels">{{item.labels}}</div>
                   </div>
                 </div>
                 </li>
@@ -112,7 +112,7 @@
   </section>
 </template>
 <script>
-import {getArticleListPage,getUser,delArticle} from '../../api/api'
+import {getArticleListPage,getUser,delArticle,getRelationListPage, addRelation} from '../../api/api'
 import util from '../../common/js/util'
 import marked from 'marked'
 export default {
@@ -121,20 +121,11 @@ export default {
       user:{},
       canAttention:true,
       isSelf: false,
-      followers: [
-        {
-          user_id: 1,
-          username:'hongker',
-          avatar:'http://ouecw69lw.bkt.clouddn.com/profile_big.jpg'
-        },
-        {
-          user_id: 2,
-          username:'test001',
-          avatar:'http://ouecw69lw.bkt.clouddn.com/profile_big.jpg'
-        }
-      ],
+      pupils: [],
       attentions: [],
       articles:[],
+      following: false,
+      isMaster: false,
     }
   },
   methods: {
@@ -181,8 +172,9 @@ export default {
 
         if(res.errorNo == 0 ) {
           this.user = res.data;
-
+          this.isMaster = this.user.is_master;
           this.getArticles(id);
+          this.getPupils(id);
 
         }else {
           this.$router.push({ path: '/404' });
@@ -197,6 +189,14 @@ export default {
         }
       });
     },
+    getPupils(id) {
+      let para = {uid: id};
+      getRelationListPage(para).then(res=>{
+        if(res.errorNo == 0 && res.data != null ) {
+          this.pupils = res.data;
+        }
+      });
+    },
     viewArticle(id) {
       this.$router.push({ path: '/article/info?id='+id });
     },
@@ -205,6 +205,39 @@ export default {
     },
     compiledMarkdown(content) {
       return marked(content.substring(0,200), { sanitize: true })
+    },
+    follow() {
+      this.following = true;
+      this.$confirm('确定要拜其为师么?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let para = {master_id: this.user.id};
+          addRelation(para).then(res => {
+            this.following = false;
+            if(res.errorNo==0) {
+              this.$message({
+                type: 'success',
+                message: '拜师成功!'
+              });
+              this.isMaster = true;
+            }else {
+              this.$message({
+                type: 'error',
+                message: res.message
+              });
+              }
+          });
+
+        }).catch(() => {
+          this.following = false;
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          });
+        });
+
     }
   },
   mounted() {

@@ -153,6 +153,15 @@ func FetchSingleArticle(c *gin.Context) {
 		})
 		return
 	}
+
+	//增加点击量
+	var token models.Token
+	token.Token = c.GetHeader("Token")
+
+	if !(ValidateToken(&token, c) == true && token.UserID == article.UserID) {
+		db.Model(&article).UpdateColumn("clicks", article.Clicks+1)
+	}
+
 	db.Model(&article).Related(&user)
 	_article := models.TransformedArticle{
 		ID:        article.ID,

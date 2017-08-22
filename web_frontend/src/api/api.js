@@ -47,3 +47,6 @@ export const editArticle = params => {return instance.put(`/article/${params.id}
 
 export const getCommentListPage = params => { return instance.get(`/comment/`, {params: params}).then(res => res.data); };
 export const addComment = params => { return instance.post(`/comment/`, params).then(res => res.data); };
+
+export const addRelation = params => { return instance.post(`/relation/`, params).then(res => res.data); };
+export const getRelationListPage = params => { return instance.get(`/relation/`, {params: params}).then(res => res.data); };

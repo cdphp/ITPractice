@@ -150,6 +150,20 @@ func FetchSingleUser(c *gin.Context) {
 		return
 	}
 
+	//验证师徒关系
+	isMaster := false
+	// 验证token
+	var token models.Token
+	token.Token = c.GetHeader("Token")
+
+	if ValidateToken(&token, c) == true {
+		var relation models.Relation
+		if err := db.Where("is_delete=0 and master_id=? and pupil_id=?", user.ID, token.UserID).First(&relation).Error; err == nil {
+			isMaster = true
+		}
+
+	}
+
 	_user := models.TransformedUser{
 		ID:       user.ID,
 		Username: user.Username,
@@ -158,8 +172,10 @@ func FetchSingleUser(c *gin.Context) {
 		About:    profile.About,
 		Labels:   profile.Labels,
 		Score:    profile.Score,
+		IsMaster: isMaster,
 	}
 	errorNo := 0
+
 	c.JSON(http.StatusOK, gin.H{
 		"errorNo": errorNo,
 		"message": GetMsg(errorNo),

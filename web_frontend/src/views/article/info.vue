@@ -235,7 +235,7 @@ export default {
     this.getArticleInfo(id);
     this.getComments();
 
-    var user = sessionStorage.getItem('user');
+    var user = localStorage.getItem('user');
 
     if (user) {
       user = JSON.parse(user);

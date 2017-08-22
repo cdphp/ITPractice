@@ -1,16 +1,16 @@
 <template>
   <section class="login-bg">
-  <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
+  <el-form  :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
     <h4 class="title">用户登录</h4>
     <el-form-item prop="account">
       <el-input type="text" v-model="ruleForm2.account" auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
     <el-form-item prop="checkPass">
-      <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="密码"></el-input>
+      <el-input type="password" v-model="ruleForm2.checkPass" @keyup.enter.native="handleSubmit2"  auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
     <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
     <el-form-item>
-      <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="logining">登录</el-button>
+      <el-button type="primary"  style="width:100%;"  @click.native.prevent="handleSubmit2" :loading="logining">登录</el-button>
     </el-form-item>
     <div class="login-footer">
       <a href="#" class="text-gray">忘记密码</a> | <a href="#/reg" class="text-gray">直接注册</a>
@@ -52,6 +52,9 @@
       handleReset2() {
         this.$refs.ruleForm2.resetFields();
       },
+      test() {
+        alert(123);
+      },
       handleSubmit2(ev) {
 
         var _this = this;
@@ -84,7 +87,7 @@
                 }
 
               } else {
-                sessionStorage.setItem('user', JSON.stringify(res.data));
+                localStorage.setItem('user', JSON.stringify(res.data));
                 if(this.checked) {
                   localStorage.setItem('name',this.ruleForm2.account);
                 }
@@ -100,12 +103,12 @@
       }
     },
     mounted() {
-      var user = sessionStorage.getItem('user');
+      var user = localStorage.getItem('user');
       console.log("user",user);
       if (user) {
         this.$router.push({ path: '/' });
       }
-      this.ruleForm2.account = localStorage.getItem('user');
+      this.ruleForm2.account = localStorage.getItem('name');
 
     }
   }

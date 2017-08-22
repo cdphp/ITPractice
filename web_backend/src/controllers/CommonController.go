@@ -342,12 +342,6 @@ func Mail(c *gin.Context) {
 	return
 }
 
-var (
-	accessKey = "9lq_6tRciBvyJPZE88U3IOBaDCdpba_cuGF1IGWv"
-	secretKey = "oQ_PsPA24wughLtzaWBkuG_zOhJ3VQwQMvpaJ43R"
-	bucket    = "itwebimagesource"
-)
-
 // Upload 上传
 func Upload(c *gin.Context) {
 	type UploadData struct {

@@ -61,7 +61,7 @@
           //type: 'warning'
         }).then(() => {
           this.isLogin = false
-          sessionStorage.removeItem('user');
+          localStorage.removeItem('user');
           this.$router.push('/login');
         }).catch(() => {
 
@@ -69,7 +69,7 @@
         },
     },
     mounted() {
-    var user = sessionStorage.getItem('user');
+    var user = localStorage.getItem('user');
 
     if (user) {
       this.isLogin = true

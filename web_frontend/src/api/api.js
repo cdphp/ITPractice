@@ -12,7 +12,7 @@ var instance = axios.create({
 
 instance.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
-    var user = sessionStorage.getItem('user');
+    var user = localStorage.getItem('user');
     if(user) {
       user = JSON.parse(user);
       config.headers.token = user.token;

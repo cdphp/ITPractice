@@ -209,7 +209,7 @@ export default {
   mounted() {
     var id = this.$route.query.id;
 
-    var user = sessionStorage.getItem('user');
+    var user = localStorage.getItem('user');
 
     if (user) {
       user = JSON.parse(user);

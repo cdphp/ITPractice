@@ -21,6 +21,9 @@ export default {
         case 'Manager':
           return "掌门人";
           break;
+        case 'Higher':
+          return "映照诸天";
+          break;
         default:
           return "游侠";
 

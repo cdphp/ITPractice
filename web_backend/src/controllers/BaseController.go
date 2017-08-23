@@ -87,6 +87,8 @@ func GetAuthName(auth uint) string {
 		name = "Custodian"
 	} else if auth == 4 {
 		name = "Manager"
+	} else if auth == 22 {
+		name = "Higher"
 	}
 	return name
 }

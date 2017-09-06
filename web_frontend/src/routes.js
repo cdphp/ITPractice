@@ -14,6 +14,8 @@ const Article = resolve => require(['./views/article/index.vue'], resolve)
 const ArticleAdd = resolve => require(['./views/article/add.vue'], resolve)
 const ArticleInfo = resolve => require(['./views/article/info.vue'], resolve)
 const ArticleEdit = resolve => require(['./views/article/edit.vue'], resolve)
+const Company = resolve => require(['./views/company/index.vue'], resolve)
+const CompanyAdd = resolve => require(['./views/company/add.vue'], resolve)
 let routes = [
     {
         path: '/',
@@ -22,10 +24,12 @@ let routes = [
         children: [
           { path: '/', component: Index, name: '首页', hidden: true },
           { path: '/article', component: Article, name: '文章', hidden: true },
+          { path: '/company', component: Company, name: '公司', hidden: true },
           { path: '/master', component: Master, name: 'Master', hidden: true },
 
           { path: '/user', component: User, name: '用户主页', hidden: true },
           { path: '/user/edit', component: UserEdit, name: '用户编辑', hidden: true },
+          { path: '/company/add', component: CompanyAdd, name: '添加公司', hidden: true },
           { path: '/article/add', component: ArticleAdd, name: '写文章', hidden: true },
           { path: '/article/info', component: ArticleInfo, name: '文章详情', hidden: true },
           { path: '/article/edit', component: ArticleEdit, name: '文章编辑', hidden: true },

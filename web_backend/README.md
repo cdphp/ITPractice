@@ -39,22 +39,3 @@
     | /users | POST | add | 添加信息 |
     | /users/:id | PUT | update | 修改信息 |
     | /users/:id | DELETE | delete | 删除信息 |
-
-### 本地部署
-  * 安装环境(go)
-    根据[官方文档](http://docscn.studygolang.com/doc/)安装最新版本的golang
-
-
-### 项目部署
-## v1.0
-  初步实现restful
-   * 获取mux包
-      ```
-      go get "github.com/gorilla/mux"
-      go get "github.com/go-sql-driver/mysql"
-      ```
-    * 运行
-      ```
-      cd src/v1.0
-      go run main.go
-      ```

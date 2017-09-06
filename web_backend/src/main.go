@@ -23,6 +23,7 @@ func main() {
 	db.AutoMigrate(&models.Comment{})
 	db.AutoMigrate(&models.Score{})
 	db.AutoMigrate(&models.Relation{})
+	db.AutoMigrate(&models.Company{})
 	defer db.Close()
 
 	router := gin.Default()
@@ -58,6 +59,12 @@ func main() {
 	{
 		comments.POST("/", controllers.CreateComment)
 		comments.GET("/", controllers.ListComment)
+	}
+
+	companys := router.Group("/company")
+	{
+		companys.POST("/", controllers.CreateCompany)
+		companys.GET("/", controllers.ListCompany)
 	}
 
 	relations := router.Group("/relation")

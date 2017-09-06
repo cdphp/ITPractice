@@ -1,11 +1,15 @@
-### 项目说明
-使用`github.com/gin-gonic/gin`和`github.com/jinzhu/gorm`对项目进行优化重构
+### 本地部署
+  * 安装环境(go)
+    根据[官方文档](http://docscn.studygolang.com/doc/)安装最新版本的golang
 
-* 获取package
+  * 设置GOPATH
+    以linux为例:($WorkDir表示你本机的工作目录)
     ```
-    go get "github.com/gin-gonic/gin"
-    go get -u "github.com/jinzhu/gorm"
+    vim /etc/profile
+    export GOPATH = $WorkDir/ITPractice/web_backend
+
     ```
+### 项目说明
 
 * 运行
     ```

@@ -1,4 +1,8 @@
+/*
 html,body {font-family: 'Stdin Default', Georgia, 'Times New Roman', Times, serif,Arial,sans-serif}
+*/
+html,body {font-family: "Helvetica Neue",Arial,"Hiragino Sans GB",STHeiti,"Microsoft YaHei"}
+
 a {text-decoration: none;cursor: pointer;}
 
 ul li {list-style: none;}
@@ -108,7 +112,7 @@ input, select {
     vertical-align:middle;
 }
 .wrapper {padding:10px;}
-.gray-bg {background:#f4f8f9;}
+.gray-bg {background:#f7f8fc;}
 .logo {
   width: 30px;
   line-height:30px;
@@ -161,6 +165,7 @@ input, select {
 .box-footer {
 
 }
+.btn-bg {padding:20px;}
 a.btn-blue,button.btn-blue {
   background:#00B1ED;
   color:#fff;
@@ -259,15 +264,18 @@ a.text-gray:hover{color:#333;text-decoration:none;}
 }
 
 footer {
-    height:50px;
-    padding: 15px 0;
+    background: #36434d;
+    padding: 80px 0 0 0;
+    font-size: 14px;
+    line-height: 1.85;
     overflow: hidden;
     text-align:center;
+    color:#fff;
 }
 
 footer p {
 
-    color: #838181;
+
     font-family: "raleway-regular";
     font-size: 13px;
 
@@ -276,23 +284,25 @@ footer p {
   margin-bottom:0px;
 }
 .navbar-default {
-    padding:15px;
+
+    margin: 0 0 20px 0;
+    padding-top: 20px;
     background-color: transparent;
 
-    border-style:none none solid none;
+    border-style:none none none none;
 
 }
 .navbar-default .navbar-nav>li a {
-    color: #545e6b;
+    color: #90959A;
     font-weight: 600;
     font-size: 14px;
     -webkit-transition:all .2s linear;
     -moz-transition:all .2s linear;
     -o-transition:all .2s linear;
-    color:#5d5d5d;
+
 }
 .navbar-default .navbar-nav>li a:hover {
-  color:#F8B08D;
+  color:#36434d;
 }
 .navbar-brand {
   padding:7px 15px;

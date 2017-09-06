@@ -25,7 +25,7 @@
                 <div class="form-group">
                   <label for="content" class="col-sm-2 control-label">内容</label>
                   <div class="col-sm-10">
-                    <mavon-editor v-model="content"/>
+                    <editor @imgAdd="imgAdd" @imgDel="imgDel" v-model="content"/>
                   </div>
                 </div>
 
@@ -48,7 +48,7 @@
   </section>
 </template>
 <script>
-import {addArticle} from '../../api/api'
+import {addArticle,upload} from '../../api/api'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 
@@ -59,14 +59,44 @@ export default {
       digest: '',
       content:'',
       loading: false,
+      img_file: {},
     }
   },
   components: {
-    'mavon-editor': mavonEditor.mavonEditor
+    'editor': mavonEditor.mavonEditor
   },
 
   methods: {
+
+    imgAdd(pos, $file){
+          //this.img_file[pos] = $file;
+
+          var reader = new FileReader();
+        reader.readAsDataURL($file);
+        let $vm = this.$children[0];
+        reader.onload = function(e){
+        let para = {type:"image", content: this.result};
+        upload(para).then(res => {
+          if(res.errorNo!=0) {
+            this.$message({
+              type: 'error',
+              message: res.errorMsg,
+            });
+            return
+          }
+
+
+          $vm.$img2Url(pos,res.url);
+        });
+        }
+
+
+      },
+      imgDel(pos){
+          delete this.img_file[pos];
+      },
     add() {
+      //console.log(this.$children[0]);return;
       if(this.title=='') {
         this.$message({
           message: '标题不能为空',

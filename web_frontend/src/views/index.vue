@@ -5,13 +5,13 @@
     <div class="row">
       <div class="col-md-10 col-md-offset-1 caption">
         <div class="col-md-6">
-          <h1 class="title">学以致用</h1>
-          <p class="content">在知识的海洋里遨游，在兴趣的天空中飞翔.</p>
+          <h1 class="title">Make a living off your passion</h1>
+          <p class="content">Sell online courses and digital products from your own beautiful storefront in seconds.</p>
 
-          <a class="btn btn-blue" href="#/master">开始学习</a>
+          <a class="btn btn-blue btn-lg" href="#/master">开始学习</a>
         </div>
         <div class="col-md-6">
-          <img class="img-responsive" src="../assets/imgs/herobanner-new.png" alt="One on One Check-ins to know the pulse and engagement of your team">
+          <img class="img-responsive" src="http://ouecw69lw.bkt.clouddn.com/profit-fbdeecd9d18c4e8a01edc3018d229e7df504e77153b64679d66cb03973eda702.svg" alt="One on One Check-ins to know the pulse and engagement of your team">
         </div>
       </div>
     </div>
@@ -62,17 +62,21 @@ export default {
 <style scoped>
 
 .caption {
-  margin-top: 30px;
-  color: #5d5d5d;
+  margin-top: 0px;
+  color: #5e6971;
 }
 .caption .title {
 font-size: 36px;
-margin-top:20px;
+margin-top:80px;
 margin-bottom:20px;
+
+color: #36434d;
 }
 .caption .content {
-margin-top:20px;
-margin-bottom:20px;
+margin:30px 0px;
+font-size: 20px;
+line-height:1.4;
+
 }
 
 .graybg {

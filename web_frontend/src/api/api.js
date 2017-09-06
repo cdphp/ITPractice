@@ -50,3 +50,6 @@ export const addComment = params => { return instance.post(`/comment/`, params).
 
 export const addRelation = params => { return instance.post(`/relation/`, params).then(res => res.data); };
 export const getRelationListPage = params => { return instance.get(`/relation/`, {params: params}).then(res => res.data); };
+
+export const getCompanyListPage = params => { return instance.get(`/company/`, {params: params}).then(res => res.data); };
+export const addCompany = params => { return instance.post(`/company/`, params).then(res => res.data); };

@@ -11,8 +11,9 @@
 
           <div class="content text-gray" v-html="compiledMarkdown(item.content)"></div>
           <div class="footer">
-          <span class="muted">作者：{{item.author}}</span>
-          <span class="muted right">发布于：{{formatTime(item.created_at)}}</span>
+          <span class="middle"><img class="img-circle-head mini-head" :src="item.avatar"> {{item.author}}</span>
+
+          <span class="right middle">发布于：{{formatTime(item.created_at)}}</span>
           </div>
 
 
@@ -91,6 +92,7 @@ export default {
 }
 </script>
 <style scoped>
+
 .articles .title {
   margin:15px 0px;
 }
@@ -107,6 +109,7 @@ export default {
   margin:10px 0px;
   font-size:14px;
 }
+
 
 
 </style>

@@ -195,12 +195,15 @@ export default {
       evaluteAnswer(para).then(res => {
         if(res.errorNo == 0 ) {
           this.$message({ message: '点评成功', type: 'success'});
+          this.page = 1;
+          this.answers = [];
+          this.getAnswers();
 
         }else {
         this.$message({ message: res.message, type: 'error' });
         }
         this.loading = false;
-        window.location.reload();
+
       });
     },
 

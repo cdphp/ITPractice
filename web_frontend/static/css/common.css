@@ -4,6 +4,7 @@ html,body {font-family: 'Stdin Default', Georgia, 'Times New Roman', Times, seri
 html,body {font-family: "Helvetica Neue",Arial,"Hiragino Sans GB",STHeiti,"Microsoft YaHei"}
 
 a {text-decoration: none;cursor: pointer;}
+a:hover,a:visited {text-decoration: none;}
 
 ul li {list-style: none;}
 .clearfix {
@@ -37,9 +38,7 @@ body {
     line-height:1;
 }
 
-img{
-  width: 100%;
-}
+
 
 article,aside,details,figcaption,figure,
 footer,header,hgroup,menu,nav,section {
@@ -264,21 +263,26 @@ a.text-gray:hover{color:#333;text-decoration:none;}
 
 footer {
     background: #36434d;
-    padding: 80px 0 0 0;
+    padding: 20px 10px;
     font-size: 14px;
     line-height: 1.85;
     overflow: hidden;
-    text-align:center;
+
     color:#fff;
 }
 
 footer p {
-
-
     font-family: "raleway-regular";
     font-size: 13px;
-
 }
+footer a:hover,footer a:visited {
+  color:#fff;
+}
+footer ul.icons a {
+  font-size: 35px;
+  color:#fff;
+}
+
 .navbar {
   margin-bottom:0px;
 }
@@ -324,3 +328,6 @@ p {margin-bottom: 10px;}
 
 .media-body .footer {margin-top:20px;}
 .media-body .footer span {margin:0px 5px;}
+.content img {
+  width: 100%;
+}

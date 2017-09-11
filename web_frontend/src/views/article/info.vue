@@ -23,9 +23,9 @@
                      {{article.author}}
                   </div>
                   <div class="muted font-small footer">
-                    <span>提问于:{{formatTime(article.created_at)}}</span>
-                    <span>阅读 4396</span>
-                    <span>回答 25</span>
+                    <span>发布于:{{formatTime(article.created_at)}}</span>
+                    <span>阅读 {{article.clicks}}</span>
+                    <span>评论 {{length}}</span>
                   </div>
                 </div>
               </div>

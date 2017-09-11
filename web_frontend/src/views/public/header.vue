@@ -61,7 +61,7 @@
       goHome: function() {
 
         this.$router.push({ path: '/user?id='+this.user_id });
-        window.location.reload();
+        
       },
       logout: function () {
 

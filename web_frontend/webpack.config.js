@@ -14,7 +14,7 @@ module.exports = (options = {}) => ({
     filename: options.dev ? '[name].js' : '[name].js?[chunkhash]',
     chunkFilename: '[id].js?[chunkhash]',
     publicPath: options.dev ? '/assets/' : publicPath,
-    
+
   },
   module: {
     rules: [{

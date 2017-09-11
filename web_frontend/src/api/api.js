@@ -53,3 +53,12 @@ export const getRelationListPage = params => { return instance.get(`/relation/`,
 
 export const getCompanyListPage = params => { return instance.get(`/company/`, {params: params}).then(res => res.data); };
 export const addCompany = params => { return instance.post(`/company/`, params).then(res => res.data); };
+
+export const getQuestionListPage = params => { return instance.get(`/question/`, {params: params}).then(res => res.data); };
+export const addQuestion = params => { return instance.post(`/question/`, params).then(res => res.data); };
+export const getQuestion = params => {return instance.get(`/question/${params.id}`).then(res => res.data);}
+export const delQuestion = params => { return instance.delete(`/question/${params.id}`).then(res => res.data); };
+export const editQuestion = params => {return instance.put(`/question/${params.id}`, params).then(res => res.data);}
+
+export const getAnswerListPage = params => { return instance.get(`/answer/`, {params: params}).then(res => res.data); };
+export const addAnswer = params => { return instance.post(`/answer/`, params).then(res => res.data); };

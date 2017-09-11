@@ -20,6 +20,8 @@
       <li><a href="#/master">传承</a></li>
       <li><a href="#/article">文章</a></li>
       <li><a href="#/company">公司</a></li>
+      <li><a href="#/live">直播</a></li>
+      <li><a href="#/question">问道</a></li>
     </ul>
 
 
@@ -57,7 +59,9 @@
     },
     methods: {
       goHome: function() {
-        this.$router.go({ path: '/user?id='+this.user_id });
+
+        this.$router.push({ path: '/user?id='+this.user_id });
+        window.location.reload();
       },
       logout: function () {
 

@@ -10,13 +10,25 @@
             <h1 class="title">
               <a href="#" class="text-blue">{{article.title}}</a>
             </h1>
-            <div class="subtitle muted">
-              <span class="item">{{article.author}}</span>
-              <span class="item">发布于： {{formatTime(article.created_at)}}</span>
-            </div>
-            <div class="subtitle muted text-right">
-              <span class="item"><i class="el-icon-star-off"></i> 20</span>
-              <span class="item"><span class="glyphicon glyphicon-eye-open"></span> 20</span>
+            <div class="subtitle">
+              <div class="media">
+                <div class="media-left">
+                  <a href="javascript:void(0)" v-on:click="viewUser(article.user_id)">
+                    <img class="media-object img-circle-head" :src="article.avatar">
+                  </a>
+                </div>
+                <div class="media-body">
+                  <div class="media-heading">
+                    <span class="label label-danger">作者</span>
+                     {{article.author}}
+                  </div>
+                  <div class="muted font-small footer">
+                    <span>提问于:{{formatTime(article.created_at)}}</span>
+                    <span>阅读 4396</span>
+                    <span>回答 25</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
               <div v-html="compiledMarkdown" class="content"></div>

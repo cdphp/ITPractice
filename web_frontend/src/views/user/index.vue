@@ -45,7 +45,7 @@
               </div>
               <div class="box-content" v-if="user.github">
 
-                  <p class="github"><a v-bind:href="user.github" target="_blank" class="text-blue" ><i class="fa fa-github" aria-hidden="true"></i>{{user.github}}</a></p>
+                  <p class="github"><a v-bind:href="user.github" target="_blank" class="text-blue" ><i class="fa fa-github" aria-hidden="true"></i> {{user.github}}</a></p>
 
               </div>
 
@@ -102,9 +102,7 @@
                   </div>
                 </div>
                 </li>
-                <li>
 
-                </li>
               </ul>
               <div class="clearfix"></div>
             </div>
@@ -261,6 +259,9 @@ export default {
       this.isSelf = user.user_id==id?true:false;
 
     }
+    if(id==undefined) {
+      id = user.user_id;
+    }
 
     this.getUserInfo(id);
 
@@ -271,25 +272,14 @@ export default {
 </script>
 <style scoped>
 
-  .user-sidebar {
-    width:100%;
-    margin:10px;
-  }
-  .user-sidebar .headpic {
-    padding-bottom: 0px;
-    margin:10px 5px 5px 5px;
-  }
-  .labels, .about{
-    margin: 10px 0px;
-    font-size:14px;
-
-  }
-  .labels {
-    color:#888;
-  }
-  .about {
-    color:#333;
-  }
+.user-sidebar {
+  width:100%;
+  margin:10px;
+}
+.user-sidebar .headpic {
+  padding-bottom: 0px;
+  margin:10px 5px 5px 5px;
+}
 
   .user-sidebar .btns{
     padding:0px 50px;
@@ -297,10 +287,6 @@ export default {
   }
   .user-sidebar .username {
     padding:10px 0px;
-  }
-  .user-sidebar .follow {
-    margin:20px 0px;
-
   }
   .userinfo {
     text-align: center;
@@ -316,6 +302,23 @@ export default {
     height:70px;
     border-radius: 50%;
   }
+  .labels, .about{
+    margin: 10px 0px;
+    font-size:14px;
+
+  }
+  .labels {
+    color:#888;
+  }
+  .about {
+    color:#333;
+  }
+
+  .user-sidebar .follow {
+    margin:20px 0px;
+
+  }
+
 
   .articles {
     width:100%;

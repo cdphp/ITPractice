@@ -5,6 +5,7 @@ import (
 	"lib"
 
 	"controllers"
+
 	"models"
 
 	"github.com/gin-gonic/gin"
@@ -24,6 +25,9 @@ func main() {
 	db.AutoMigrate(&models.Score{})
 	db.AutoMigrate(&models.Relation{})
 	db.AutoMigrate(&models.Company{})
+	db.AutoMigrate(&models.Question{})
+	db.AutoMigrate(&models.Answer{})
+
 	defer db.Close()
 
 	router := gin.Default()
@@ -55,10 +59,25 @@ func main() {
 		articles.DELETE("/:id", controllers.DeleteArticle)
 	}
 
+	questions := router.Group("/question")
+	{
+		questions.POST("/", controllers.CreateQuestion)
+		questions.GET("/", controllers.ListQuestion)
+		questions.GET("/:id", controllers.FetchSingleQuestion)
+		questions.PUT("/:id", controllers.UpdateQuestion)
+		questions.DELETE("/:id", controllers.DeleteQuestion)
+	}
+
 	comments := router.Group("/comment")
 	{
 		comments.POST("/", controllers.CreateComment)
 		comments.GET("/", controllers.ListComment)
+	}
+
+	answers := router.Group("/answer")
+	{
+		answers.POST("/", controllers.CreateAnswer)
+		answers.GET("/", controllers.ListAnswer)
 	}
 
 	companys := router.Group("/company")

@@ -38,7 +38,7 @@ body {
 }
 
 img{
-    max-width: 100%;
+  width: 100%;
 }
 
 article,aside,details,figcaption,figure,
@@ -130,8 +130,9 @@ input, select {
     border-width: 2px 0 0;
     color: inherit;
     margin-bottom: 0;
-    padding: 10px;
+    padding: 0px 10px;
     min-height: 48px;
+    line-height: 48px;
 
 }
 .box-header .box-title {
@@ -162,9 +163,7 @@ input, select {
     border-width: 1px 0;
 }
 .no-padding{padding:0px;}
-.box-footer {
 
-}
 .btn-bg {padding:20px;}
 a.btn-blue,button.btn-blue {
   background:#00B1ED;
@@ -226,7 +225,7 @@ a.text-blue:hover{color:#00beff;text-decoration:none;}
 a.text-red:hover{color:#ec7063;text-decoration:none;}
 a.text-gray:hover{color:#333;text-decoration:none;}
 .media-left {width:64px;height: 64px;}
-.media .media-body {width:0px;}
+
 .input {
     position: relative;
     font-size: 14px;
@@ -315,9 +314,13 @@ footer p {
   background:#fff;
 }
 .img-circle-head {width:50px;height:50px;border-radius:50%;}
+.mini-head {width:28px;height:28px;vertical-align: middle;}
 .right {float:right;}
 .no-border {
   border:none;
 }
 .font-small {font-size:14px;}
 p {margin-bottom: 10px;}
+
+.media-body .footer {margin-top:13px;}
+.media-body .footer span {margin:0px 5px;}

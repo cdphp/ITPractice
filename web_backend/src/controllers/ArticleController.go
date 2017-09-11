@@ -146,6 +146,7 @@ func FetchSingleArticle(c *gin.Context) {
 
 	var article models.Article
 	var user models.User
+	var profile models.Profile
 
 	if err = db.Where("id=?", id).First(&article).Error; err != nil {
 
@@ -166,6 +167,7 @@ func FetchSingleArticle(c *gin.Context) {
 	}
 
 	db.Model(&article).Related(&user)
+	db.Model(&user).Related(&profile)
 	_article := models.TransformedArticle{
 		ID:        article.ID,
 		Title:     article.Title,
@@ -173,6 +175,7 @@ func FetchSingleArticle(c *gin.Context) {
 		Digest:    article.Digest,
 		UserID:    user.ID,
 		Author:    user.Username,
+		Avatar:    profile.Avatar,
 		Labels:    article.Labels,
 		Clicks:    article.Clicks,
 		CreatedAt: article.CreatedAt,

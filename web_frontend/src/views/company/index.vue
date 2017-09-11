@@ -142,6 +142,7 @@ export default {
   width: 400px;
 }
 .search .box input {
+  
   border-radius: 0px;
   padding:20px;
   border: none;

@@ -192,8 +192,8 @@ export default {
     getArticles(id) {
       let para = {uid :id};
       getArticleListPage(para).then(res=>{
-        if(res.errorNo == 0 && res.data != null ) {
-          this.articles = res.data;
+        if(res.errorNo == 0) {
+          this.articles = res.data == null ? []:res.data;
           this.totalArticle = res.total;
         }
       });
@@ -201,8 +201,8 @@ export default {
     getPupils(id) {
       let para = {uid: id};
       getRelationListPage(para).then(res=>{
-        if(res.errorNo == 0 && res.data != null ) {
-          this.pupils = res.data;
+        if(res.errorNo == 0) {
+          this.pupils = res.data == null ? []:res.data;
           this.totalPupil = res.total;
         }
       });
@@ -247,24 +247,30 @@ export default {
           });
         });
 
+    },
+    fetchData() {
+      var id = this.$route.query.id;
+
+      var user = localStorage.getItem('user');
+
+      if (user) {
+        user = JSON.parse(user);
+        this.isSelf = user.user_id==id?true:false;
+
+      }
+      if(id==undefined) {
+        id = user.user_id;
+      }
+
+      this.getUserInfo(id);
     }
   },
   mounted() {
-    var id = this.$route.query.id;
+    this.fetchData();
 
-    var user = localStorage.getItem('user');
-
-    if (user) {
-      user = JSON.parse(user);
-      this.isSelf = user.user_id==id?true:false;
-
-    }
-    if(id==undefined) {
-      id = user.user_id;
-    }
-
-    this.getUserInfo(id);
-
+  },
+  watch:{
+      '$route':'fetchData'
   },
 
 

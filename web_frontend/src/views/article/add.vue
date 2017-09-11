@@ -139,7 +139,12 @@ export default {
     }
   },
   mounted() {
+    var user = localStorage.getItem('user');
 
+    if (!user) {
+      this.$router.push({ path: '/login' });
+
+    }
   }
 }
 </script>

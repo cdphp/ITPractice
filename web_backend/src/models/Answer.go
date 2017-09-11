@@ -15,6 +15,7 @@ type Answer struct {
 	QuestionID int64 `gorm:"not null"`
 	Question   Question
 	Content    string `gorm:"not null" sql:"type:text"`
+	Approval   int    `gorm:"not null;default:0"`
 	IsDelete   bool   `gorm:"not null;default:0"`
 	CreatedAt  int64  `gorm:"not null"`
 	UpdatedAt  int64  `gorm:"not null;default:0"`
@@ -26,6 +27,7 @@ type TransformedAnswer struct {
 	QuestionID int64  `json:"question_id"`
 	Title      string `json:"title"`
 	Content    string `json:"content"`
+	Approval   int    `json:"approval"`
 	UserID     int64  `json:"user_id"`
 	Author     string `json:"author"`
 	Avatar     string `json:"avatar"`

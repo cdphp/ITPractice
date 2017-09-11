@@ -314,7 +314,7 @@ footer p {
   background:#fff;
 }
 .img-circle-head {width:50px;height:50px;border-radius:50%;}
-.mini-head {width:28px;height:28px;vertical-align: middle;}
+.mini-head {width:28px;height:28px;vertical-align: middle;border-radius:50%;}
 .right {float:right;}
 .no-border {
   border:none;
@@ -322,5 +322,5 @@ footer p {
 .font-small {font-size:14px;}
 p {margin-bottom: 10px;}
 
-.media-body .footer {margin-top:13px;}
+.media-body .footer {margin-top:20px;}
 .media-body .footer span {margin:0px 5px;}

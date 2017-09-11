@@ -13,6 +13,7 @@ type Question struct {
 	User      User
 	UserID    int64  `gorm:"not null"`
 	Content   string `gorm:"not null" sql:"type:text"`
+	Clicks    int    `gorm:"not null;default:0"`
 	IsDelete  bool   `gorm:"not null;default:0"`
 	CreatedAt int64  `gorm:"not null"`
 	UpdatedAt int64  `gorm:"not null;default:0"`
@@ -25,6 +26,7 @@ type TransformedQuestion struct {
 	Content   string `json:"content"`
 	UserID    int64  `json:"user_id"`
 	Author    string `json:"author"`
+	Clicks    int    `json:"clicks"`
 	Avatar    string `json:"avatar"`
 	CreatedAt int64  `json:"created_at"`
 }

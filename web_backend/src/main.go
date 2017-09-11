@@ -78,6 +78,7 @@ func main() {
 	{
 		answers.POST("/", controllers.CreateAnswer)
 		answers.GET("/", controllers.ListAnswer)
+		answers.POST("/evalute", controllers.EvaluateAnswer)
 	}
 
 	companys := router.Group("/company")

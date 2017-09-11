@@ -135,6 +135,14 @@ func FetchSingleQuestion(c *gin.Context) {
 		return
 	}
 
+	//增加点击量
+	var token models.Token
+	token.Token = c.GetHeader("Token")
+
+	if !(ValidateToken(&token, c) == true && token.UserID == question.UserID) {
+		db.Model(&question).UpdateColumn("clicks", question.Clicks+1)
+	}
+
 	db.Model(&question).Related(&user)
 	db.Model(&user).Related(&profile)
 	_question := models.TransformedQuestion{
@@ -144,6 +152,7 @@ func FetchSingleQuestion(c *gin.Context) {
 		UserID:    user.ID,
 		Author:    user.Username,
 		Avatar:    profile.Avatar,
+		Clicks:    question.Clicks,
 		CreatedAt: question.CreatedAt,
 	}
 	errorNo := 0

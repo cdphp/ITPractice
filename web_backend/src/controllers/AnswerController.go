@@ -114,6 +114,7 @@ func ListAnswer(c *gin.Context) {
 			Author:     user.Username,
 			Avatar:     profile.Avatar,
 			QuestionID: answer.QuestionID,
+			Approval:   answer.Approval,
 			CreatedAt:  answer.CreatedAt,
 		})
 	}
@@ -125,6 +126,59 @@ func ListAnswer(c *gin.Context) {
 		"data":    _answers,
 		"total":   total,
 	})
+}
+
+// EvaluateAnswer 点评
+func EvaluateAnswer(c *gin.Context) {
+	type EvaluateData struct {
+		Type     int `json:"type" binding:"required"` // 1:赞,2:踩
+		AnswerID int `json:"answer_id" binding:"required"`
+	}
+	var evaluateData EvaluateData
+
+	if err := c.BindJSON(&evaluateData); err != nil {
+		fmt.Println("err:", err)
+		errorNo := 24
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"errorNo": errorNo,
+			"message": GetMsg(errorNo),
+		})
+		return
+	}
+	var answer models.Answer
+
+	if err := db.Where("id=?", evaluateData.AnswerID).First(&answer).Error; err != nil {
+
+		errorNo := 22
+		c.JSON(http.StatusNoContent, gin.H{
+			"errorNo": errorNo,
+			"message": GetMsg(errorNo),
+		})
+		return
+	}
+
+	var token models.Token
+	token.Token = c.GetHeader("Token")
+
+	var approval int
+	if evaluateData.Type == 1 {
+		approval = answer.Approval + 1
+	} else {
+		if answer.Approval > 1 {
+			approval = answer.Approval - 1
+		} else {
+			approval = 0
+		}
+	}
+
+	db.Model(&answer).UpdateColumn("approval", approval)
+
+	errorNo := 0
+	c.JSON(http.StatusCreated, gin.H{
+		"errorNo": errorNo,
+		"message": GetMsg(errorNo),
+	})
+
 }
 
 // DeleteAnswer 删除

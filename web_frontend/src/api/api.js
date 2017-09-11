@@ -62,3 +62,4 @@ export const editQuestion = params => {return instance.put(`/question/${params.i
 
 export const getAnswerListPage = params => { return instance.get(`/answer/`, {params: params}).then(res => res.data); };
 export const addAnswer = params => { return instance.post(`/answer/`, params).then(res => res.data); };
+export const evaluteAnswer = params => { return instance.post(`/answer/evalute`, params).then(res => res.data); };

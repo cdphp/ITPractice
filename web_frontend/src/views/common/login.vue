@@ -1,5 +1,5 @@
 <template>
-  <section class="login-bg">
+  <section class="login-bg gray-bg">
   <el-form  :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
     <h4 class="title">用户登录</h4>
     <el-form-item prop="account">
@@ -20,6 +20,7 @@
 
     </div>
   </el-form>
+  <div class="clearfix"></div>
   </section>
 </template>
 
@@ -131,6 +132,7 @@
     width: 350px;
     padding: 35px 35px 15px 35px;
     background: #fff;
+    margin-bottom: 80px;
 
 
   }

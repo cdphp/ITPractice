@@ -23,7 +23,7 @@
                     </div>
                     <div class="muted font-small footer">
                       <span>提问于{{formatTime(question.created_at)}}</span>
-                      <span>阅读 4396</span>
+                      <span>阅读 {{question.clicks}}</span>
                       <span>回答 {{length}}</span>
                     </div>
                   </div>
@@ -32,6 +32,48 @@
                 <div v-html="compiledMarkdown(question.content)" class="content"></div>
             </div>
           </div>
+
+
+        <div class="box ">
+          <div class="box-header no-border">
+            相关回答({{length}})
+          </div>
+          <div class="none" v-if="length==0">暂无内容</div>
+          <div class="box-content answers" v-else v-for="(item,index) in answers">
+
+
+
+              <div class="media">
+                <div class="media-left">
+
+                      <a href="javascript:void(0)" v-on:click="evalute(item.id,1)" class="text-primary" data-toggle="tooltip" data-placement="top" title="这问题答得好，我要点赞">
+                          <i class="fa fa-chevron-up"> </i>
+                      </a>
+                      <div class="text-center">{{item.approval}}</div>
+                      <a href="javascript:void(0)" v-on:click="evalute(item.id,2)" class="text-primary"  data-toggle="tooltip" data-placement="bottom" title="不靠谱">
+                          <i class="fa fa-chevron-down"> </i>
+                      </a>
+
+                </div>
+                <div class="media-body">
+
+                  <div v-html="compiledMarkdown(item.content)" class="content"></div>
+                  <div class="footer muted">
+                    <span>{{formatTime(item.created_at,'MM月dd')}}回答</span>
+                    <span class="middle right"><img class="mini-head" :src="item.avatar"> {{item.author}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            </div>
+            <div class="more" v-if="nomore">没有啦</div>
+            <div class="more" v-on:click="loadMore" v-else>查看更多</div>
+
+
+
+
         <div class="box no-border">
           <div class="box-content ">
           <div class="form-horizontal">
@@ -50,39 +92,6 @@
             </div>
           </div>
         </div>
-
-        <div class="box ">
-          <div class="box-header no-border">
-            相关回答({{length}})
-          </div>
-          <div class="box-content no-border">
-            <div class="none" v-if="length==0">暂无内容</div>
-            <div v-else>
-            <ul class="answers" >
-              <li v-for="(item,index) in answers">
-              <div class="media">
-                <div class="media-left">
-                  <a href="javascript:void(0)" v-on:click="viewUser(item.user_id)">
-                    <img class="media-object img-circle-head" :src="item.avatar">
-                  </a>
-                </div>
-                <div class="media-body">
-                  <div class="media-heading"><span class="floor muted">#{{index+1}}</span><span>{{item.author.username}}</span></div>
-                  <div v-html="compiledMarkdown(item.content)" class="content"></div>
-                </div>
-              </div>
-              </li>
-
-            </ul>
-
-            <div class="more" v-if="nomore">没有啦</div>
-            <div class="more" v-on:click="loadMore" v-else>查看更多</div>
-            </div>
-
-
-
-          </div>
-        </div>
       </div>
 
     </div>
@@ -92,7 +101,7 @@
 </section>
 </template>
 <script>
-import {getQuestion, getAnswerListPage,addAnswer,getUser} from '../../api/api'
+import {getQuestion, getAnswerListPage,addAnswer,getUser,evaluteAnswer} from '../../api/api'
 import util from '../../common/js/util'
 import marked from 'marked'
 import mavonEditor from 'mavon-editor'
@@ -150,26 +159,15 @@ export default {
 
         if(res.errorNo == 0 ) {
           this.question = res.data;
-          this.getUserInfo(this.question.user_id);
+
         }else {
           this.$router.push({ path: '/404' });
         }
       });
     },
-    getUserInfo(id) {
-      let para = {id :id};
-      getUser(para).then(res => {
 
-        if(res.errorNo == 0 ) {
-          this.user = res.data;
-
-
-
-        }
-      });
-    },
-    formatTime(unixTime) {
-      return util.formatDate.format(new Date(unixTime*1000),'yy-MM-dd hh:mm');
+    formatTime(unixTime,format='yy-MM-dd hh:mm') {
+      return util.formatDate.format(new Date(unixTime*1000),format);
     },
     viewUser(id) {
       this.$router.push({ path: '/user?id='+id });
@@ -186,6 +184,23 @@ export default {
             this.nomore = true;
           }
         }
+      });
+    },
+    evalute(id, type) {
+      if(this.loading==true) {
+        this.$message({ message: '正在操作，请等待', type: 'warning'});
+      }
+      this.loading = true;
+      let para = {answer_id: id, type: type};
+      evaluteAnswer(para).then(res => {
+        if(res.errorNo == 0 ) {
+          this.$message({ message: '点评成功', type: 'success'});
+
+        }else {
+        this.$message({ message: res.message, type: 'error' });
+        }
+        this.loading = false;
+        window.location.reload();
       });
     },
 
@@ -287,7 +302,7 @@ font-size: 20px;
 
 }
 
-
+.answers {font-size:14px;}
 .answers li {
   margin-top:10px;
   margin-bottom:10px;

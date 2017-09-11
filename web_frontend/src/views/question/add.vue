@@ -61,7 +61,7 @@ export default {
   },
 
   methods: {
-    imgAdd(pos, $file){  
+    imgAdd(pos, $file){
         var reader = new FileReader();
         reader.readAsDataURL($file);
         let $vm = this.$children[0];
@@ -118,6 +118,12 @@ export default {
     }
   },
   mounted() {
+    var user = localStorage.getItem('user');
+
+    if (!user) {
+      this.$router.push({ path: '/login' });
+
+    }
 
   }
 }

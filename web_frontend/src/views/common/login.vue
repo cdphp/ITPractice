@@ -13,7 +13,14 @@
       <el-button type="primary"  style="width:100%;"  @click.native.prevent="handleSubmit2" :loading="logining">登录</el-button>
     </el-form-item>
     <div class="login-footer">
-      <a href="#/forget" class="text-gray">忘记密码</a> | <a href="#/reg" class="text-gray">直接注册</a>
+      <a href="/forget" class="text-gray">忘记密码</a> | <a href="/reg" class="text-gray">直接注册</a>
+
+    </div>
+    <div class="partner">
+
+      <ul>
+        <li data-toggle="tooltip" data-placement="bottom" title="直接使用Github账号登录"><a class="text-gray" href="http://github.com/login/oauth/authorize?client_id=a5d9a5d4595fdb831368&redirect_uri=http://127.0.0.1:8010/oauth" target="_blank" ><i class="fa fa-github" aria-hidden="true"></i></a></li>
+      </ul>
 
     </div>
     <div class="login-footer">
@@ -138,11 +145,17 @@
   }
   .login-footer {text-align:center;color:#888;}
   .title {
-    margin: 0px auto 40px auto;
+    margin: 0px auto 20px auto;
     text-align: center;
     color: #505458;
   }
   .remember {
     margin: 0px 0px 35px 0px;
+  }
+  .partner {
+    margin-top: 20px;
+  }
+  .partner ul li a {
+    font-size: 20px;
   }
 </style>

@@ -5,6 +5,7 @@ const Register = resolve => require(['./views/register/index.vue'], resolve)
 const Validate = resolve => require(['./views/common/validate.vue'], resolve)
 const Forget = resolve => require(['./views/common/forget.vue'], resolve)
 const NotFound = resolve => require(['./views/common/404.vue'], resolve)
+const Oauth = resolve => require(['./views/common/oauth.vue'], resolve)
 
 const Main = resolve => require(['./views/layouts/main.vue'], resolve)
 const Master = resolve => require(['./views/master.vue'], resolve)
@@ -33,6 +34,7 @@ let routes = [
           { path: '/master', component: Master, name: '传承', hidden: true },
           { path: '/live', component: Live, name: '直播', hidden: true },
           { path: '/question', component: Question, name: '问道', hidden: true },
+          { path: '/oauth', component: Oauth, name: 'Oauth', hidden: true },
 
           { path: '/user', component: User, name: '用户主页', hidden: true },
           { path: '/user/edit', component: UserEdit, name: '用户编辑', hidden: true },

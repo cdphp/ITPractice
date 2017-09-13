@@ -16,8 +16,8 @@
 
 
               <div class="btns" v-if="isSelf">
-                <a href="#/article/add" class="btn btn-blue btn-block btn-ellipse follow">发布文章</a>
-                <a href="#/user/edit" class="btn btn-default btn-block btn-ellipse follow">修改信息</a>
+                <a href="/article/add" class="btn btn-blue btn-block btn-ellipse follow">发布文章</a>
+                <a href="/user/edit" class="btn btn-default btn-block btn-ellipse follow">修改信息</a>
               </div>
               <div class="btns" v-else>
 

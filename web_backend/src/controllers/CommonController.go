@@ -1,9 +1,12 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"models"
@@ -427,6 +430,144 @@ func ForgetPass(c *gin.Context) {
 		"errorNo": errorNo,
 		"message": GetMsg(errorNo),
 		"email":   user.Email,
+	})
+	return
+
+}
+
+// Oauth 验证
+func Oauth(c *gin.Context) {
+	code := c.Query("code")
+
+	client := &http.Client{}
+
+	req, err := http.NewRequest(
+		"POST",
+		"https://github.com/login/oauth/access_token",
+		strings.NewReader("client_id=a5d9a5d4595fdb831368&client_secret=3527e024d285fff4b6614af690acbb6fa010a08c&redirect_uri=http://127.0.0.1:8010/login&code="+code),
+	)
+	if err != nil {
+		// handle error
+	}
+
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := client.Do(req)
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		// handle error
+	}
+
+	var dat map[string]string
+	json.Unmarshal(body, &dat)
+	fmt.Println(dat)
+
+	if _, ok := dat["access_token"]; ok {
+		// 获取用户信息
+		resp, err = http.Get("https://api.github.com/user?access_token=" + dat["access_token"])
+		body, err = ioutil.ReadAll(resp.Body)
+		fmt.Println(string(body))
+		if err == nil {
+			var userinfo map[string]interface{}
+			json.Unmarshal(body, &userinfo)
+
+			id := int(userinfo["id"].(float64))
+			username := userinfo["name"].(string)
+			email := userinfo["email"].(string)
+			avatar := userinfo["avatar_url"].(string)
+
+			var user models.User
+			db.Where("github_id=? and is_delete=0", id).First(&user)
+			// 检查用户是否存在
+			if user.ID != 0 { //直接登录
+				fmt.Println("user:", user)
+
+				//验证通过，生成token
+				token := models.Token{
+					Token:  Md5(strconv.FormatInt(time.Now().UnixNano(), 10)),
+					UserID: user.ID,
+					Auth:   GetAuthName(user.Type),
+				}
+
+				db.Create(&token)
+				if token.ID != 0 {
+					var user models.User
+					var profile models.Profile
+					db.Model(&token).Related(&user).Related(&profile)
+
+					_token := models.TransformedToken{
+						ID:        token.ID,
+						Token:     token.Token,
+						Username:  user.Username,
+						UserID:    user.ID,
+						Avatar:    profile.Avatar,
+						Expire:    token.Expire,
+						Auth:      token.Auth,
+						CreatedAt: token.CreatedAt,
+					}
+
+					errorNo := 0
+					c.JSON(http.StatusCreated, gin.H{
+						"errorNo": errorNo,
+						"message": GetMsg(errorNo),
+						"data":    _token,
+					})
+					return
+
+				} else {
+					errorNo := 105
+					c.JSON(http.StatusCreated, gin.H{
+						"errorNo": errorNo,
+						"message": GetMsg(errorNo),
+					})
+					return
+				}
+			} else { //需要注册
+				user := models.User{
+					Username:  username,
+					Email:     email,
+					Password:  Md5(username),
+					GithubID:  id,
+					State:     1,
+					UniqueKey: UniqueID(),
+				}
+				fmt.Println(user)
+
+				if err := db.Create(&user).Error; err == nil {
+					profile := models.Profile{
+						UserID: user.ID,
+
+						Avatar: avatar,
+					}
+					db.Create(&profile)
+
+					errorNo := 0
+					c.JSON(http.StatusCreated, gin.H{
+						"errorNo":    errorNo,
+						"message":    GetMsg(errorNo),
+						"need_login": 1,
+					})
+					return
+
+				} else {
+					c.JSON(http.StatusCreated, gin.H{
+						"errorNo": 23,
+						"message": err.Error(),
+					})
+					return
+				}
+			}
+		}
+
+	}
+	errorNo := 201
+	c.JSON(http.StatusCreated, gin.H{
+		"errorNo": errorNo,
+		"message": GetMsg(errorNo),
 	})
 	return
 

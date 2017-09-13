@@ -33,7 +33,7 @@
           <div class="box-content">问题总计：20个</div>
         </div>
         <div class="box">
-        <a href="#/question/add" class="btn btn-blue  btn-block">我要提问</a>
+        <a href="/question/add" class="btn btn-blue  btn-block">我要提问</a>
         </div>
       </div>
     </div>
@@ -88,7 +88,7 @@ export default {
       });
     },
     viewQuestion(id) {
-      window.open('#/question/info?id='+id,'_blank');
+      window.open('/question/info?id='+id,'_blank');
     },
     compiledMarkdown(content) {
       return marked(content.substring(0,200), { sanitize: true })

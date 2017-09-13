@@ -16,6 +16,7 @@ type User struct {
 	Type      uint   `gorm:"not null;default:1"`
 	State     uint   `gorm:"not null;default:0"`
 	Profile   Profile
+	GithubID  int   `gorm:"not null;default:0"`
 	IsDelete  bool  `gorm:"not null;default:0"`
 	CreatedAt int64 `gorm:"not null"`
 	UpdatedAt int64 `gorm:"not null;default:0"`

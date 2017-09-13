@@ -31,7 +31,7 @@
           </div>
         </div>
         <div class="box">
-        <a href="#/company/add" class="btn btn-blue  btn-block">新增记录</a>
+        <a href="/company/add" class="btn btn-blue  btn-block">新增记录</a>
         </div>
       </div>
 

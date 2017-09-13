@@ -40,6 +40,7 @@ func main() {
 		common.POST("/mail", controllers.Mail)
 		common.POST("/upload", controllers.Upload)
 		common.POST("/forget", controllers.ForgetPass)
+		common.GET("/oauth", controllers.Oauth)
 	}
 
 	users := router.Group("/user")

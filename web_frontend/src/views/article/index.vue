@@ -80,7 +80,7 @@ export default {
       });
     },
     viewArticle(id) {
-      window.open('#/article/info?id='+id,'_blank');
+      window.open('/article/info?id='+id,'_blank');
     },
     compiled(content) {
       return content.substring(0,200);

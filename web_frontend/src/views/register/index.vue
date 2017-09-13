@@ -35,7 +35,7 @@
           <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="loading">注册</el-button>
         </el-form-item>
         <div class="login-footer">
-          已有用户?<a href="#/login" class="text-gray">直接登录</a>
+          已有用户?<a href="/login" class="text-gray">直接登录</a>
         </div>
 
       </el-form>
@@ -63,7 +63,7 @@
       </div>
 
       <div class="content" v-if="step==3">
-        如果您已经完成验证，请直接：<a href="#/login" class="text-blue">登录</a>
+        如果您已经完成验证，请直接：<a href="/login" class="text-blue">登录</a>
 
       </div>
     </div>

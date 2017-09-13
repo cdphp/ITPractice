@@ -16,12 +16,12 @@
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#">门户 <span class="sr-only">(current)</span></a></li>
-      <li><a href="#/master">传承</a></li>
-      <li><a href="#/article">文章</a></li>
-      <li><a href="#/company">公司</a></li>
-      <li><a href="#/live">直播</a></li>
-      <li><a href="#/question">问道</a></li>
+      <li class="active"><a href="/">门户 <span class="sr-only">(current)</span></a></li>
+      <li><a href="/master">传承</a></li>
+      <li><a href="/article">文章</a></li>
+      <li><a href="/company">公司</a></li>
+      <li><a href="/live">直播</a></li>
+      <li><a href="/question">问道</a></li>
     </ul>
 
 
@@ -39,8 +39,8 @@
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-right" v-else>
-      <li><a href="#/login">登录</a></li>
-      <li><a href="#/reg">注册</a></li>
+      <li><a href="/login">登录</a></li>
+      <li><a href="/reg">注册</a></li>
 
     </ul>
   </div><!-- /.navbar-collapse -->
@@ -61,7 +61,7 @@
       goHome: function() {
 
         this.$router.push({ path: '/user?id='+this.user_id });
-        
+
       },
       logout: function () {
 

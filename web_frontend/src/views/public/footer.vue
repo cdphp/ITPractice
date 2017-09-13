@@ -12,10 +12,10 @@
           <div class="col-sm-4">
             <h4>网站地图</h4>
             <ul>
-              <li><a href="#/">首页</a></li>
-              <li><a href="#/master">传承</a></li>
-              <li><a href="#/article">文章</a></li>
-              <li><a href="#/question">问答</a></li>
+              <li><a href="/">首页</a></li>
+              <li><a href="/master">传承</a></li>
+              <li><a href="/article">文章</a></li>
+              <li><a href="/question">问答</a></li>
 
             </ul>
 

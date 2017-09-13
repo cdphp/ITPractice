@@ -2,7 +2,7 @@ import axios from 'axios';
 
 var instance = axios.create({
   baseURL: '/api',
-  timeout: 2500,
+  timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
@@ -32,6 +32,9 @@ export const validateEmail = params => { return instance.post(`/validate`, param
 export const sendMail = params => { return instance.post(`/mail`, params).then(res => res.data); };
 export const upload = params => { return instance.post(`/upload`, params).then(res => res.data); };
 export const forget = params => { return instance.post(`/forget`, params).then(res => res.data); };
+
+export const oauthGithub = params => {return instance.get(`/oauth`,{params: params}).then(res => res.data);}
+export const getGithubUser = params => {return axios.get(`https://api.github.com/user`,{params: params}).then(res => res.data);}
 
 
 export const getUserListPage = params => { return instance.get(`/user/`, {params: params}).then(res => res.data); };

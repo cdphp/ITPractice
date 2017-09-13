@@ -31,12 +31,14 @@ export const register = params => { return instance.post(`/register`, params).th
 export const validateEmail = params => { return instance.post(`/validate`, params).then(res => res.data); };
 export const sendMail = params => { return instance.post(`/mail`, params).then(res => res.data); };
 export const upload = params => { return instance.post(`/upload`, params).then(res => res.data); };
+export const forget = params => { return instance.post(`/forget`, params).then(res => res.data); };
 
 
 export const getUserListPage = params => { return instance.get(`/user/`, {params: params}).then(res => res.data); };
 
 export const getUser = params => {return instance.get(`/user/${params.id}`).then(res => res.data);}
 export const editUser = params => {return instance.put(`/user/${params.id}`, params).then(res => res.data);}
+export const resetPass = params => {return instance.post(`/user/resetPass`, params).then(res => res.data);}
 
 export const getArticleListPage = params => { return instance.get(`/article/`, {params: params}).then(res => res.data); };
 

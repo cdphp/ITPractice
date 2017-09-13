@@ -31,7 +31,7 @@
               </div>
             </div>
 
-              <div v-html="compiledMarkdown" class="content"></div>
+              <div v-html="article.content" class="content"></div>
 
           </div>
 
@@ -100,7 +100,6 @@
 <script>
 import {getArticle, getCommentListPage,addComment,getUser} from '../../api/api'
 import util from '../../common/js/util'
-import marked from 'marked'
 
 export default {
   data() {
@@ -230,12 +229,7 @@ export default {
     }
 
 
-  },
-  computed: {
-    compiledMarkdown: function () {
-      return marked(this.article.content, { sanitize: true })
-    }
-  },
+  }
 }
 </script>
 <style scoped>

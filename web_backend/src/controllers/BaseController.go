@@ -165,25 +165,34 @@ func SendMail(to string, content map[string]string) {
 	myConfig := new(lib.Config)
 	myConfig.InitConfig(lib.GetCurrentDir() + "/configs/configs.ini")
 	host := myConfig.Read("default", "host")
+	var subject, body string
 
-	if content["type"] == "validate" {
-		subject := "邮箱验证"
-		requestURI := "/reg/validate?key=" + content["key"]
+	if content["type"] == "register" {
+		subject = "会员注册邮箱验证"
+		requestURI := "/validate?type=" + content["type"] + "&key=" + content["key"]
 		url := strings.Join([]string{host, requestURI}, "")
 
-		body := `<!DOCTYPE html><html><head><meta charset="utf-8"><title>邮箱验证</title></head><style>.container{margin:0 auto;top:100px;position:relative;width:550px;height:300px;background:#fff;border-radius:5px;padding:30px}.container .content{padding:20px;font-size:14px;color:#666}.content div{margin:10px}</style><body><div style="background:#ebedeb;width:100%;height:600px"><div class="container"><div class="header"><div>尊敬的道友，` + to + ` ,您好：</div></div><div class="content"><div class="">感谢您加入我们。</div><div class="">请点击以下链接进行邮箱验证，以便开始使用您的账号</div><div class=""><a href="` + url + `" style="display:inline-block;color:#fff;line-height:40px;background-color:#1989fa;border-radius:5px;text-align:center;text-decoration:none;font-size:14px;padding:1px 30px">马上验证邮箱</a></div><div class="">如果您无法点击以上链接，请复制以下网址到浏览器里直接打开：</div><div class=""><a href="` + url + `">` + url + `</a></div><div class="">如果您并未申请门派弟子，可能是其他用户误输入了您的邮箱地址。请忽略此邮件，或者 <a href="#">联系掌门</a></div></div></div></div></body></html>		`
+		body = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>邮箱验证</title></head><style>.container{margin:0 auto;top:100px;position:relative;width:550px;height:300px;background:#fff;border-radius:5px;padding:30px}.container .content{padding:20px;font-size:14px;color:#666}.content div{margin:10px}</style><body><div style="background:#ebedeb;width:100%;height:600px"><div class="container"><div class="header"><div>尊敬的道友，` + to + ` ,您好：</div></div><div class="content"><div class="">感谢您加入我们。</div><div class="">请点击以下链接进行邮箱验证，以便开始使用您的账号</div><div class=""><a href="` + url + `" style="display:inline-block;color:#fff;line-height:40px;background-color:#1989fa;border-radius:5px;text-align:center;text-decoration:none;font-size:14px;padding:1px 30px">马上验证邮箱</a></div><div class="">如果您无法点击以上链接，请复制以下网址到浏览器里直接打开：</div><div class=""><a href="` + url + `">` + url + `</a></div><div class="">如果您并未申请门派弟子，可能是其他用户误输入了您的邮箱地址。请忽略此邮件，或者 <a href="#">联系掌门</a></div></div></div></div></body></html>		`
 
-		err := mail.SendToMail(to, subject, body, "html")
+	} else if content["type"] == "forget" {
+		subject = "找回密码邮箱验证"
 
-		if err != nil {
-			fmt.Println("Send mail error!")
-			fmt.Println(err)
+		requestURI := "/validate?type=" + content["type"] + "&key=" + content["key"]
+		url := strings.Join([]string{host, requestURI}, "")
 
-		}
-
-		fmt.Println("Send mail success!")
+		body = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>邮箱验证</title></head><style>.container{margin:0 auto;top:100px;position:relative;width:550px;height:300px;background:#fff;border-radius:5px;padding:30px}.container .content{padding:20px;font-size:14px;color:#666}.content div{margin:10px}</style><body><div style="background:#ebedeb;width:100%;height:600px"><div class="container"><div class="header"><div>尊敬的道友，` + to + ` ,您好：</div></div><div class="content"><div class="">您正在进行找回密码操作。</div><div class="">请点击以下链接进行邮箱验证，以便开始使用您的账号</div><div class=""><a href="` + url + `" style="display:inline-block;color:#fff;line-height:40px;background-color:#1989fa;border-radius:5px;text-align:center;text-decoration:none;font-size:14px;padding:1px 30px">马上验证邮箱</a></div><div class="">如果您无法点击以上链接，请复制以下网址到浏览器里直接打开：</div><div class=""><a href="` + url + `">` + url + `</a></div><div class="">如果您并未申请门派弟子，可能是其他用户误输入了您的邮箱地址。请忽略此邮件，或者 <a href="#">联系掌门</a></div></div></div></div></body></html>		`
 
 	}
+
+	err := mail.SendToMail(to, subject, body, "html")
+
+	if err != nil {
+		fmt.Println("Send mail error!")
+		fmt.Println(err)
+
+	}
+
+	fmt.Println("Send mail success!")
 
 }
 

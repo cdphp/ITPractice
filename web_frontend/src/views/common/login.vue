@@ -13,7 +13,7 @@
       <el-button type="primary"  style="width:100%;"  @click.native.prevent="handleSubmit2" :loading="logining">登录</el-button>
     </el-form-item>
     <div class="login-footer">
-      <a href="#" class="text-gray">忘记密码</a> | <a href="#/reg" class="text-gray">直接注册</a>
+      <a href="#/forget" class="text-gray">忘记密码</a> | <a href="#/reg" class="text-gray">直接注册</a>
 
     </div>
     <div class="login-footer">

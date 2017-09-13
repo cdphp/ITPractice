@@ -123,7 +123,7 @@
     },
     methods: {
       sendValidateMail() {
-      var params = {email: this.ruleForm2.email,type:"validate"};
+      var params = {email: this.ruleForm2.email,type:"register"};
 
       sendMail(params).then(res => {
         this.loading = false;

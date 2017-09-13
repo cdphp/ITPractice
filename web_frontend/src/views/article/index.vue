@@ -9,7 +9,7 @@
           <div class="box-content" v-for="(item,index) in articles">
           <div class="title"><h1><a href="javascript:void(0)" v-on:click="viewArticle(item.id)" class="text-black">{{item.title}}</a></h1></div>
 
-          <div class="content text-gray" v-html="compiledMarkdown(item.content)"></div>
+          <div class="content text-gray" v-html="compiled(item.content)"></div>
           <div class="footer">
           <span class="middle"><img class="img-circle-head mini-head" :src="item.avatar"> {{item.author}}</span>
 
@@ -82,8 +82,8 @@ export default {
     viewArticle(id) {
       window.open('#/article/info?id='+id,'_blank');
     },
-    compiledMarkdown(content) {
-      return marked(content.substring(0,200), { sanitize: true })
+    compiled(content) {
+      return content.substring(0,200);
     }
   },
   mounted() {

@@ -6,7 +6,7 @@ const publicPath = ''
 
 module.exports = (options = {}) => ({
   entry: {
-    vendor: ['mavon-editor'],
+    //vendor: ['mavon-editor'],
     index: './src/main.js'
   },
   output: {

@@ -29,7 +29,7 @@
                   </div>
                 </div>
               </div>
-                <div v-html="compiledMarkdown(question.content)" class="content"></div>
+                <div v-html="question.content" class="content"></div>
             </div>
           </div>
 
@@ -57,7 +57,7 @@
                 </div>
                 <div class="media-body">
 
-                  <div v-html="compiledMarkdown(item.content)" class="content"></div>
+                  <div v-html="item.content" class="content"></div>
                   <div class="footer muted">
                     <span>{{formatTime(item.created_at,'MM月dd')}}回答</span>
                     <span class="middle right"><img class="mini-head" :src="item.avatar"> {{item.author}}</span>
@@ -80,7 +80,7 @@
 
             <div class="form-group">
               <div class="col-sm-12">
-                <editor @imgAdd="imgAdd" @imgDel="imgDel" placeholder="我要回答.." default_open="edit" v-model="answerContent"/>
+                <vue-html5-editor :content="answerContent" @change="updateData" ref="editor" :height="200"></vue-html5-editor>
               </div>
             </div>
 
@@ -103,9 +103,6 @@
 <script>
 import {getQuestion, getAnswerListPage,addAnswer,getUser,evaluteAnswer} from '../../api/api'
 import util from '../../common/js/util'
-import marked from 'marked'
-import mavonEditor from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
 
 export default {
 
@@ -119,7 +116,7 @@ export default {
       input: '# hello',
       length:0,
       answers:[],
-      answerContent:'',
+      answerContent:'我要回答..',
       nomore: false,
       page: 1,
       loading: false,
@@ -127,28 +124,12 @@ export default {
       user:{},
     }
   },
-  components: {
-    'editor': mavonEditor.mavonEditor
-  },
+  
   methods: {
-    imgAdd(pos, $file){
-        var reader = new FileReader();
-        reader.readAsDataURL($file);
-        let $vm = this.$children[0];
-        reader.onload = function(e){
-        let para = {type:"image", content: this.result};
-        upload(para).then(res => {
-          if(res.errorNo!=0) {
-            this.$message({ type: 'error', message: res.errorMsg});
-            return
-          }
-          $vm.$img2Url(pos,res.url);
-        });
-        }
-      },
-      imgDel(pos){
-          delete this.img_file[pos];
-      },
+    updateData: function (data) {
+        // sync content to component
+        this.answerContent = data
+    },
   loadMore() {
     this.page++;
     this.getAnswers();
@@ -249,9 +230,6 @@ export default {
         }
         this.loading = false;
       });
-    },
-    compiledMarkdown: function (content) {
-      return marked(content, { sanitize: true })
     }
   },
   mounted() {

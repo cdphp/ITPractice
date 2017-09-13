@@ -39,6 +39,7 @@ func main() {
 		common.POST("/validate", controllers.Validate)
 		common.POST("/mail", controllers.Mail)
 		common.POST("/upload", controllers.Upload)
+		common.POST("/forget", controllers.ForgetPass)
 	}
 
 	users := router.Group("/user")
@@ -48,6 +49,7 @@ func main() {
 		users.GET("/:id", controllers.FetchSingleUser)
 		users.PUT("/:id", controllers.UpdateUser)
 		users.DELETE("/:id", controllers.DeleteUser)
+		users.POST("/resetPass", controllers.ResetPass)
 	}
 
 	articles := router.Group("/article")

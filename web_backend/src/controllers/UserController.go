@@ -37,6 +37,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
+	// 验证用户输入字符长度
 	if len(userData.Username) < 6 || len(userData.Username) > 30 {
 		errorNo := 111
 		c.JSON(http.StatusNotAcceptable, gin.H{
@@ -46,6 +47,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
+	// 验证邮箱
 	if IsEmail(userData.Email) == false {
 		errorNo := 112
 		c.JSON(http.StatusNotAcceptable, gin.H{
@@ -62,6 +64,7 @@ func CreateUser(c *gin.Context) {
 	}
 	fmt.Println(user)
 
+	// 插入数据
 	if err := db.Create(&user).Error; err == nil {
 		profile := models.Profile{
 			UserID: user.ID,
@@ -141,6 +144,7 @@ func FetchSingleUser(c *gin.Context) {
 	var user models.User
 	var profile models.Profile
 
+	// 获取个人信息
 	if err = db.Where("id=?", id).First(&user).Related(&profile).Error; err != nil {
 
 		fmt.Print("err:", err)
@@ -280,4 +284,51 @@ func UpdateUser(c *gin.Context) {
 // DeleteUser 删除
 func DeleteUser(c *gin.Context) {
 
+}
+
+// ResetPass 重置密码
+func ResetPass(c *gin.Context) {
+	type ResetData struct {
+		Key      string `json:"key" binding:"required"`
+		Password string `json:"password" binding:"required"`
+	}
+	var resetData ResetData
+
+	// 解析row data
+	if err := c.BindJSON(&resetData); err != nil {
+		errorNo := 24
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"errorNo": errorNo,
+			"message": GetMsg(errorNo),
+		})
+		return
+	}
+
+	var user models.User
+
+	if err := db.Where("unique_key=?", resetData.Key).First(&user).Error; err != nil {
+		errorNo := 101
+		c.JSON(http.StatusCreated, gin.H{
+			"errorNo": errorNo,
+			"message": GetMsg(errorNo),
+		})
+		return
+	}
+
+	if err := db.Model(&user).UpdateColumn(models.User{Password: Md5(resetData.Password), UpdatedAt: Now()}).Error; err != nil {
+		fmt.Println(err)
+		errorNo := 25
+		c.JSON(http.StatusBadGateway, gin.H{
+			"errorNo": errorNo,
+			"message": GetMsg(errorNo),
+		})
+		return
+	}
+
+	errorNo := 0
+	c.JSON(http.StatusOK, gin.H{
+		"errorNo": errorNo,
+		"message": GetMsg(errorNo),
+	})
+	return
 }

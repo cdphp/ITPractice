@@ -2,8 +2,8 @@
 const Index = resolve => require(['./views/index.vue'], resolve)
 const Login = resolve => require(['./views/common/login.vue'], resolve)
 const Register = resolve => require(['./views/register/index.vue'], resolve)
-const RegisterValidate = resolve => require(['./views/register/validate.vue'], resolve)
-
+const Validate = resolve => require(['./views/common/validate.vue'], resolve)
+const Forget = resolve => require(['./views/common/forget.vue'], resolve)
 const NotFound = resolve => require(['./views/common/404.vue'], resolve)
 
 const Main = resolve => require(['./views/layouts/main.vue'], resolve)
@@ -41,9 +41,10 @@ let routes = [
           { path: '/article/info', component: ArticleInfo, name: '文章详情', hidden: true },
           { path: '/article/edit', component: ArticleEdit, name: '文章编辑', hidden: true },
           { path: '/reg', component: Register, name: '注册', hidden: true },
-          { path: '/reg/validate', component: RegisterValidate, name: '等待验证', hidden: true },
+          { path: '/validate', component: Validate, name: '等待验证', hidden: true },
 
           { path: '/login', component: Login, name: '登录', hidden: true },
+          { path: '/forget', component: Forget, name: '忘记密码', hidden: true },
           { path: '/question/add', component: QuestionAdd, name: '发问', hidden: true },
           { path: '/question/info', component: QuestionInfo, name: '问题详情', hidden: true },
           { path: '/question/edit', component: QuestionEdit, name: '问题编辑', hidden: true },

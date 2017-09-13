@@ -20,7 +20,7 @@
                 <div class="form-group">
                   <label for="content" class="col-sm-2 control-label">内容</label>
                   <div class="col-sm-10">
-                    <editor @imgAdd="imgAdd" @imgDel="imgDel" v-model="content"/>
+                    <vue-html5-editor :content="content" @change="updateData" ref="editor" :height="300"></vue-html5-editor>
                   </div>
                 </div>
 
@@ -44,42 +44,22 @@
 </template>
 <script>
 import {addQuestion,upload} from '../../api/api'
-import mavonEditor from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
+
 
 export default {
   data(){
     return{
       title: '',
-      content:'',
+      content: "请填写内容",
       loading: false,
-      img_file: {},
+
     }
-  },
-  components: {
-    'editor': mavonEditor.mavonEditor
   },
 
   methods: {
-    imgAdd(pos, $file){
-        var reader = new FileReader();
-        reader.readAsDataURL($file);
-        let $vm = this.$children[0];
-        reader.onload = function(e){
-        let para = {type:"image", content: this.result};
-        upload(para).then(res => {
-          if(res.errorNo!=0) {
-            this.$message({ type: 'error', message: res.errorMsg});
-            return
-          }
-          $vm.$img2Url(pos,res.url);
-        });
-        }
-      },
-      imgDel(pos){
-          delete this.img_file[pos];
-      },
+
     add() {
+
       //console.log(this.$children[0]);return;
       if(this.title=='') {
         this.$message({
@@ -115,7 +95,11 @@ export default {
           this.$router.push({ path: '/question/info?id='+res.resourceId });
         }
       });
-    }
+    },
+    updateData: function (data) {
+        // sync content to component
+        this.content = data
+    },
   },
   mounted() {
     var user = localStorage.getItem('user');

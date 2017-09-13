@@ -25,7 +25,7 @@
                 <div class="form-group">
                   <label for="content" class="col-sm-2 control-label">内容</label>
                   <div class="col-sm-10">
-                    <mavon-editor v-model="content"/>
+                    <vue-html5-editor :content="content" @change="updateData" ref="editor" :height="300"></vue-html5-editor>
                   </div>
                 </div>
 
@@ -49,8 +49,6 @@
 </template>
 <script>
 import {editArticle,getArticle} from '../../api/api'
-import mavonEditor from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
 
 export default {
   data(){
@@ -62,11 +60,13 @@ export default {
       loading: false,
     }
   },
-  components: {
-    'mavon-editor': mavonEditor.mavonEditor
-  },
+
 
   methods: {
+    updateData: function (data) {
+        // sync content to component
+        this.content = data
+    },
   getArticleInfo(id) {
     let para = {id :id};
     getArticle(para).then(res => {

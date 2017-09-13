@@ -385,3 +385,49 @@ func Upload(c *gin.Context) {
 	})
 	return
 }
+
+// 忘记密码
+func ForgetPass(c *gin.Context) {
+	// ForgetData 用于接收忘记密码的row data
+	type ForgetData struct {
+		Account string `json:"account" binding:"required"`
+	}
+	var forgetData ForgetData
+
+	// 解析row data
+	if err := c.BindJSON(&forgetData); err != nil {
+		errorNo := 24
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"errorNo": errorNo,
+			"message": GetMsg(errorNo),
+		})
+		return
+	}
+
+	// 查找账户
+	var user models.User
+	//验证账号是邮箱还是用户名
+	if IsEmail(forgetData.Account) {
+		db.Where("email=? and is_delete=0", forgetData.Account).First(&user)
+	} else {
+		db.Where("username=? and is_delete=0", forgetData.Account).First(&user)
+	}
+
+	if user.ID == 0 {
+		errorNo := 101
+		c.JSON(http.StatusCreated, gin.H{
+			"errorNo": errorNo,
+			"message": GetMsg(errorNo),
+		})
+		return
+	}
+
+	errorNo := 0
+	c.JSON(http.StatusOK, gin.H{
+		"errorNo": errorNo,
+		"message": GetMsg(errorNo),
+		"email":   user.Email,
+	})
+	return
+
+}

@@ -19,7 +19,7 @@
     <div class="partner">
 
       <ul>
-        <li data-toggle="tooltip" data-placement="bottom" title="直接使用Github账号登录"><a class="text-gray" href="http://github.com/login/oauth/authorize?client_id=a5d9a5d4595fdb831368&redirect_uri=http://127.0.0.1:8010/oauth" target="_blank" ><i class="fa fa-github" aria-hidden="true"></i></a></li>
+        <li data-toggle="tooltip" data-placement="bottom" title="直接使用Github账号登录"><a class="text-gray" href="http://github.com/login/oauth/authorize?client_id=a5d9a5d4595fdb831368&redirect_uri=http://it.miaowu.org/oauth" target="_blank" ><i class="fa fa-github" aria-hidden="true"></i></a></li>
       </ul>
 
     </div>

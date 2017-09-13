@@ -439,12 +439,20 @@ func ForgetPass(c *gin.Context) {
 func Oauth(c *gin.Context) {
 	code := c.Query("code")
 
+	myConfig := new(lib.Config)
+	myConfig.InitConfig(lib.GetCurrentDir() + "/configs/configs.ini")
+	host := myConfig.Read("default", "host")
+	client_id := myConfig.Read("github", "client_id")
+	client_secret := myConfig.Read("github", "client_secret")
+	access_token_url := myConfig.Read("github", "access_token_url")
+	userinfo_url := myConfig.Read("github", "userinfo_url")
+
 	client := &http.Client{}
 
 	req, err := http.NewRequest(
 		"POST",
-		"https://github.com/login/oauth/access_token",
-		strings.NewReader("client_id=a5d9a5d4595fdb831368&client_secret=3527e024d285fff4b6614af690acbb6fa010a08c&redirect_uri=http://127.0.0.1:8010/login&code="+code),
+		access_token_url,
+		strings.NewReader("client_id="+client_id+"&client_secret="+client_secret+"&redirect_uri="+host+"/login&code="+code),
 	)
 	if err != nil {
 		// handle error
@@ -468,7 +476,7 @@ func Oauth(c *gin.Context) {
 
 	if _, ok := dat["access_token"]; ok {
 		// 获取用户信息
-		resp, err = http.Get("https://api.github.com/user?access_token=" + dat["access_token"])
+		resp, err = http.Get(userinfo_url + "?access_token=" + dat["access_token"])
 		body, err = ioutil.ReadAll(resp.Body)
 		fmt.Println(string(body))
 		if err == nil {

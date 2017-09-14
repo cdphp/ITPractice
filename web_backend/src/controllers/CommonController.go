@@ -535,6 +535,23 @@ func Oauth(c *gin.Context) {
 					return
 				}
 			} else { //需要注册
+				if HasUser(username) {
+					errorNo := 103
+					c.JSON(http.StatusCreated, gin.H{
+						"errorNo": errorNo,
+						"message": GetMsg(errorNo),
+					})
+					return
+				}
+
+				if HasEmail(email) {
+					errorNo := 104
+					c.JSON(http.StatusCreated, gin.H{
+						"errorNo": errorNo,
+						"message": GetMsg(errorNo),
+					})
+					return
+				}
 				user := models.User{
 					Username:  username,
 					Email:     email,

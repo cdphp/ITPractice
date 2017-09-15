@@ -22,7 +22,7 @@
               <div class="btns" v-else>
 
                 <button v-if="!isMaster && user.auth!='User'" class="btn btn-blue btn-block btn-ellipse follow" v-on:click="follow" :disable="following">拜 师 <i class="fa fa-plus" aria-hidden="true"></i></button>
-                <button class="btn btn-default btn-block btn-ellipse follow">私 信 <i class="fa fa-envelope-o" aria-hidden="true"></i></button>
+                <button class="btn btn-default btn-block btn-ellipse follow" v-on:click="sendMsg">私 信 <i class="fa fa-envelope-o" aria-hidden="true"></i></button>
               </div>
               </div>
               <div class="box-content counts">
@@ -78,6 +78,43 @@
 
             </div>
 
+            <div class="box" v-if="isSelf">
+            <div class="box-header no-border">
+
+              <h5 class="box-title">私信</h5>
+            </div>
+            <div class="box-content" v-if="messages.length==0">
+              <div class="none" >暂无内容</div>
+            </div>
+            
+            <div class="box-content no-padding" v-else>
+              
+              <div　>
+              <ul class="messages" >
+                <li v-for="item in messages">
+                  <div class="media">
+                    <div class="media-left media-middle">
+                      <a href="#">
+                        <img class="media-object img-circle-head" :src="item.author_avatar">
+                      </a>
+                    </div>
+                    <div class="media-body">
+                      <h4 class="media-heading">{{item.author_name}}</h4>
+                      <p class="muted">{{item.content}}</p>
+                    </div>
+                    <div class="media-right">
+                      <div class="date">{{formatTime(item.created_at,'MM-dd')}}</div>
+                    </div>
+                  </div>
+                
+                </li>
+              </ul>
+              <div class="more" v-if="nomore">没有啦</div>
+              <div class="more" v-on:click="getMessages" v-else>查看更多</div>
+              </div>
+          </div>
+        </div>
+
           </div>
           <div class="col-sm-3">
           <div class="box">
@@ -108,6 +145,8 @@
             </div>
           </div>
 
+
+
           </div>
         </div>
       </div>
@@ -115,7 +154,7 @@
   </section>
 </template>
 <script>
-import {getArticleListPage,getUser,delArticle,getRelationListPage, addRelation} from '../../api/api'
+import {getArticleListPage,getUser,delArticle,getRelationListPage, addRelation,getMessageListPage, addMessage} from '../../api/api'
 import util from '../../common/js/util'
 
 export default {
@@ -127,6 +166,9 @@ export default {
       pupils: [],
       attentions: [],
       articles:[],
+      messages:[],
+      messagePage:1,
+      nomore: false,
       following: false,
       isMaster: false,
       totalArticle:0,
@@ -138,11 +180,24 @@ export default {
     this.page++;
     this.getArticles();
   },
-  formatTime(unixTime) {
-    return util.formatDate.format(new Date(unixTime*1000),'yy-MM-dd hh:mm');
+  formatTime(unixTime,format='yy-MM-dd hh:mm') {
+    return util.formatDate.format(new Date(unixTime*1000),format);
   },
   formatAuth(auth) {
     return util.getAuthName(auth);
+  },
+  getMessages() {
+    let para = {page: this.messagePage++};
+    getMessageListPage(para).then(res=>{
+        if(res.errorNo == 0) {
+          
+          if(res.data) {
+            this.messages.push.apply(this.messages, res.data);
+          }else {
+            this.nomore = true;
+          }
+        }
+      });
   },
   delArticle(id) {
     this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -183,6 +238,7 @@ export default {
           this.isMaster = this.user.is_master;
           this.getArticles(id);
           this.getPupils(id);
+          this.getMessages();
 
         }else {
           this.$router.push({ path: '/404' });
@@ -212,6 +268,36 @@ export default {
     },
     editArticle(id) {
       this.$router.push({ path: '/article/edit?id='+id });
+    },
+    sendMsg() {
+      this.$prompt('请输入内容', '私信', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          
+        }).then(({ value }) => {
+          // 记录消息
+          let para = {content: value,target_id:this.user.id};
+          addMessage(para).then(res => {
+            
+            if(res.errorNo==0) {
+              this.$message({
+                type: 'success',
+                message: '发送成功!'
+              });
+              
+            }else {
+              this.$message({
+                type: 'error',
+                message: res.message
+              });
+              }
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消'
+          });       
+        });
     },
 
     follow() {
@@ -263,6 +349,7 @@ export default {
       }
 
       this.getUserInfo(id);
+      
     }
   },
   mounted() {
@@ -410,6 +497,22 @@ export default {
   .github i {
     font-size:20px;
     margin-right:10px;
+  }
+  
+  .messages li {
+    padding: 5px;
+    transition: 1s;
+    border-bottom: 1px solid #e7eaec;
+  }
+  .messages .date {
+    width: 50px;
+    padding: 8px 0px;
+  }
+  .messages li:hover {
+    background: #e7eaec;
+  }
+  .messages li .media-heading {
+    padding: 8px 0px;
   }
 
 

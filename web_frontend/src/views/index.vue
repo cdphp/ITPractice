@@ -13,6 +13,7 @@
         <div class="col-md-6">
           <img class="img-responsive" src="http://ouecw69lw.bkt.clouddn.com/profit-fbdeecd9d18c4e8a01edc3018d229e7df504e77153b64679d66cb03973eda702.svg" alt="One on One Check-ins to know the pulse and engagement of your team">
         </div>
+        
       </div>
     </div>
 

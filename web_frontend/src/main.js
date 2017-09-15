@@ -1,4 +1,3 @@
-
 import Vue from 'vue'
 import { Form,FormItem,Button,Checkbox,Input,Message,MessageBox } from 'element-ui'
 import App from './App.vue'
@@ -14,7 +13,7 @@ import editorOptions from './common/js/editor.js'
 Vue.use(VueHtml5Editor,editorOptions)
 
 Vue.prototype.$confirm = MessageBox.confirm
-
+Vue.prototype.$prompt = MessageBox.prompt
 Vue.prototype.$message = Message
 Vue.use(VueRouter)
 

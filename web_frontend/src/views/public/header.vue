@@ -64,7 +64,7 @@
 
       },
       logout: function () {
-
+        this.$confirm("test");
         this.$confirm('确认退出吗?', '提示', {
           //type: 'warning'
         }).then(() => {

@@ -27,6 +27,7 @@ func main() {
 	db.AutoMigrate(&models.Company{})
 	db.AutoMigrate(&models.Question{})
 	db.AutoMigrate(&models.Answer{})
+	db.AutoMigrate(&models.Message{})
 
 	defer db.Close()
 
@@ -96,6 +97,13 @@ func main() {
 		relations.GET("/", controllers.ListRelation)
 		relations.DELETE("/:id", controllers.DeleteRelation)
 	}
+
+	messages := router.Group("/message")
+	{
+		messages.POST("/", controllers.CreateMessage)
+		messages.GET("/", controllers.ListMessage)
+	}
+
 	router.Run(":8085")
 
 }

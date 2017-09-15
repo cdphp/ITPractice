@@ -9,6 +9,7 @@ module.exports = (options = {}) => ({
     //vendor: ['mavon-editor'],
     index: './src/main.js'
   },
+  
   output: {
     path: resolve(__dirname, 'dist'),
     filename: options.dev ? '[name].js' : '[name].js?[chunkhash]',

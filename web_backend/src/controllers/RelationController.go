@@ -37,7 +37,7 @@ func CreateRelation(c *gin.Context) {
 
 	if ValidateToken(&token, c) == false {
 		errorNo := 201
-		c.JSON(http.StatusNotAcceptable, gin.H{
+		c.JSON(http.StatusCreated, gin.H{
 			"errorNo": errorNo,
 			"message": GetMsg(errorNo),
 		})
